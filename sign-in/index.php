@@ -6,10 +6,10 @@
     $isPassword = isset($_POST['password']);
 
     if (!$isEmail || !$isPassword) {
-        $errosParams = "?";
+        $errorParams = "?";
 
-        if (!$isEmail) $errosParams .= "email=empty&";
-        if (!$isPassword) $errosParams .= "password=empty";
+        if (!$isEmail) $errorParams .= "email=empty&";
+        if (!$isPassword) $errorParams .= "password=empty";
 
         header("Location: ./index.php$errorParams");
         exit;
