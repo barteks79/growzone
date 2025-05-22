@@ -73,7 +73,7 @@ CREATE TABLE `products` (
   `name` varchar(50) NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `photo` text,
-  `stock_quantity` tinyint(1) NOT NULL DEFAULT '1'
+  `in_stock` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
