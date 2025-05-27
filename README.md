@@ -1,6 +1,6 @@
 <div align="center">
 
-# Grow Zone <img src="./public/icon.png" alt="icon" width="25" />
+# Grow Zone <img src="./public/images/icon.png" alt="icon" width="25" />
 
 **GrowZone to nowoczesny sklep ogrodniczy online, stworzony z myślą o pasjonatach ogrodnictwa 🌱**
 

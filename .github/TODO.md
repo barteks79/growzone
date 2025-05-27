@@ -17,10 +17,10 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
 ### Bartosz Sarnowski
 
 1. `Logowanie (backend)`
-   
-   - [x] walidacja danych z POSTa
-   - [x] sprawdzenie zgodności danych z użytkownikiem
-   - [x] dodanie redirectów z parametrami get, które mówią co poszło w logowaniu nie tak 
-   - [ ] implementacja pobierania użytkownika z DB 
+
+    - [x] walidacja danych z POSTa
+    - [x] sprawdzenie zgodności danych z użytkownikiem
+    - [x] dodanie redirectów z parametrami get, które mówią co poszło w logowaniu nie tak
+    - [ ] implementacja pobierania użytkownika z DB
 
 2. `Koszyk (backend)`
