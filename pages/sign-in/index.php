@@ -1,6 +1,8 @@
 <?php session_start(); ?>
 
 <?php
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') exit;
+
     // walidacja danych (czy są uzupełnione)
     $is_email = isset($_POST['email']);
     $is_password = isset($_POST['password']);
