@@ -2,16 +2,16 @@
 
 <?php
     // walidacja danych (czy są uzupełnione)
-    $isEmail = isset($_POST['email']);
-    $isPassword = isset($_POST['password']);
+    $is_email = isset($_POST['email']);
+    $is_password = isset($_POST['password']);
 
-    if (!$isEmail || !$isPassword) {
-        $errorParams = "?";
+    if (!$is_email || !$is_password) {
+        $error_params = "?";
 
-        if (!$isEmail) $errorParams .= "email=empty&";
-        if (!$isPassword) $errorParams .= "password=empty";
+        if (!$is_email) $error_params .= "email=empty&";
+        if (!$is_password) $error_params .= "password=empty";
 
-        header("Location: ./index.php$errorParams");
+        header("Location: ./index.php$error_params");
         exit;
     }
 
@@ -29,10 +29,10 @@
         exit;
     }
 
-    $hashedPassword = $user['password'];
-    $isPasswordCorrect = password_verify($password, $hashedPassword);
+    $hashed_password = $user['password'];
+    $is_password_correct = password_verify($password, $hashed_password);
     
-    if (!$isPasswordCorrect) {
+    if (!$is_password_correct) {
         header("Location: ./index.php?password=incorrect");
         exit;
     }
