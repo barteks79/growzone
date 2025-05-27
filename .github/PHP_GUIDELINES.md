@@ -1,11 +1,11 @@
-# PHP Guidelines 
+# PHP Guidelines <img src="../public/php.png" alt="PHP logo" width="25" />
 
 Stosujemy się do zasad, aby każdy rozumiał kod.
 
 1. **Nazywanie Zmiennych**
-   
+
    ```diff
-  
+
    # korzystamy z snake case
    - $isGay = true;
    - $IsGay = true;
@@ -24,10 +24,10 @@ Stosujemy się do zasad, aby każdy rozumiał kod.
 
    Strony są w plikach index.php
 
-    ```
-    ├── pages 
-    │   └── sign-in
-    │       └── index.php
-    ├── php
-    │   └── db.php 
+   ```
+   ├── pages
+   │   └── sign-in
+   │       └── index.php
+   ├── php
+   │   └── db.php
    ```
