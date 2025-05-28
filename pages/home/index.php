@@ -1,3 +1,8 @@
+<?php
+session_start();
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,8 +39,8 @@
             </div>
 
             <div class="justify-self-center flex gap-10 font-medium uppercase *:hover:text-emerald-600 *:transition-colors drop-shadow-2xl">
-                <a href="#">Home</a>
-                <a href="#">Plants</a>
+                <a href="../home/index.php">Home</a>
+                <a href="../plants/index.php">Plants</a>
                 <a href="#">Tools</a>
                 <a href="#">Sale</a>
                 <a href="#">Seasonal</a>
@@ -50,12 +55,23 @@
                     <i data-lucide="shopping-cart" class="size-full"></i>
                 </button>
 
-                <button class="size-10 cursor-pointer relative">
-                    <span class="bg-orange-400 text-lg pt-1 font-bold text-white size-full rounded-full grid place-items-center">PL</span>
-                    <div class="absolute bg-white p-0.5 rounded-full grid place-items-center -bottom-1.5 -right-1">
-                        <i data-lucide="chevron-down" class="size-[14px]"></i>
-                    </div>
-                </button>
+                <form method="post">
+                    <button class="size-10 cursor-pointer relative" name="login_button" type="submit">
+                        <span class="bg-orange-400 text-lg pt-1 font-bold text-white size-full rounded-full grid place-items-center">PL</span>
+                        <div class="absolute bg-white p-0.5 rounded-full grid place-items-center -bottom-1.5 -right-1">
+                            <i data-lucide="chevron-down" class="size-[14px]"></i>
+                        </div>
+                    </button>
+                </form>
+                <?php
+                if($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['login_button'])){
+                    if(!isset($_SESSION['user'])){
+                        echo '<script>window.location.href = "../sign-in/index.php"</script>';
+                    } else{
+                        echo "Lesiak zmieniasz pomysły jak skarpetki :)";
+                    }
+                }
+                ?>
             </div>
         </nav>
 
