@@ -20,10 +20,6 @@ INSERT INTO users (email, password, role) VALUES
 ('kuba.motyczka@example.com', 'passgggg', 'user'),
 ('magda.kompost@example.com', 'passhhhh', 'user');
 
-
-
-
-
 INSERT INTO shipping_address (street, building_number, apartment_number, city, postal_code, country) VALUES
 ('Ogrodowa', '12', '3', 'Warszawa', '00-001', 'Polska'),
 ('Kwiatowa', '7', NULL, 'Kraków', '30-002', 'Polska'),
@@ -45,9 +41,6 @@ INSERT INTO shipping_address (street, building_number, apartment_number, city, p
 ('Czereśniowa', '15', '2', 'Radom', '26-018', 'Polska'),
 ('Jagodowa', '17', NULL, 'Kielce', '25-019', 'Polska'),
 ('Winogronowa', '19', '6', 'Siedlce', '08-020', 'Polska');
-
-
-
 
 INSERT INTO `products` (`name`, `price`, `photo`, `stock_quantity`) VALUES
 ('Amnesia Haze CBD - susz konopny', 29.99, NULL, 1),
@@ -71,12 +64,6 @@ INSERT INTO `products` (`name`, `price`, `photo`, `stock_quantity`) VALUES
 ('Banana Kush CBD - susz konopny', 36.90, NULL, 1),
 ('Fioletowa Mgła CBD - susz konopny', 30.50, NULL, 1);
 
-
-
-
-
-
-
 INSERT INTO orders (order_date, status, shipping_address_id, delivery_date, user_id) VALUES
 ('2025-05-01', 'oplacono', 1, '2025-05-03', 1),
 ('2025-05-02', 'wyslano', 2, '2025-05-05', 2),
@@ -99,8 +86,6 @@ INSERT INTO orders (order_date, status, shipping_address_id, delivery_date, user
 ('2025-05-19', 'oplacono', 19, '2025-05-24', 19),
 ('2025-05-20', 'wyslano', 20, '2025-05-25', 20);
 
-
-
 INSERT INTO order_item (product_id, order_id, quantity) VALUES
 (1, 1, 2),
 (2, 2, 1),
@@ -122,9 +107,6 @@ INSERT INTO order_item (product_id, order_id, quantity) VALUES
 (18, 18, 1),
 (19, 19, 2),
 (20, 20, 1);
-
-
-
 
 INSERT INTO cart_items (user_id, product_id, quantity) VALUES
 (1, 5, 1),
