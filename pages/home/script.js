@@ -1,7 +1,11 @@
 import {
     ACESFilmicToneMapping,
+    DirectionalLight,
     Group,
+    Mesh,
+    MeshStandardMaterial,
     PerspectiveCamera,
+    PlaneGeometry,
     PMREMGenerator,
     Raycaster,
     Scene,
@@ -9,6 +13,7 @@ import {
     WebGLRenderer,
 } from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { animate, frame } from 'motion';
 
@@ -19,8 +24,9 @@ const renderer = new WebGLRenderer({
     antialias: true,
     alpha: true,
 });
+renderer.shadowMap.enabled = true;
 renderer.toneMapping = ACESFilmicToneMapping;
-renderer.toneMappingExposure = Math.pow(2, 0);
+renderer.toneMappingExposure = Math.pow(2, -0.5);
 
 const pmremGenerator = new PMREMGenerator(renderer);
 pmremGenerator.compileEquirectangularShader();
@@ -68,11 +74,40 @@ class IntroductionScene {
         this.camera.position.z = 5;
         this.scene.add(this.camera);
 
+        this.controls = new OrbitControls(this.camera, this.canvas);
+
+        this.directionalLight = new DirectionalLight(0xffffff, 10);
+        this.directionalLight.castShadow = true;
+        this.directionalLight.position.set(5, 2, -1);
+        this.directionalLight.target.position.set(-2, -2, 2);
+        this.scene.add(this.directionalLight);
+        this.scene.add(this.directionalLight.target);
+
+        this.ground = new Mesh(
+            new PlaneGeometry(20, 5),
+            new MeshStandardMaterial({
+                color: 0xffffff,
+                transparent: true,
+                alphaTest: 0.1,
+                opacity: 0.5,
+            }),
+        );
+        this.ground.castShadow = true;
+        this.ground.receiveShadow = true;
+        this.ground.position.set(0, -2.8, 0);
+        this.ground.rotation.set(-1.6, 0, 0);
+        this.scene.add(this.ground);
+
         this.shoppingCart = await loadGLTFModel('shopping-cart.glb');
         this.shoppingCart.position.set(-10, -2.6, 0);
         this.shoppingCart.rotation.set(0.0, 2.2, 0);
         this.shoppingCart.scale.setScalar(4);
         this.scene.add(this.shoppingCart);
+
+        this.shoppingCart.traverse(node => {
+            node.castShadow = true;
+            node.receiveShadow = true;
+        });
 
         this.shoppingCartAnimationCompleted = false;
 
@@ -100,16 +135,22 @@ class IntroductionScene {
         animate(this.tableBox.rotation, { y: -0.1 }, { duration: 2, ease: easeOutQuart });
 
         this.table = await loadGLTFModel('coffee-table.glb');
+        this.table.castShadow = true;
+        this.table.receiveShadow = true;
         this.table.scale.setScalar(3.5);
         this.tableBox.add(this.table);
 
         this.ponytailPalm = await loadGLTFModel('ponytail-palm.glb');
+        this.ponytailPalm.castShadow = true;
+        this.ponytailPalm.receiveShadow = true;
         this.ponytailPalm.name = PlantNames['PonytailPalm'];
         this.ponytailPalm.position.set(-1, 2.4, -0.2);
         this.ponytailPalm.scale.setScalar(0.1);
         this.tableBox.add(this.ponytailPalm);
 
         this.fiddleLeafFig = await loadGLTFModel('fiddle-leaf-fig.glb');
+        this.fiddleLeafFig.castShadow = true;
+        this.fiddleLeafFig.receiveShadow = true;
         this.fiddleLeafFig.name = PlantNames['FiddleLeafFig'];
         this.fiddleLeafFig.position.set(-0.08, 1.45, 0.1);
         this.fiddleLeafFig.rotation.set(0, 0.8, 0);
@@ -117,10 +158,17 @@ class IntroductionScene {
         this.tableBox.add(this.fiddleLeafFig);
 
         this.rhyzomePlant = await loadGLTFModel('rhyzome-plant.glb');
+        this.rhyzomePlant.castShadow = true;
+        this.rhyzomePlant.receiveShadow = true;
         this.rhyzomePlant.name = PlantNames['RhyzomePlant'];
         this.rhyzomePlant.position.set(1.3, 1.45, 0.2);
         this.rhyzomePlant.scale.setScalar(1.5);
         this.tableBox.add(this.rhyzomePlant);
+
+        this.tableBox.traverse(node => {
+            node.castShadow = true;
+            node.receiveShadow = true;
+        });
 
         this.raycaster = new Raycaster();
 
@@ -153,6 +201,8 @@ class IntroductionScene {
 
     /** @param {number} delta */
     update(delta) {
+        this.controls.update(delta);
+
         if (this.shoppingCartAnimationCompleted) {
             this.shoppingCart.rotation.x = this.pointer.y * 0.1 + 0.0;
             this.shoppingCart.rotation.y = this.pointer.x * 0.2 + 1.6;
