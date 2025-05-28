@@ -26,5 +26,7 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
 2. `Akcje koszyka (backend)`
 
     - [ ] plik z funkcjonalnością dodawania przedmiotow
+        - [x] dodać logike php
+        - [ ] dodać logikę db
     - [ ] plik z funkcjonalnością usuwania przedmiotow
     - [ ] plik z funkcjonalnością usuwania wszystkich przedmiotow (czyszczenia)
