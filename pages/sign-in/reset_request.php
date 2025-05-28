@@ -2,6 +2,7 @@
 require '../php/phpmailer/src/PHPMailer.php';
 require '../php/phpmailer/src/SMTP.php';
 require '../php/phpmailer/src/Exception.php';
+require '../php/utils.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -27,14 +28,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Wysyłka maila
     $mail = new PHPMailer(true);
 
+    $env = get_env();
+
     try {
         $mail->isSMTP();
-        $mail->Host       = 'smtp.gmail.com';
-        $mail->SMTPAuth   = true;
-        $mail->Username   = 'growzone.help@gmail.com';  // <-- ZMIEŃ!
-        $mail->Password   = 'aghcvnysescjschd';    // <-- ZMIEŃ!
-        $mail->SMTPSecure = 'tls';
-        $mail->Port       = 587;
+        $mail->Host       = $env['HOST'];
+        $mail->SMTPAuth   = $env['AUTH'] === 'true' ? true : false;
+        $mail->Username   = $env['USERNAME'];
+        $mail->Password   = $env['PASSWORD'];
+        $mail->SMTPSecure = $env['SECURE'];
+        $mail->Port       = (int)$env['PORT'];
 
         $mail->setFrom('twojemail@gmail.com', 'TwojaStrona');
         $mail->addAddress($email);
