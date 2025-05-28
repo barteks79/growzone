@@ -29,7 +29,7 @@ session_start();
 <body class="font-[Sofia_Pro]">
     <div class="relative h-dvh">
         <div class="primary-radial-background absolute inset-0 -z-[2]"></div>
-        <canvas id="introduction-canvas" class="absolute size-full z-[1]"></canvas>
+        <canvas id="introduction-canvas" class="absolute size-full -z-[1]"></canvas>
 
         <nav class="px-[5vw] py-6 grid place-items-center grid-cols-3">
             <div class="justify-self-start">
@@ -55,30 +55,19 @@ session_start();
                     <i data-lucide="shopping-cart" class="size-full"></i>
                 </button>
 
-                <form method="post">
-                    <button class="size-10 cursor-pointer relative" name="login_button" type="submit">
-                        <span class="bg-orange-400 text-lg pt-1 font-bold text-white size-full rounded-full grid place-items-center">PL</span>
-                        <div class="absolute bg-white p-0.5 rounded-full grid place-items-center -bottom-1.5 -right-1">
-                            <i data-lucide="chevron-down" class="size-[14px]"></i>
-                        </div>
-                    </button>
-                </form>
-                <?php
-                if($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['login_button'])){
-                    if(!isset($_SESSION['user'])){
-                        echo '<script>window.location.href = "../sign-in/index.php"</script>';
-                    } else{
-                        echo "Lesiak zmieniasz pomysły jak skarpetki :)";
-                    }
-                }
-                ?>
+                <button class="size-10 cursor-pointer relative">
+                    <span class="bg-orange-400 text-lg pt-1 font-bold text-white size-full rounded-full grid place-items-center">PL</span>
+                    <div class="absolute bg-white p-0.5 rounded-full grid place-items-center -bottom-1.5 -right-1">
+                        <i data-lucide="chevron-down" class="size-[14px]"></i>
+                    </div>
+                </button>
             </div>
         </nav>
 
         <div class="mt-[60px] ml-[100px]">
-            <h2 class="animate-[enter-header_1000ms_ease-out] grid gap-4 font-[GT_Walsheim_Pro] text-8xl text-[#2D2946]">
+            <h2 class="animate-[enter-header_1000ms_ease-out] select-none grid gap-4 font-[GT_Walsheim_Pro] text-8xl text-[#2D2946]">
                 <span>Nature your garden</span>
-                <span>with <span id="header-product-text" class="text-emerald-400 text-shadow-[0_6px_var(--color-emerald-700)]">Growzone</span></span>
+                <span>with <span id="header-product-text" class="pb-2 text-emerald-400 text-shadow-[0_6px_var(--color-emerald-700)] overflow-clip">Growzone</span></span>
             </h2>
         </div>
     </div>

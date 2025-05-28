@@ -13,7 +13,6 @@ import {
     WebGLRenderer,
 } from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { animate, frame } from 'motion';
 
@@ -47,6 +46,67 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, true);
 });
 
+/** @param {string} text */
+function animateHeaderText(text) {
+    /** @type {HTMLSpanElement} */
+    const target = document.querySelector('#header-product-text');
+
+    target.innerHTML = '';
+
+    for (let i = 0; i < text.length; ++i) {
+        const letter = text[i];
+
+        const container = document.createElement('span');
+        container.style.position = 'relative';
+        container.style.display = 'inline-block';
+        container.style.transformStyle = 'preserve-3d';
+        container.style.perspective = '10000px';
+
+        const back = document.createElement('span');
+        back.style.position = 'absolute';
+        back.style.display = 'inline-block';
+        back.style.backfaceVisibility = 'hidden';
+        back.style.transformOrigin = '50% 25%';
+        back.textContent = letter == ' ' ? '\u00A0' : letter;
+        container.append(back);
+
+        animate(
+            back,
+            { y: 115 },
+            { delay: i * 0.05, duration: 0.3, ease: [0.175, 0.885, 0.32, 1.1] },
+        );
+
+        const front = document.createElement('span');
+        front.style.position = 'absolute';
+        front.style.display = 'inline-block';
+        front.style.backfaceVisibility = 'hidden';
+        front.style.transformOrigin = '50% 100%';
+        front.textContent = letter == ' ' ? '\u00A0' : letter;
+        container.append(front);
+
+        animate(
+            front,
+            { y: [-115, 0] },
+            { delay: i * 0.05 + 0.05, duration: 0.3, ease: [0.175, 0.885, 0.32, 1.1] },
+        );
+
+        const invisible = document.createElement('span');
+        invisible.style.visibility = 'hidden';
+        invisible.textContent = letter == ' ' ? '\u00A0' : letter;
+        container.append(invisible);
+
+        target.append(container);
+    }
+}
+
+/**
+ * @param {number} min
+ * @param {number} max
+ */
+function randomFloat(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
 const PlantNames = /** @type {const} */ ({
     PonytailPalm: 'Ponytail Palm',
     FiddleLeafFig: 'Fiddle-Leaf Fig',
@@ -74,8 +134,6 @@ class IntroductionScene {
         this.camera.position.z = 5;
         this.scene.add(this.camera);
 
-        this.controls = new OrbitControls(this.camera, this.canvas);
-
         this.directionalLight = new DirectionalLight(0xffffff, 10);
         this.directionalLight.castShadow = true;
         this.directionalLight.position.set(5, 2, -1);
@@ -86,10 +144,10 @@ class IntroductionScene {
         this.ground = new Mesh(
             new PlaneGeometry(20, 5),
             new MeshStandardMaterial({
-                color: 0xffffff,
+                color: 0x00ff00,
                 transparent: true,
                 alphaTest: 0.1,
-                opacity: 0.5,
+                opacity: 0,
             }),
         );
         this.ground.castShadow = true;
@@ -98,8 +156,10 @@ class IntroductionScene {
         this.ground.rotation.set(-1.6, 0, 0);
         this.scene.add(this.ground);
 
+        animate(this.ground.material, { opacity: 0.9 }, { duration: 1, ease: 'linear' });
+
         this.shoppingCart = await loadGLTFModel('shopping-cart.glb');
-        this.shoppingCart.position.set(-10, -2.6, 0);
+        this.shoppingCart.position.set(-10, -2.75, 0);
         this.shoppingCart.rotation.set(0.0, 2.2, 0);
         this.shoppingCart.scale.setScalar(4);
         this.scene.add(this.shoppingCart);
@@ -181,8 +241,46 @@ class IntroductionScene {
             this.pointer.y = -((event.clientY / this.canvas.clientHeight) * 2 - 1);
         });
 
-        /** @type {HTMLSpanElement} */
-        this.headerProductText = document.querySelector('#header-product-text');
+        this.plantClicked = false;
+
+        document.addEventListener('pointerdown', () => {
+            this.plantClicked = true;
+        });
+
+        this.plantHover = null;
+    }
+
+    /** @param {(typeof PlantNames)[keyof typeof PlantNames]} name */
+    #pushPlantToCart(name) {
+        let plant;
+
+        if (name == PlantNames.PonytailPalm) {
+            plant = this.ponytailPalm.clone();
+            plant.position.set(randomFloat(-0.05, 0.05), 0.9, randomFloat(-0.15, 0.25));
+            plant.scale.setScalar(0.015);
+
+            animate(plant.position, { y: 0.51 }, { duration: 0.5, ease: easeOutQuart });
+        }
+
+        if (name == PlantNames.FiddleLeafFig) {
+            plant = this.fiddleLeafFig.clone();
+            plant.position.set(randomFloat(-0.08, 0.04), 0.7, randomFloat(-0.15, 0.2));
+            plant.scale.setScalar(0.3);
+
+            animate(plant.position, { y: 0.35 }, { duration: 0.5, ease: easeOutQuart });
+        }
+
+        if (name == PlantNames.RhyzomePlant) {
+            plant = this.rhyzomePlant.clone();
+            plant.position.set(randomFloat(-0.1, 0.1), 0.6, randomFloat(-0.15, 0.2));
+            plant.scale.setScalar(0.25);
+
+            animate(plant.position, { y: 0.37 }, { duration: 0.5, ease: easeOutQuart });
+        }
+
+        plant.castShadow = false;
+        plant.receiveShadow = false;
+        this.shoppingCart.add(plant);
     }
 
     resize() {
@@ -201,8 +299,6 @@ class IntroductionScene {
 
     /** @param {number} delta */
     update(delta) {
-        this.controls.update(delta);
-
         if (this.shoppingCartAnimationCompleted) {
             this.shoppingCart.rotation.x = this.pointer.y * 0.1 + 0.0;
             this.shoppingCart.rotation.y = this.pointer.x * 0.2 + 1.6;
@@ -219,17 +315,48 @@ class IntroductionScene {
 
             for (const intersection of intersects) {
                 if (this.ponytailPalm.getObjectById(intersection.object.id)) {
-                    this.headerProductText.textContent = this.ponytailPalm.name;
+                    if (this.plantHover != PlantNames.PonytailPalm) {
+                        animateHeaderText(PlantNames.PonytailPalm);
+                    }
+
+                    this.plantHover = PlantNames.PonytailPalm;
+
+                    if (this.plantClicked) {
+                        this.#pushPlantToCart(PlantNames.PonytailPalm);
+                        this.plantClicked = false;
+                    }
                 }
 
                 if (this.fiddleLeafFig.getObjectById(intersection.object.id)) {
-                    this.headerProductText.textContent = this.fiddleLeafFig.name;
+                    if (this.plantHover != PlantNames.FiddleLeafFig) {
+                        animateHeaderText(PlantNames.FiddleLeafFig);
+                    }
+
+                    this.plantHover = PlantNames.FiddleLeafFig;
+
+                    if (this.plantClicked) {
+                        this.#pushPlantToCart(PlantNames.FiddleLeafFig);
+                        this.plantClicked = false;
+                    }
                 }
 
                 if (this.rhyzomePlant.getObjectById(intersection.object.id)) {
-                    this.headerProductText.textContent = this.rhyzomePlant.name;
+                    if (this.plantHover != PlantNames.RhyzomePlant) {
+                        animateHeaderText(PlantNames.RhyzomePlant);
+                    }
+
+                    this.plantHover = PlantNames.RhyzomePlant;
+
+                    if (this.plantClicked) {
+                        this.#pushPlantToCart(PlantNames.RhyzomePlant);
+                        this.plantClicked = false;
+                    }
                 }
             }
+
+            this.plantClicked = false;
+
+            document.body.style.cursor = intersects.length ? 'pointer' : 'auto';
         }
     }
 
