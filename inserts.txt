@@ -1,0 +1,149 @@
+INSERT INTO users (email, password, role) VALUES
+('anna.kowalska@example.com', 'pass1234', 'user'),
+('jan.nowak@example.com', 'pass5678', 'admin'),
+('kasia.ogrodnik@example.com', 'pass0000', 'user'),
+('marek.kwiat@example.com', 'pass9999', 'user'),
+('ewa.zielona@example.com', 'pass8888', 'user'),
+('tomasz.drwal@example.com', 'pass7777', 'user'),
+('ola.kaktus@example.com', 'pass6666', 'user'),
+('piotr.róża@example.com', 'pass5555', 'admin'),
+('marta.tulipan@example.com', 'pass4444', 'user'),
+('adam.krzew@example.com', 'pass3333', 'user'),
+('iza.doniczka@example.com', 'pass2222', 'user'),
+('bartek.trawa@example.com', 'pass1111', 'user'),
+('monika.pelargonia@example.com', 'passaaaa', 'user'),
+('dawid.sadzonka@example.com', 'passbbbb', 'user'),
+('agnieszka.garnek@example.com', 'passcccc', 'user'),
+('julia.zraszacz@example.com', 'passdddd', 'user'),
+('wojtek.konewka@example.com', 'passeeee', 'user'),
+('karol.grabie@example.com', 'passffff', 'user'),
+('kuba.motyczka@example.com', 'passgggg', 'user'),
+('magda.kompost@example.com', 'passhhhh', 'user');
+
+
+
+
+
+INSERT INTO shipping_address (street, building_number, apartment_number, city, postal_code, country) VALUES
+('Ogrodowa', '12', '3', 'Warszawa', '00-001', 'Polska'),
+('Kwiatowa', '7', NULL, 'Kraków', '30-002', 'Polska'),
+('Leśna', '4', '2', 'Wrocław', '50-003', 'Polska'),
+('Zielona', '9', NULL, 'Gdańsk', '80-004', 'Polska'),
+('Polna', '3', '1', 'Poznań', '60-005', 'Polska'),
+('Słoneczna', '18', NULL, 'Łódź', '90-006', 'Polska'),
+('Wiśniowa', '5', NULL, 'Katowice', '40-007', 'Polska'),
+('Brzozowa', '10', '5', 'Szczecin', '70-008', 'Polska'),
+('Topolowa', '21', NULL, 'Lublin', '20-009', 'Polska'),
+('Lipowa', '16', '4', 'Rzeszów', '35-010', 'Polska'),
+('Dębowa', '8', NULL, 'Opole', '45-011', 'Polska'),
+('Akacjowa', '2', NULL, 'Bydgoszcz', '85-012', 'Polska'),
+('Jesionowa', '6', NULL, 'Białystok', '15-013', 'Polska'),
+('Grabowa', '14', '7', 'Gorzów', '66-014', 'Polska'),
+('Morelowa', '11', NULL, 'Toruń', '87-015', 'Polska'),
+('Agrestowa', '13', NULL, 'Zielona Góra', '65-016', 'Polska'),
+('Malinowa', '1', NULL, 'Płock', '09-017', 'Polska'),
+('Czereśniowa', '15', '2', 'Radom', '26-018', 'Polska'),
+('Jagodowa', '17', NULL, 'Kielce', '25-019', 'Polska'),
+('Winogronowa', '19', '6', 'Siedlce', '08-020', 'Polska');
+
+
+
+
+INSERT INTO `products` (`name`, `price`, `photo`, `stock_quantity`) VALUES
+('Amnesia Haze CBD - susz konopny', 29.99, NULL, 1),
+('Lemon Skunk CBD - susz konopny', 32.50, NULL, 1),
+('OG Kush CBD - susz konopny', 34.90, NULL, 1),
+('Truskawkowy Cough CBD - susz', 31.00, NULL, 1),
+('Blueberry Diesel CBD - susz konopny', 33.25, NULL, 1),
+('Biała Wdowa CBD - susz', 30.00, NULL, 1),
+('Northern Lights CBD - susz konopny', 27.90, NULL, 1),
+('Pineapple Express CBD - susz konopny', 35.00, NULL, 1),
+('Gorilla Glue CBD - susz', 36.40, NULL, 1),
+('Green Crack CBD - susz', 28.80, NULL, 1),
+('Zkittlez CBD - susz konopny', 33.00, NULL, 1),
+('Super Cytrynowy Haze CBD - susz', 30.90, NULL, 1),
+('Girl Scout Cookies CBD - susz', 34.20, NULL, 1),
+('Wedding Cake CBD - susz konopny', 32.00, NULL, 1),
+('Jack Herer CBD - susz', 29.50, NULL, 1),
+('AK-47 CBD - susz konopny', 31.70, NULL, 1),
+('Critical Mass CBD - susz', 28.60, NULL, 1),
+('Orange Bud CBD - susz', 27.50, NULL, 1),
+('Banana Kush CBD - susz konopny', 36.90, NULL, 1),
+('Fioletowa Mgła CBD - susz konopny', 30.50, NULL, 1);
+
+
+
+
+
+
+
+INSERT INTO orders (order_date, status, shipping_address_id, delivery_date, user_id) VALUES
+('2025-05-01', 'oplacono', 1, '2025-05-03', 1),
+('2025-05-02', 'wyslano', 2, '2025-05-05', 2),
+('2025-05-03', 'dostarczono', 3, '2025-05-07', 3),
+('2025-05-04', 'oplacono', 4, '2025-05-08', 4),
+('2025-05-05', 'wyslano', 5, '2025-05-10', 5),
+('2025-05-06', 'dostarczono', 6, '2025-05-11', 6),
+('2025-05-07', 'oplacono', 7, '2025-05-12', 7),
+('2025-05-08', 'wyslano', 8, '2025-05-13', 8),
+('2025-05-09', 'dostarczono', 9, '2025-05-14', 9),
+('2025-05-10', 'oplacono', 10, '2025-05-15', 10),
+('2025-05-11', 'wyslano', 11, '2025-05-16', 11),
+('2025-05-12', 'dostarczono', 12, '2025-05-17', 12),
+('2025-05-13', 'oplacono', 13, '2025-05-18', 13),
+('2025-05-14', 'wyslano', 14, '2025-05-19', 14),
+('2025-05-15', 'dostarczono', 15, '2025-05-20', 15),
+('2025-05-16', 'oplacono', 16, '2025-05-21', 16),
+('2025-05-17', 'wyslano', 17, '2025-05-22', 17),
+('2025-05-18', 'dostarczono', 18, '2025-05-23', 18),
+('2025-05-19', 'oplacono', 19, '2025-05-24', 19),
+('2025-05-20', 'wyslano', 20, '2025-05-25', 20);
+
+
+
+INSERT INTO order_item (product_id, order_id, quantity) VALUES
+(1, 1, 2),
+(2, 2, 1),
+(3, 3, 3),
+(4, 4, 1),
+(5, 5, 2),
+(6, 6, 1),
+(7, 7, 1),
+(8, 8, 1),
+(9, 9, 2),
+(10, 10, 1),
+(11, 11, 1),
+(12, 12, 2),
+(13, 13, 1),
+(14, 14, 1),
+(15, 15, 1),
+(16, 16, 3),
+(17, 17, 1),
+(18, 18, 1),
+(19, 19, 2),
+(20, 20, 1);
+
+
+
+
+INSERT INTO cart_items (user_id, product_id, quantity) VALUES
+(1, 5, 1),
+(2, 6, 2),
+(3, 7, 1),
+(4, 8, 1),
+(5, 9, 2),
+(6, 10, 1),
+(7, 11, 1),
+(8, 12, 1),
+(9, 13, 1),
+(10, 14, 1),
+(11, 15, 1),
+(12, 16, 2),
+(13, 17, 1),
+(14, 18, 1),
+(15, 19, 1),
+(16, 20, 1),
+(17, 1, 1),
+(18, 2, 1),
+(19, 3, 2),
+(20, 4, 1);

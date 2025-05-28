@@ -23,4 +23,8 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
     - [x] dodanie redirectów z parametrami get, które mówią co poszło w logowaniu nie tak
     - [ ] implementacja pobierania użytkownika z DB
 
-2. `Koszyk (backend)`
+2. `Akcje koszyka (backend)`
+
+    - [ ] plik z funkcjonalnością dodawania przedmiotow
+    - [ ] plik z funkcjonalnością usuwania przedmiotow
+    - [ ] plik z funkcjonalnością usuwania wszystkich przedmiotow (czyszczenia)
