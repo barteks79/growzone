@@ -2,6 +2,11 @@
 
 Stosujemy się do zasad, aby każdy rozumiał kod.
 
+> [!WARNING]  
+> Plik środowiskowy `.env` powinien znależć się w roocie projektu.
+
+---
+
 1. **Nazywanie Zmiennych**
 
     ![PHP](https://img.shields.io/badge/php-%23777BB4.svg?style=for-the-badge&logo=php&logoColor=white)
@@ -36,6 +41,14 @@ Stosujemy się do zasad, aby każdy rozumiał kod.
     │       └── index.php
     ├── php
     │   └── db.php
+    │
+    ├── README.md
+    │
+    ├── LICENSE
+    │
+    ├── .gitignore
+    │
+    └── .env
     ```
 
 3. **Nazywanie commitów**
@@ -47,3 +60,18 @@ Stosujemy się do zasad, aby każdy rozumiał kod.
     <nazwa funkcjonalności/strony>: <wiadomość w formie dokonanej bezosobowej>
     # koszyk: zaimplementowano usuwanie przedmiotów z koszyka po kliknięciu przycisku Linka (kosza)
     ```
+    
+4. **Zmienne środowiskowe**
+
+    Uzupełnij te zmienne w pliku `.env`, po znaku =, bez spacji ani cudzysłowiu.
+
+   ```bash
+
+   HOST=
+   AUTH=
+   USERNAME=
+   PASSWORD=
+   SECURE=
+   PORT=
+   
+   ```
