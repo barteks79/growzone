@@ -34,3 +34,9 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
     - [ ] plik z funkcjonalnością usuwania wszystkich przedmiotow (czyszczenia)
         - [x] dodać logike php
         - [ ] dodać logikę db
+
+---
+
+### Bartosz Rymer
+
+- [ ] resetowanie hasła
