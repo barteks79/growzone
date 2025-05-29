@@ -59,6 +59,8 @@ function animateHeaderText(text) {
         const container = document.createElement('span');
         container.style.position = 'relative';
         container.style.display = 'inline-block';
+        container.style.paddingBottom = '15px';
+        container.style.overflow = 'hidden';
         container.style.transformStyle = 'preserve-3d';
         container.style.perspective = '10000px';
 
@@ -378,14 +380,8 @@ class IntroductionScene {
                 }
             }
 
-            if (intersects.length) {
-                document.body.style.cursor = 'pointer';
-            } else {
-                document.body.style.cursor = 'auto';
-                this.plantHover = null;
-            }
-
             this.plantClicked = false;
+            document.body.style.cursor = intersects.length ? 'pointer' : 'auto';
         }
     }
 
