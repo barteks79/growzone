@@ -29,7 +29,7 @@ session_start();
 <body class="font-[Sofia_Pro]">
     <div class="relative h-dvh">
         <div class="primary-radial-background absolute inset-0 -z-[2]"></div>
-        <canvas id="introduction-canvas" class="absolute size-full -z-[1]"></canvas>
+        <canvas id="introduction-canvas" class="absolute size-full -z-[1] data-focus:z-10"></canvas>
 
         <nav class="px-[5vw] py-6 grid place-items-center grid-cols-3">
             <div class="justify-self-start">

@@ -241,42 +241,66 @@ class IntroductionScene {
             this.pointer.y = -((event.clientY / this.canvas.clientHeight) * 2 - 1);
         });
 
+        this.plantHover = null;
         this.plantClicked = false;
 
         document.addEventListener('pointerdown', () => {
             this.plantClicked = true;
         });
 
-        this.plantHover = null;
+        this.activePushAnimations = 0;
     }
 
     /** @param {(typeof PlantNames)[keyof typeof PlantNames]} name */
     #pushPlantToCart(name) {
-        let plant;
+        let plant, animation;
+
+        this.activePushAnimations += 1;
+        this.canvas.dataset.focus = 'true';
 
         if (name == PlantNames.PonytailPalm) {
             plant = this.ponytailPalm.clone();
-            plant.position.set(randomFloat(-0.05, 0.05), 0.9, randomFloat(-0.15, 0.25));
+            plant.position.set(randomFloat(-0.05, 0.05), 1.1, randomFloat(-0.15, 0.25));
             plant.scale.setScalar(0.015);
 
-            animate(plant.position, { y: 0.51 }, { duration: 0.5, ease: easeOutQuart });
+            animation = animate(
+                plant.position,
+                { y: 0.51 },
+                { duration: 0.5, ease: easeOutQuart },
+            );
         }
 
         if (name == PlantNames.FiddleLeafFig) {
             plant = this.fiddleLeafFig.clone();
-            plant.position.set(randomFloat(-0.08, 0.04), 0.7, randomFloat(-0.15, 0.2));
+            plant.position.set(randomFloat(-0.08, 0.04), 0.95, randomFloat(-0.15, 0.2));
             plant.scale.setScalar(0.3);
 
-            animate(plant.position, { y: 0.35 }, { duration: 0.5, ease: easeOutQuart });
+            animation = animate(
+                plant.position,
+                { y: 0.35 },
+                { duration: 0.5, ease: easeOutQuart },
+            );
         }
 
         if (name == PlantNames.RhyzomePlant) {
             plant = this.rhyzomePlant.clone();
-            plant.position.set(randomFloat(-0.1, 0.1), 0.6, randomFloat(-0.15, 0.2));
+            plant.position.set(randomFloat(-0.1, 0.1), 0.9, randomFloat(-0.15, 0.2));
             plant.scale.setScalar(0.25);
 
-            animate(plant.position, { y: 0.37 }, { duration: 0.5, ease: easeOutQuart });
+            animation = animate(
+                plant.position,
+                { y: 0.37 },
+                { duration: 0.5, ease: easeOutQuart },
+            );
         }
+
+        animation.then(() => {
+            this.activePushAnimations -= 1;
+
+            if (this.activePushAnimations <= 0) {
+                delete this.canvas.dataset.focus;
+            }
+        });
 
         plant.castShadow = false;
         plant.receiveShadow = false;
@@ -354,9 +378,14 @@ class IntroductionScene {
                 }
             }
 
-            this.plantClicked = false;
+            if (intersects.length) {
+                document.body.style.cursor = 'pointer';
+            } else {
+                document.body.style.cursor = 'auto';
+                this.plantHover = null;
+            }
 
-            document.body.style.cursor = intersects.length ? 'pointer' : 'auto';
+            this.plantClicked = false;
         }
     }
 
