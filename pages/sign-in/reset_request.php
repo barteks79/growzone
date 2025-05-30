@@ -2,7 +2,7 @@
 require '../php/phpmailer/src/PHPMailer.php';
 require '../php/phpmailer/src/SMTP.php';
 require '../php/phpmailer/src/Exception.php';
-require '../php/utils.php';
+require '../php/env.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;

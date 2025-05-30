@@ -16,6 +16,8 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { animate, frame } from 'motion';
 
+import { updateAvatar } from '../../js/avatar.js';
+
 const easeOutQuart = [0.25, 1, 0.5, 1];
 
 const renderer = new WebGLRenderer({
@@ -44,6 +46,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         introductionScene.update(delta);
         await introductionScene.render();
     }, true);
+
+    const avatars = document.querySelectorAll('.avatar');
+
+    for (const avatar of avatars) {
+        const firstName = avatar.dataset.firstName;
+        const lastName = avatar.dataset.lastName;
+
+        updateAvatar(avatar, firstName, lastName);
+    }
 });
 
 /** @param {string} text */

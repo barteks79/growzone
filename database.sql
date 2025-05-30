@@ -44,9 +44,11 @@ CREATE TABLE `shipping_address` (
 
 CREATE TABLE `users` (
   `user_id` int NOT NULL,
-  `password` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `role` enum('admin','user') DEFAULT 'user',
+  `first_name` varchar(20) NOT NULL,
+  `last_name` varchar(30) NOT NULL,
   `email` varchar(255) NOT NULL,
+  `password` text NOT NULL,
+  `role` enum('admin','user') DEFAULT 'user',
   `reset_token` VARCHAR(100),
   `token_expires` DATETIME
 ); 
