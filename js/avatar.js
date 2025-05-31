@@ -13,7 +13,7 @@ export function updateAvatar(target, firstName, lastName) {
     const lastInitial = last.charAt(0).toUpperCase();
     target.textContent = `${firstInitial}${lastInitial}`;
 
-    const colors = ['#FF3399', '#FFCC00', '#33CC33', '#3399FF', '#9933FF', '#FF6600'];
+    const colors = ['#FF3399', '#FFCC00', '#33CC33', '#3399FF', '#9933FF', '#FF8400'];
     const colorIndex = hashStringToUnitInterval(`${first} ${last}`);
     target.style.background = colors[Math.floor(colorIndex * colors.length)];
 }

@@ -89,6 +89,12 @@ if (isset($_SESSION['errors'])) {
     <div class="relative h-dvh">
         <div class="primary-radial-background absolute inset-0 -z-[1]"></div>
 
+        <a href="../home/index.php" class="absolute top-6 left-6 bg-white rounded-md shadow-sm px-6 py-3">
+            <div class="flex items-center gap-3 group">
+                <img src="../../public/images/icon.png" alt="growzone icon" width="36" height="36" />
+                <span class="text-2xl font-semibold group-hover:text-emerald-600 transition">GrowZone</span>
+            </div>
+        </a>
         <div class="h-full grid place-items-center">
             <main class="bg-white rounded-xl shadow-xl px-8 py-8 min-w-[25rem] flex flex-col items-center">
                 <h2 class="text-3xl font-medium mb-8">Welcome back</h2>

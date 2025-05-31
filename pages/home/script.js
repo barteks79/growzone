@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const lastName = avatar.dataset.lastName;
 
         updateAvatar(avatar, firstName, lastName);
+        avatar.classList.remove('animate-pulse');
     }
 });
 
