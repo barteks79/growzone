@@ -35,6 +35,11 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
         - [x] dodać logike php
         - [ ] dodać logikę db
 
+3. `Mailer (frontend)`
+
+    - [x] stworzyć UI dla strony reset request
+    - [ ] stworzyć UI dla strony reset password
+
 ---
 
 ### Bartosz Rymer
@@ -53,7 +58,7 @@ INSERT INTO nazwa_tabeli (klucz_podstawowy, ..., klucz_obcy) VALUES (1, ..., 3);
 
    - [ ] dodaj do tych wstawianych wartości klucze obce i podstawowe  
 
-3. `Zapytania SQL`
+2. `Zapytania SQL`
    
    - [ ] wszystkie produkty
    - [ ] koszyki dla uzytkownika (po user_id)
