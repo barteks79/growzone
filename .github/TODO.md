@@ -2,7 +2,7 @@
 
 Taski zapisujemy według poniższego wzoru ↓
 
-```
+```txt
 Nazwa funkcjonalności + (backend/frontend/database) ✓
 
 - [x] Task ukończony
@@ -44,22 +44,72 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
 
 ### Bartosz Rymer
 
-- [x] resetowanie hasła
+-   [x] resetowanie hasła
 
 ---
 
 ### Aleksandra Jarema
 
-```sql 
+```sql
 INSERT INTO nazwa_tabeli (klucz_podstawowy, ..., klucz_obcy) VALUES (1, ..., 3);
 ```
 
 1. `Inserty`
 
-   - [ ] dodaj do tych wstawianych wartości klucze obce i podstawowe  
+    - [ ] dodaj do tych wstawianych wartości klucze obce i podstawowe
 
 2. `Zapytania SQL`
-   
-   - [ ] wszystkie produkty
-   - [ ] koszyki dla uzytkownika (po user_id)
-   - [ ] produkt nalezacy do koszyka (po cart_id)
+
+    - [ ] wszystkie produkty
+    - [ ] koszyki dla uzytkownika (po user_id)
+    - [ ] produkt nalezacy do koszyka (po cart_id)
+
+### Piotr Lesiak
+
+1. `Wyszukiwanie (frontend)`
+
+    - [ ] design strony
+    - [ ] wyszukiwanie po nazwie produktu (słowa kluczowe)
+    - [ ] filtrowanie kategorii produktów
+    - [ ] filtrowanie po cenie produktu (widełki)
+    - [ ] filtrowanie po dostępności produktu
+    - [ ] paginacja ??
+
+2. `Strona produktu (frontend)`
+
+    - [ ] design strony
+    - [ ] interaktywne zdjęcia produktu
+    - [ ] dodawanie do koszyka
+
+3. `Koszyk (frontend)`
+
+    - [ ] design strony
+    - [ ] interakcja z produktami (dodawanie, usuwanie)
+    - [ ] usuwanie całego koszyka
+    - [ ] zamawianie
+    - [ ] formularz z adresem użytkownika
+
+4. `Historia zamówień (frontend)`
+
+    - [ ] design strony
+    - [ ] możliwość ponownego zamówienia
+    - [ ] usuwanie z historii
+
+5. `Ustawienia użytkownika (frontend)`
+
+    - [ ] design strony
+    - [ ] formularz zmiany imiona, nazwiska, hasła
+    - [ ] kastomizacja koloru & obrazu profilu
+    - [ ] zmiana email'a ??
+
+6. `Panel admina (frontend)`
+
+    - [ ] design strony
+    - [ ] dodawanie produktów (również zdjęć)
+    - [ ] edycja produktów
+    - [ ] zarządzanie użytkownikami
+
+7. `Mail z resetowaniem hasła (frontend)`
+
+    - [ ] design mail'a
+    - [ ] [ukryty link do wirusa](https://youareanidiot.cc)
