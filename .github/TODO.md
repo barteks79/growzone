@@ -40,3 +40,21 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
 ### Bartosz Rymer
 
 - [ ] resetowanie hasła
+
+---
+
+### Aleksandra Jarema
+
+```sql 
+INSERT INTO nazwa_tabeli (klucz_podstawowy, ..., klucz_obcy) VALUES (1, ..., 3);
+```
+
+1. `Inserty`
+
+   - [ ] dodaj do tych wstawianych wartości klucze obce i podstawowe  
+
+3. `Zapytania SQL`
+   
+   - [ ] wszystkie produkty
+   - [ ] koszyki dla uzytkownika (po user_id)
+   - [ ] produkt nalezacy do koszyka (po cart_id)
