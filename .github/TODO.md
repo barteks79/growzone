@@ -21,7 +21,7 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
     - [x] walidacja danych z POSTa
     - [x] sprawdzenie zgodności danych z użytkownikiem
     - [x] dodanie redirectów z parametrami get, które mówią co poszło w logowaniu nie tak
-    - [ ] implementacja pobierania użytkownika z DB
+    - [x] implementacja pobierania użytkownika z DB
 
 2. `Akcje koszyka (backend)`
 
@@ -39,7 +39,7 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
 
 ### Bartosz Rymer
 
-- [ ] resetowanie hasła
+- [x] resetowanie hasła
 
 ---
 

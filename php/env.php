@@ -1,7 +1,7 @@
 <?php 
    function get_env() {
       $env = [];
-      $lines = file('../.env');
+      $lines = file('../../.env');
 
       foreach ($lines as $line) {
          if (!empty($line) && strpos(trim($line), '#') !== 0) {

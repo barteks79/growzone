@@ -134,7 +134,7 @@ if (isset($_SESSION['errors'])) {
                             <label for="remember">Remember me</label>
                         </div>
 
-                        <a href="#" class="underline">Forgot password?</a>
+                        <a href="reset_request.php" class="underline">Forgot password?</a>
                     </div>
 
                     <button type="submit" class="cursor-pointer rounded-md bg-green-500 py-3 font-bold text-white shadow-xs transition hover:brightness-110 [box-shadow:0_4px_0_0_var(--color-green-700)] active:translate-y-[4px] active:shadow-none">Sign in</button>
