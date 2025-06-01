@@ -119,7 +119,7 @@ if (isset($_SESSION['user_id'])) {
             <h2 class="animate-[enter-header_1000ms_ease-out] select-none grid gap-4 font-[GT_Walsheim_Pro] text-8xl text-[#2D2946]">
                 <span>Nature your garden</span>
                 <span class="flex gap-4 items-start">
-                    <span>width</span>    
+                    <span>with</span>    
                     <span id="header-product-text" class="text-emerald-400 text-shadow-[0_6px_var(--color-emerald-700)]">GrowZone</span>
                 </span>
             </h2>
