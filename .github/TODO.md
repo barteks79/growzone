@@ -38,7 +38,7 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
 3. `Mailer (frontend)`
 
     - [x] stworzyć UI dla strony reset request
-    - [ ] stworzyć UI dla strony reset password
+    - [x] stworzyć UI dla strony reset password
 
 ---
 
