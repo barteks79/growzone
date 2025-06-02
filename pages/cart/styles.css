@@ -1,17 +1,4 @@
-@import '../../public/fonts/GTWalsheimPro/include.css';
-@import '../../public/fonts/SofiaPro/include.css';
-
-@keyframes enter-header {
-    from {
-        opacity: 0;
-        translate: 0 -5rem;
-    }
-
-    to {
-        opacity: 1;
-        translate: 0;
-    }
-}
+@import '../../public/fonts/Inter/include.css';
 
 .primary-radial-background {
     background: hsl(150 100% 96.2%);

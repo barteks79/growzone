@@ -9,9 +9,17 @@ $first_name = $_POST['first-name'] ?? null;
 $last_name = $_POST['last-name'] ?? null;
 $email = $_POST['email'] ?? null;
 $password = $_POST['password'] ?? null;
+$remember = $_POST['remember'] ?? null;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $errors = [];
+    $_SESSION['sign-in-data'] = [
+        'first-name' => $first_name,
+        'last-name' => $last_name,
+        'email' => $email,
+        'password' => $password,
+        'remember' => $remember
+    ];
 
     if (!validate_email($email)) {
         $errors['email'] = 'Email is invalid.';
@@ -39,7 +47,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             $_SESSION['user_id'] = $user_id;
             unset($_SESSION['errors']);
-            unset($_SESSION['sign-in-data']);
+            
+            if ($remember !== 'on') {
+                unset($_SESSION['sign-in-data']);
+            }
 
             header('Location: ../home/index.php');
             exit();
@@ -49,12 +60,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     $_SESSION['errors'] = $errors;
-    $_SESSION['sign-in-data'] = [
-        'first-name' => $first_name,
-        'last-name' => $last_name,
-        'email' => $email,
-        'password' => $password
-    ];
 
     header('Location: ./index.php');
     exit();
@@ -65,6 +70,8 @@ $email_error = htmlspecialchars($_SESSION['errors']['email'] ?? '');
 
 $password = htmlspecialchars($_SESSION['sign-in-data']['password'] ?? '');
 $password_error = htmlspecialchars($_SESSION['errors']['password'] ?? '');
+
+$remember = htmlspecialchars($_SESSION['sign-in-data']['remember'] ?? '');
 
 if (isset($_SESSION['errors'])) {
     unset($_SESSION['errors']);
@@ -89,10 +96,10 @@ if (isset($_SESSION['errors'])) {
     <div class="relative h-dvh">
         <div class="primary-radial-background absolute inset-0 -z-[1]"></div>
 
-        <a href="../home/index.php" class="absolute top-6 left-6 bg-white rounded-md shadow-sm px-6 py-3">
-            <div class="flex items-center gap-3 group">
+        <a href="../home/index.php" class="absolute top-6 left-6 bg-white rounded-md shadow-sm px-6 py-3 group">
+            <div class="flex items-center gap-3">
                 <img src="../../public/images/icon.png" alt="growzone icon" width="36" height="36" />
-                <span class="text-2xl font-semibold group-hover:text-emerald-600 transition">GrowZone</span>
+                <span class="text-2xl font-bold group-hover:text-lime-600 transition">GrowZone</span>
             </div>
         </a>
         <div class="h-full grid place-items-center">
@@ -106,7 +113,7 @@ if (isset($_SESSION['errors'])) {
                             <span class="text-red-600">*</span>
                         </label>
                         <div class="relative">
-                            <input type="email" name="email" id="email" placeholder="Enter your email" class="border border-gray-400 p-2 pl-3 rounded-md w-full" value="<?= $email ?>" />
+                            <input type="email" name="email" id="email" placeholder="Enter your email" class="<?= $email_error ? 'shake-animation border-red-600' : '' ?> border border-gray-400 p-2 pl-3 rounded-md w-full" value="<?= $email ?>" />
                             <div class="absolute right-0.5 bottom-1 p-2">
                                 <i data-lucide="mail" class="size-[18px]"></i>
                             </div>
@@ -120,7 +127,7 @@ if (isset($_SESSION['errors'])) {
                             <span class="text-red-600">*</span>
                         </label>
                         <div class="relative">
-                            <input type="password" name="password" id="password" placeholder="Enter your password" class="border border-gray-400 p-2 pl-3 rounded-md w-full" value="<?= $password ?>" />
+                            <input type="password" name="password" id="password" placeholder="Enter your password" class="<?= $password_error ? 'shake-animation border-red-600' : '' ?> border border-gray-400 p-2 pl-3 rounded-md w-full" value="<?= $password ?>" />
                             <button type="button" id="toggle-password" class="absolute right-0.5 bottom-0.5 p-2">
                                 <i data-lucide="eye" class="size-[22px]"></i>
                             </button>
@@ -130,14 +137,14 @@ if (isset($_SESSION['errors'])) {
 
                     <div class="flex items-center justify-between px-1">
                         <div class="flex items-center gap-2">
-                            <input type="checkbox" name="remember" id="remember" />
+                            <input type="checkbox" name="remember" id="remember" <?= $remember ? 'checked' : '' ?> />
                             <label for="remember">Remember me</label>
                         </div>
 
-                        <a href="reset_request.php" class="underline">Forgot password?</a>
+                        <a href="./reset-request.php" class="underline">Forgot password?</a>
                     </div>
 
-                    <button type="submit" class="cursor-pointer rounded-md bg-green-500 py-3 font-bold text-white shadow-xs transition hover:brightness-110 [box-shadow:0_4px_0_0_var(--color-green-700)] active:translate-y-[4px] active:shadow-none">Sign in</button>
+                    <button type="submit" class="relative mt-3 duration-75 cursor-pointer rounded-md bg-green-500 py-3 font-bold text-white shadow-xs transition hover:brightness-105 [box-shadow:0_4px_0_0_var(--color-green-700)] active:translate-y-[4px] active:shadow-none before:absolute before:inset-0 before:-left-[500%] before:bg-[linear-gradient(120deg,_transparent,_hsla(0_0%_100%_/_.6),_transparent)] before:transition-none before:duration-700 before:ease-in-out hover:before:left-full hover:before:transition-all overflow-hidden">Sign in</button>
                 </form>
 
                 <div class="mt-6 flex items-center gap-2 w-full">

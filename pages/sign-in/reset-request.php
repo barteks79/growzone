@@ -18,13 +18,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = $stmt->get_result()->fetch_assoc();
 
     if (!$user) {
-        header('Location: ./reset_request.php?email=notfound');
+        header('Location: ./reset-request.php?email=notfound');
         exit;
     }
 
     $token = bin2hex(random_bytes(32));
     $expires = date('Y-m-d H:i:s', strtotime('+1 hour'));
-    $resetLink = "http://localhost/growzone/pages/sign-in/reset_password.php?token=$token";
+    $resetLink = "http://localhost/growzone/pages/sign-in/reset-password.php?token=$token";
 
     $stmt = $db_o->prepare("UPDATE users SET reset_token = ?, token_expires = ? WHERE email = ?");
     $stmt->bind_param('sss', $token, $expires, $email);
@@ -105,10 +105,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $mail->send();
         echo "Wysłano wiadomość e-mail z linkiem do resetu.";
-        header('Location: ./reset_request.php?email=sent');
+        header('Location: ./reset-request.php?email=sent');
     } catch (Exception $e) {
         echo "Błąd wysyłania: {$mail->ErrorInfo}";
-        header("Location: ./reset_request.php?email=$mail->ErrorInfo");
+        header("Location: ./reset-request.php?email=$mail->ErrorInfo");
     }
 }
 

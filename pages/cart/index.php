@@ -20,8 +20,8 @@ if (isset($_SESSION['user_id'])) {
     }
 }
 
-if (!$user || $user['role'] !== 'admin') {
-    header("Location: ../home/index.php");
+if (!$user) {
+    header("Location: ../sign-in/index.php");
     exit();
 }
 
@@ -31,7 +31,7 @@ if (!$user || $user['role'] !== 'admin') {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin | GrowZone</title>
+    <title>Cart | GrowZone</title>
 
     <link rel="shortcut icon" href="../../public/images/icon.png" />
     <link rel="stylesheet" href="./styles.css" />
@@ -42,7 +42,8 @@ if (!$user || $user['role'] !== 'admin') {
 </head>
 <body class="font-[Inter]">
     <div class="relative h-dvh">
-        <div class="primary-radial-background absolute inset-0 -z-[1]"></div>
+        <div class="primary-radial-background absolute inset-0 -z-[2]"></div>
+        <canvas id="introduction-canvas" class="absolute size-full -z-[1] data-focus:z-[1]"></canvas>
 
         <nav class="px-[3vw] py-6 grid place-items-center grid-cols-3">
             <div class="justify-self-start">
@@ -89,7 +90,9 @@ if (!$user || $user['role'] !== 'admin') {
                             <div class="mt-4 grid gap-2">
                                 <span class="w-full h-[2px] rounded-full bg-black/20"></span>
 
-                                <a href="../admin/index.php" class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-emerald-200"><i data-lucide="shield-user" class="size-5"></i>Admin Panel</a>
+                                <?php if ($user['role'] == 'admin'): ?>
+                                    <a href="../admin/index.php" class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-emerald-200"><i data-lucide="shield-user" class="size-5"></i>Admin Panel</a>
+                                <?php endif; ?>
 
                                 <button class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-neutral-200"><i data-lucide="history" class="size-5"></i>History</button>
                                 <button class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-neutral-200"><i data-lucide="settings" class="size-5"></i>Settings</button>

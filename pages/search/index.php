@@ -26,22 +26,13 @@ if (isset($_SESSION['user_id'])) {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GrowZone</title>
+    <title>Search | GrowZone</title>
 
     <link rel="shortcut icon" href="../../public/images/icon.png" />
     <link rel="stylesheet" href="./styles.css" />
 
     <script src="https://unpkg.com/@tailwindcss/browser@4.1.7"></script>
     <script src="https://unpkg.com/lucide@0.511.0"></script>
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://cdn.jsdelivr.net/npm/three@0.176.0/build/three.module.js",
-                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.176.0/examples/jsm/",
-                "motion": "https://cdn.jsdelivr.net/npm/motion@12.12.2/+esm"
-            }
-        }
-    </script>
     <script src="./script.js" type="module"></script>
 </head>
 <body class="font-[Inter]">
@@ -121,16 +112,6 @@ if (isset($_SESSION['user_id'])) {
                 <?php endif; ?>
             </div>
         </nav>
-
-        <div class="mt-[60px] ml-[100px]">
-            <h2 class="animate-[enter-header_1000ms_ease-out] select-none grid gap-4 font-[GT_Walsheim_Pro] text-8xl text-[#2D2946]">
-                <span>Nature your garden</span>
-                <span class="flex gap-4 items-start">
-                    <span>with</span>
-                    <span id="header-product-text" class="text-emerald-400 text-shadow-[0_6px_var(--color-emerald-700)]">GrowZone</span>
-                </span>
-            </h2>
-        </div>
     </div>
 
     <script>

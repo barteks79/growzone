@@ -8,10 +8,14 @@ const firstName = document.querySelector('#first-name');
 const lastName = document.querySelector('#last-name');
 /** @type {HTMLInputElement} */
 const passwordInput = document.querySelector('#password');
+/** @type {HTMLSpanElement} */
+const passwordCapsWarning = document.querySelector('#password-caps-warning');
 /** @type {HTMLButtonElement} */
 const passwordToggle = document.querySelector('#toggle-password');
 /** @type {HTMLSpanElement[]} */
-const passwordStrength = document.querySelectorAll('#password-strength span');
+const passwordStrengthBars = document.querySelectorAll('#password-strength-bars span');
+/** @type {HTMLSpanElement} */
+const passwordStrengthText = document.querySelector('#password-strength-text');
 
 firstName.addEventListener('input', () =>
     updateAvatar(avatar, firstName.value, lastName.value),
@@ -19,10 +23,20 @@ firstName.addEventListener('input', () =>
 lastName.addEventListener('input', () =>
     updateAvatar(avatar, firstName.value, lastName.value),
 );
+if (firstName.value || lastName.value) {
+    updateAvatar(avatar, firstName.value, lastName.value);
+}
 
 passwordToggle.addEventListener('click', () => {
     passwordInput.type = passwordInput.type == 'text' ? 'password' : 'text';
     passwordInput.focus();
+});
+
+document.addEventListener('keydown', event => {
+    if (event.key != 'CapsLock') return;
+
+    passwordCapsWarning.dataset.active =
+        passwordCapsWarning.dataset.active == 'true' ? 'false' : 'true';
 });
 
 passwordInput.addEventListener('input', updatePasswordStrength);
@@ -31,8 +45,26 @@ updatePasswordStrength();
 function updatePasswordStrength() {
     const strength = evaluatePasswordStrength(passwordInput.value);
 
-    for (const element of passwordStrength) {
+    for (const element of passwordStrengthBars) {
         element.dataset.strength = strength;
+    }
+
+    passwordStrengthText.textContent = getPasswordStrengthText(strength);
+}
+
+/** @param {number} strength */
+function getPasswordStrengthText(strength) {
+    switch (strength) {
+        case 1:
+            return 'Very Weak';
+        case 2:
+            return 'Weak';
+        case 3:
+            return 'Good';
+        case 4:
+            return 'Strong';
+        default:
+            return '';
     }
 }
 

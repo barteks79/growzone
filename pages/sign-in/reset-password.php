@@ -3,7 +3,7 @@
     require_once __DIR__ . '/../../php/env.php';
 
     if (!isset($_GET['token'])) {
-        header('Location: ./reset_request.php');
+        header('Location: ./reset-request.php');
         exit;
     }
 
@@ -14,7 +14,7 @@
     $user = $stmt->get_result()->fetch_assoc();
 
     if (!$user) {
-        header('Location: ./reset_request.php');
+        header('Location: ./reset-request.php');
         exit;
     }
 
