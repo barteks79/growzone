@@ -44,6 +44,7 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
 
 ### Bartosz Rymer
 
+-   [x] rejestracja (backend)
 -   [x] resetowanie hasła
 
 ---
