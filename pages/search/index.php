@@ -37,8 +37,7 @@ if (isset($_SESSION['user_id'])) {
 </head>
 <body class="font-[Inter]">
     <div class="relative h-dvh">
-        <div class="primary-radial-background absolute inset-0 -z-[2]"></div>
-        <canvas id="introduction-canvas" class="absolute size-full -z-[1] data-focus:z-[1]"></canvas>
+        <div class="primary-radial-background absolute inset-0 -z-[1]"></div>
 
         <nav class="px-[3vw] py-6 grid place-items-center grid-cols-3">
             <div class="justify-self-start">
