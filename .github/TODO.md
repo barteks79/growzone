@@ -57,10 +57,10 @@ INSERT INTO nazwa_tabeli (klucz_podstawowy, ..., klucz_obcy) VALUES (1, ..., 3);
 
 1. `Inserty`
 
-    - [ ] dodaj do tych wstawianych wartości klucze obce i podstawowe
+    - [x] dodaj do tych wstawianych wartości klucze obce i podstawowe
 
 2. `Zapytania SQL`
 
-    - [ ] wszystkie produkty
-    - [ ] koszyki dla uzytkownika (po user_id)
-    - [ ] produkt nalezacy do koszyka (po cart_id)
+    - [x] wszystkie produkty
+    - [x] koszyki dla uzytkownika (po user_id)
+    - [x] produkt nalezacy do koszyka (po cart_id)
