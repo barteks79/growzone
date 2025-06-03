@@ -1,5 +1,7 @@
 import { hashStringToUnitInterval } from './utils.js';
 
+const backgroundColors = ['#FF3399', '#FFCC00', '#33CC33', '#3399FF', '#9933FF', '#FF8400'];
+
 /**
  * @param {HTMLElement} target
  * @param {string} firstName
@@ -13,7 +15,7 @@ export function updateAvatar(target, firstName, lastName) {
     const lastInitial = last.charAt(0).toUpperCase();
     target.textContent = `${firstInitial}${lastInitial}`;
 
-    const colors = ['#FF3399', '#FFCC00', '#33CC33', '#3399FF', '#9933FF', '#FF8400'];
-    const colorIndex = hashStringToUnitInterval(`${first} ${last}`);
-    target.style.background = colors[Math.floor(colorIndex * colors.length)];
+    const unitIndex = hashStringToUnitInterval(`${first} ${last}`);
+    const index = Math.floor(unitIndex * backgroundColors.length);
+    target.style.background = backgroundColors[index];
 }

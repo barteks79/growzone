@@ -4,9 +4,9 @@
     background: hsl(150 100% 96.2%);
     background-image: radial-gradient(
             at 80% 10%,
-            hsla(341 100% 70.2% / 0.2) 0,
+            hsla(341 100% 70.2% / 0.4) 0,
             transparent 50%
         ),
-        radial-gradient(at 15% 55%, hsla(20 100% 70.2% / 0.3) 0, transparent 50%),
-        radial-gradient(at 70% 70%, hsla(143 100% 70.2% / 0.39) 0, transparent 50%);
+        radial-gradient(at 15% 55%, hsla(20 100% 70.2% / 0.6) 0, transparent 50%),
+        radial-gradient(at 70% 70%, hsla(143 100% 70.2% / 0.78) 0, transparent 50%);
 }

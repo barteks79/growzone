@@ -2,18 +2,22 @@ import {
     ACESFilmicToneMapping,
     DirectionalLight,
     Group,
+    MathUtils,
     Mesh,
     MeshStandardMaterial,
     PerspectiveCamera,
     PlaneGeometry,
     PMREMGenerator,
+    PointLight,
     Raycaster,
     Scene,
     Vector2,
+    Vector3,
     WebGLRenderer,
 } from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { Sky } from 'three/addons/objects/Sky.js';
 import { animate, frame } from 'motion';
 
 import { updateAvatar } from '../../js/avatar.js';
@@ -21,7 +25,7 @@ import { updateAvatar } from '../../js/avatar.js';
 const easeOutQuart = [0.25, 1, 0.5, 1];
 
 const renderer = new WebGLRenderer({
-    canvas: new OffscreenCanvas(100, 100),
+    canvas: new OffscreenCanvas(1920, 1080),
     antialias: true,
     alpha: true,
 });
@@ -31,8 +35,6 @@ renderer.toneMappingExposure = Math.pow(2, -0.5);
 
 const pmremGenerator = new PMREMGenerator(renderer);
 pmremGenerator.compileEquirectangularShader();
-
-const neutralEnvironment = pmremGenerator.fromScene(new RoomEnvironment()).texture;
 
 document.addEventListener('DOMContentLoaded', async () => {
     const introductionScene = new IntroductionScene(
@@ -113,17 +115,9 @@ function animateHeaderText(text) {
     }
 }
 
-/**
- * @param {number} min
- * @param {number} max
- */
-function randomFloat(min, max) {
-    return Math.random() * (max - min) + min;
-}
-
 const PlantNames = /** @type {const} */ ({
-    PonytailPalm: 'Ponytail Palm',
     FiddleLeafFig: 'Fiddle-Leaf Fig',
+    PonytailPalm: 'Ponytail Palm',
     RhyzomePlant: 'Rhyzome Plant',
 });
 
@@ -142,21 +136,50 @@ class IntroductionScene {
 
     async setup() {
         this.scene = new Scene();
-        this.scene.environment = neutralEnvironment;
+        this.sceneEnv = new Scene();
+
+        this.sky = new Sky();
+        this.sky.scale.setScalar(10000);
+        this.sceneEnv.add(this.sky);
+
+        const phi = MathUtils.degToRad(90 - 3);
+        const theta = MathUtils.degToRad(200);
+        const sun = new Vector3();
+        sun.setFromSphericalCoords(1, phi, theta);
+        this.sky.material.uniforms['sunPosition'].value.copy(sun);
+        this.sky.material.uniforms['turbidity'].value = 10;
+        this.sky.material.uniforms['rayleigh'].value = 2;
+        this.sky.material.uniforms['mieCoefficient'].value = 0.005;
+        this.sky.material.uniforms['mieDirectionalG'].value = 0.8;
+
+        const renderTarget = pmremGenerator.fromScene(this.sceneEnv);
+        this.scene.add(this.sky);
+        this.scene.environment = renderTarget.texture;
 
         this.camera = new PerspectiveCamera(75);
         this.camera.position.z = 5;
         this.scene.add(this.camera);
 
+        this.controls = new OrbitControls(this.camera, this.canvas);
+
         this.directionalLight = new DirectionalLight(0xffffff, 10);
         this.directionalLight.castShadow = true;
-        this.directionalLight.position.set(5, 2, -1);
-        this.directionalLight.target.position.set(-2, -2, 2);
+        this.directionalLight.shadow.mapSize.set(2048, 2048);
+        this.directionalLight.shadow.intensity = 0.5;
+        this.directionalLight.position.set(-5, 1.5, -1);
+        this.directionalLight.target.position.set(3, -2, 1);
         this.scene.add(this.directionalLight);
         this.scene.add(this.directionalLight.target);
 
+        this.pointLight = new PointLight(0xffffff, 50);
+        this.pointLight.castShadow = true;
+        this.pointLight.shadow.mapSize.set(2048, 2048);
+        this.pointLight.shadow.intensity = 0.5;
+        this.pointLight.position.set(-3, 1, 1.5);
+        this.scene.add(this.pointLight);
+
         this.ground = new Mesh(
-            new PlaneGeometry(20, 5),
+            new PlaneGeometry(100, 5),
             new MeshStandardMaterial({
                 color: 0x00ff00,
                 transparent: true,
@@ -170,9 +193,9 @@ class IntroductionScene {
         this.ground.rotation.set(-1.6, 0, 0);
         this.scene.add(this.ground);
 
-        animate(this.ground.material, { opacity: 0.9 }, { duration: 1, ease: 'linear' });
+        animate(this.ground.material, { opacity: 0.8 }, { duration: 1, ease: 'linear' });
 
-        this.shoppingCart = await loadGLTFModel('shopping-cart.glb');
+        this.shoppingCart = await loadModel('shopping-cart.glb');
         this.shoppingCart.position.set(-10, -2.75, 0);
         this.shoppingCart.rotation.set(0.0, 2.2, 0);
         this.shoppingCart.scale.setScalar(4);
@@ -208,35 +231,37 @@ class IntroductionScene {
         animate(this.tableBox.position, { x: 2.5 }, { duration: 2, ease: easeOutQuart });
         animate(this.tableBox.rotation, { y: -0.1 }, { duration: 2, ease: easeOutQuart });
 
-        this.table = await loadGLTFModel('coffee-table.glb');
+        this.table = await loadModel('coffee-table.glb');
         this.table.castShadow = true;
         this.table.receiveShadow = true;
         this.table.scale.setScalar(3.5);
         this.tableBox.add(this.table);
 
-        this.ponytailPalm = await loadGLTFModel('ponytail-palm.glb');
-        this.ponytailPalm.castShadow = true;
-        this.ponytailPalm.receiveShadow = true;
-        this.ponytailPalm.name = PlantNames['PonytailPalm'];
-        this.ponytailPalm.position.set(-1, 2.4, -0.2);
-        this.ponytailPalm.scale.setScalar(0.1);
-        this.tableBox.add(this.ponytailPalm);
+        const plants = await loadModel('plants.glb');
 
-        this.fiddleLeafFig = await loadGLTFModel('fiddle-leaf-fig.glb');
+        this.fiddleLeafFig = plants.getObjectByName('SnakePlant_02').clone();
         this.fiddleLeafFig.castShadow = true;
         this.fiddleLeafFig.receiveShadow = true;
         this.fiddleLeafFig.name = PlantNames['FiddleLeafFig'];
-        this.fiddleLeafFig.position.set(-0.08, 1.45, 0.1);
-        this.fiddleLeafFig.rotation.set(0, 0.8, 0);
-        this.fiddleLeafFig.scale.setScalar(1.5);
+        this.fiddleLeafFig.position.set(-1.2, 1.44, -0.2);
+        this.fiddleLeafFig.scale.setScalar(3.5);
         this.tableBox.add(this.fiddleLeafFig);
 
-        this.rhyzomePlant = await loadGLTFModel('rhyzome-plant.glb');
+        this.ponytailPalm = plants.getObjectByName('Epipremium001').clone();
+        this.ponytailPalm.castShadow = true;
+        this.ponytailPalm.receiveShadow = true;
+        this.ponytailPalm.name = PlantNames['PonytailPalm'];
+        this.ponytailPalm.position.set(0, 1.45, 0.1);
+        this.ponytailPalm.rotation.set(0, 0.8, 0);
+        this.ponytailPalm.scale.setScalar(3.5);
+        this.tableBox.add(this.ponytailPalm);
+
+        this.rhyzomePlant = plants.getObjectByName('Palm_03').clone();
         this.rhyzomePlant.castShadow = true;
         this.rhyzomePlant.receiveShadow = true;
         this.rhyzomePlant.name = PlantNames['RhyzomePlant'];
         this.rhyzomePlant.position.set(1.3, 1.45, 0.2);
-        this.rhyzomePlant.scale.setScalar(1.5);
+        this.rhyzomePlant.scale.setScalar(4);
         this.tableBox.add(this.rhyzomePlant);
 
         this.tableBox.traverse(node => {
@@ -267,54 +292,43 @@ class IntroductionScene {
 
     /** @param {(typeof PlantNames)[keyof typeof PlantNames]} name */
     #pushPlantToCart(name) {
-        let plant, animation;
-
-        this.activePushAnimations += 1;
-        this.canvas.dataset.focus = 'true';
-
-        if (name == PlantNames.PonytailPalm) {
-            plant = this.ponytailPalm.clone();
-            plant.position.set(randomFloat(-0.05, 0.05), 1.1, randomFloat(-0.15, 0.25));
-            plant.scale.setScalar(0.015);
-
-            animation = animate(
-                plant.position,
-                { y: 0.51 },
-                { duration: 0.5, ease: easeOutQuart },
-            );
-        }
+        let plant;
 
         if (name == PlantNames.FiddleLeafFig) {
             plant = this.fiddleLeafFig.clone();
-            plant.position.set(randomFloat(-0.08, 0.04), 0.95, randomFloat(-0.15, 0.2));
-            plant.scale.setScalar(0.3);
-
-            animation = animate(
-                plant.position,
-                { y: 0.35 },
-                { duration: 0.5, ease: easeOutQuart },
+            plant.position.set(
+                MathUtils.randFloat(-0.08, 0.04),
+                0.95,
+                MathUtils.randFloat(-0.15, 0.2),
             );
+            plant.scale.setScalar(0.6);
+
+            animate(plant.position, { y: 0.38 }, { duration: 0.5, ease: easeOutQuart });
+        }
+
+        if (name == PlantNames.PonytailPalm) {
+            plant = this.ponytailPalm.clone();
+            plant.position.set(
+                MathUtils.randFloat(-0.05, 0.05),
+                1.1,
+                MathUtils.randFloat(-0.15, 0.25),
+            );
+            plant.scale.setScalar(0.6);
+
+            animate(plant.position, { y: 0.37 }, { duration: 0.5, ease: easeOutQuart });
         }
 
         if (name == PlantNames.RhyzomePlant) {
             plant = this.rhyzomePlant.clone();
-            plant.position.set(randomFloat(-0.1, 0.1), 0.9, randomFloat(-0.15, 0.2));
-            plant.scale.setScalar(0.25);
-
-            animation = animate(
-                plant.position,
-                { y: 0.37 },
-                { duration: 0.5, ease: easeOutQuart },
+            plant.position.set(
+                MathUtils.randFloat(-0.1, 0.1),
+                0.9,
+                MathUtils.randFloat(-0.15, 0.2),
             );
+            plant.scale.setScalar(0.6);
+
+            animate(plant.position, { y: 0.37 }, { duration: 0.5, ease: easeOutQuart });
         }
-
-        animation.then(() => {
-            this.activePushAnimations -= 1;
-
-            if (this.activePushAnimations <= 0) {
-                delete this.canvas.dataset.focus;
-            }
-        });
 
         plant.castShadow = false;
         plant.receiveShadow = false;
@@ -352,19 +366,6 @@ class IntroductionScene {
             ]);
 
             for (const intersection of intersects) {
-                if (this.ponytailPalm.getObjectById(intersection.object.id)) {
-                    if (this.plantHover != PlantNames.PonytailPalm) {
-                        animateHeaderText(PlantNames.PonytailPalm);
-                    }
-
-                    this.plantHover = PlantNames.PonytailPalm;
-
-                    if (this.plantClicked) {
-                        this.#pushPlantToCart(PlantNames.PonytailPalm);
-                        this.plantClicked = false;
-                    }
-                }
-
                 if (this.fiddleLeafFig.getObjectById(intersection.object.id)) {
                     if (this.plantHover != PlantNames.FiddleLeafFig) {
                         animateHeaderText(PlantNames.FiddleLeafFig);
@@ -374,6 +375,19 @@ class IntroductionScene {
 
                     if (this.plantClicked) {
                         this.#pushPlantToCart(PlantNames.FiddleLeafFig);
+                        this.plantClicked = false;
+                    }
+                }
+
+                if (this.ponytailPalm.getObjectById(intersection.object.id)) {
+                    if (this.plantHover != PlantNames.PonytailPalm) {
+                        animateHeaderText(PlantNames.PonytailPalm);
+                    }
+
+                    this.plantHover = PlantNames.PonytailPalm;
+
+                    if (this.plantClicked) {
+                        this.#pushPlantToCart(PlantNames.PonytailPalm);
                         this.plantClicked = false;
                     }
                 }
@@ -413,7 +427,7 @@ const gltfLoader = new GLTFLoader();
  * @param {string} name
  * @returns {Promise<Group>}
  */
-async function loadGLTFModel(name) {
+async function loadModel(name) {
     const path = `../../public/models/${name}`;
     const model = await gltfLoader.loadAsync(path);
 

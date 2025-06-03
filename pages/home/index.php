@@ -47,21 +47,21 @@ if (isset($_SESSION['user_id'])) {
 <body class="font-[Inter]">
     <div class="relative h-dvh">
         <div class="primary-radial-background absolute inset-0 -z-[2]"></div>
-        <canvas id="introduction-canvas" class="absolute size-full -z-[1] data-focus:z-[1]"></canvas>
+        <canvas id="introduction-canvas" class="absolute size-full -z-[1]"></canvas>
 
-        <nav class="px-[3vw] py-6 grid place-items-center grid-cols-3">
+        <nav class="px-[3vw] py-4 grid place-items-center grid-cols-3">
             <div class="justify-self-start">
                 <a href="../home/index.php" class="drop-shadow-2xl drop-shadow-emerald-400 transition duration-200 hover:drop-shadow-lime-400">
                     <img src="../../public/images/icon.png" alt="growzone icon" width="42" />
                 </a>
             </div>
 
-            <div class="justify-self-center flex gap-10 font-medium uppercase *:hover:text-emerald-600 *:hover:drop-shadow-2xl *:transition-colors drop-shadow-2xl">
-                <a href="../home/index.php">Home</a>
-                <a href="../search/index.php">Plants</a>
-                <a href="../search/index.php">Tools</a>
-                <a href="../search/index.php">Sale</a>
-                <a href="../search/index.php">Seasonal</a>
+            <div class="justify-self-center flex gap-10 font-semibold uppercase drop-shadow-2xl">
+                <a href="../home/index.php" class="hover:text-white transition-colors rounded-lg hover:bg-black px-2 py-1">Home</a>
+                <a href="../search/index.php" class="hover:text-white transition-colors rounded-lg hover:bg-black px-2 py-1">Plants</a>
+                <a href="../search/index.php" class="hover:text-white transition-colors rounded-lg hover:bg-black px-2 py-1">Tools</a>
+                <a href="../search/index.php" class="hover:text-white transition-colors rounded-lg hover:bg-black px-2 py-1">Sale</a>
+                <a href="../search/index.php" class="hover:text-white transition-colors rounded-lg hover:bg-black px-2 py-1">Seasonal</a>
             </div>
 
             <div class="justify-self-end flex gap-8">
