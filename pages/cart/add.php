@@ -3,8 +3,14 @@
 
     header('Access-Control-Allow-Origin: *');
     header('Content-Type: application/json');
-    header('Access-Control-Allow-Methods: PUT');
+    header('Access-Control-Allow-Methods: POST');
     header('Access-Control-Allow-Headers: Content-Type');
+
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        http_response_code(405);
+        echo json_encode(['message' => 'Only POST request are allowed.']);
+        exit;
+    }
 
     $body = json_decode(file_get_contents('php://input'), true);
 
@@ -88,17 +94,30 @@
         $updated_quantity = $cart_item['quantity'] + 1;
         $cart_item_id = $cart_item['cart_item_id'];
 
-        $stmt = $db_o->prepare('UPDATE cart_items SET quantity = ? WHERE cart_item_id = ?');
-        $stmt->bind_param('ii', $updated_quantity, $cart_item_id);
-        $stmt->execute();
+        try {
+            $stmt = $db_o->prepare('UPDATE cart_items SET quantity = ? WHERE cart_item_id = ?');
+            $stmt->bind_param('ii', $updated_quantity, $cart_item_id);
+            $stmt->execute();
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(['message' => $e->getMessage()]);
+            exit;
+        }
 
         http_response_code(201);
         echo json_encode(['message' => "Product's quantity increased."]);
     } else {
         // dodajemy do cart'a
-        $stmt = $db_o->prepare('INSERT INTO cart_items VALUES (NULL, ?, 1, ?)');
-        $stmt->bind_param('ii', $product_id, $cart_id);
-        $stmt->execute();
+
+        try {
+            $stmt = $db_o->prepare('INSERT INTO cart_items VALUES (NULL, ?, 1, ?)');
+            $stmt->bind_param('ii', $product_id, $cart_id);
+            $stmt->execute();
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(['message' => $e->getMessage()]);
+            exit;
+        }
         
         http_response_code(201);
         echo json_encode(['message' => 'Product added to cart.']);
