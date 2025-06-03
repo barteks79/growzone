@@ -1,4 +1,6 @@
 <?php 
+    require_once __DIR__ . '../../../php/db.php';
+
     header('Access-Control-Allow-Origin: *');
     header('Content-Type: application/json');
     header('Access-Control-Allow-Methods: PUT');
@@ -6,6 +8,7 @@
 
     $body = json_decode(file_get_contents('php://input'), true);
 
+    // walidacja body
     if (!$body) {
         http_response_code(400);
         echo json_encode(['message' => 'No body provided.']);
@@ -21,15 +24,14 @@
         exit;
     }
 
-    // logika z db
+    // pobieranie produktu z bazy
+    $stmt = $db_o->prepare('SELECT * FROM products WHERE product_id = ?');
+    $stmt->bind_param('i', $product_id);
+    $stmt->execute();
 
-    $product = [
-        'product_id' => 1,
-        'name' => 'Palma',
-        'price' => 69.99,
-        'photo' => 'images/palma.jpg',
-        'in_stock' => true
-    ];
+    $product = $stmt
+        ->get_result()
+        ->fetch_assoc();
 
     if (!$product) {
         http_response_code(404);
@@ -37,30 +39,71 @@
         exit;
     }
 
-    $user = [
-        'email' => 'test@gmail.com',
-        'password' => '32de32nsadyu2jsnadjkhas-sdad2@E3'
-    ];
+    // pobieranie uzytkownika z bazy
+    $stmt = $db_o->prepare('SELECT * FROM users WHERE user_id = ?');
+    $stmt->bind_param('i', $user_id);
+    $stmt->execute();
 
+    $user = $stmt
+        ->get_result()
+        ->fetch_assoc();
+
+    // walidacja uzytkownika
     if (!$user) {
-        http_response_code(404);
-        echo json_encode(['message' => 'User not found.']);
+        http_response_code(401);
+        echo json_encode(['message' => 'User not authenticated.']);
         exit;
     }
 
-    $is_product_in_cart = false; // logika z DB
+    // pobieramy koszyk z bazy
+    $stmt = $db_o->prepare('SELECT * FROM carts WHERE user_id = ?');
+    $stmt->bind_param('i', $user_id);
+    $stmt->execute();
+
+    $cart = $stmt
+        ->get_result()
+        ->fetch_assoc();
+
+    if (!$cart) {
+        $stmt = $db_o->prepare('INSERT INTO carts VALUES (NULL, ?)');
+        $stmt->bind_param('i', $user_id);
+        $stmt->execute();
+    }
+
+    $cart_id = $cart['cart_id'] ?? $stmt->insert_id;
+
+    // pobieramy cart_item z bazy
+    $stmt = $db_o->prepare('SELECT * FROM cart_items WHERE product_id = ? AND cart_id = ?');
+    $stmt->bind_param('ii', $product_id, $cart_id);
+    $stmt->execute();
+
+    $cart_item = $stmt
+        ->get_result()
+        ->fetch_assoc();
+
+    $is_product_in_cart = boolval($cart_item); // logika z DB
 
     if ($is_product_in_cart) {
         // zwiększamy quantity
+        $updated_quantity = $cart_item['quantity'] + 1;
+        $cart_item_id = $cart_item['cart_item_id'];
+
+        $stmt = $db_o->prepare('UPDATE cart_items SET quantity = ? WHERE cart_item_id = ?');
+        $stmt->bind_param('ii', $updated_quantity, $cart_item_id);
+        $stmt->execute();
 
         http_response_code(201);
         echo json_encode(['message' => "Product's quantity increased."]);
     } else {
         // dodajemy do cart'a
+        $stmt = $db_o->prepare('INSERT INTO cart_items VALUES (NULL, ?, 1, ?)');
+        $stmt->bind_param('ii', $product_id, $cart_id);
+        $stmt->execute();
         
         http_response_code(201);
         echo json_encode(['message' => 'Product added to cart.']);
     }
 
+    $stmt->close();
     exit;
 ?>
