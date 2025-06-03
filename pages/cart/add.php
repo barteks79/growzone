@@ -1,5 +1,6 @@
 <?php 
     require_once __DIR__ . '../../../php/db.php';
+    require_once __DIR__ . '../../../php/server_error.php';
 
     header('Access-Control-Allow-Origin: *');
     header('Content-Type: application/json');
@@ -30,10 +31,9 @@
         exit;
     }
 
-    // pobieranie produktu z bazy
     $stmt = $db_o->prepare('SELECT * FROM products WHERE product_id = ?');
     $stmt->bind_param('i', $product_id);
-    $stmt->execute();
+    if (!$stmt->execute()) server_error($stmt->error);
 
     $product = $stmt
         ->get_result()
@@ -48,7 +48,7 @@
     // pobieranie uzytkownika z bazy
     $stmt = $db_o->prepare('SELECT * FROM users WHERE user_id = ?');
     $stmt->bind_param('i', $user_id);
-    $stmt->execute();
+    if (!$stmt->execute()) server_error($stmt->error);
 
     $user = $stmt
         ->get_result()
@@ -64,7 +64,7 @@
     // pobieramy koszyk z bazy
     $stmt = $db_o->prepare('SELECT * FROM carts WHERE user_id = ?');
     $stmt->bind_param('i', $user_id);
-    $stmt->execute();
+    if (!$stmt->execute()) server_error($stmt->error);
 
     $cart = $stmt
         ->get_result()
@@ -73,7 +73,7 @@
     if (!$cart) {
         $stmt = $db_o->prepare('INSERT INTO carts VALUES (NULL, ?)');
         $stmt->bind_param('i', $user_id);
-        $stmt->execute();
+        if (!$stmt->execute()) server_error($stmt->error);
     }
 
     $cart_id = $cart['cart_id'] ?? $stmt->insert_id;
@@ -81,7 +81,7 @@
     // pobieramy cart_item z bazy
     $stmt = $db_o->prepare('SELECT * FROM cart_items WHERE product_id = ? AND cart_id = ?');
     $stmt->bind_param('ii', $product_id, $cart_id);
-    $stmt->execute();
+    if (!$stmt->execute()) server_error($stmt->error);
 
     $cart_item = $stmt
         ->get_result()
@@ -94,30 +94,17 @@
         $updated_quantity = $cart_item['quantity'] + 1;
         $cart_item_id = $cart_item['cart_item_id'];
 
-        try {
-            $stmt = $db_o->prepare('UPDATE cart_items SET quantity = ? WHERE cart_item_id = ?');
-            $stmt->bind_param('ii', $updated_quantity, $cart_item_id);
-            $stmt->execute();
-        } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(['message' => $e->getMessage()]);
-            exit;
-        }
+        $stmt = $db_o->prepare('UPDATE cart_items SET quantity = ? WHERE cart_item_id = ?');
+        $stmt->bind_param('ii', $updated_quantity, $cart_item_id);
+        if (!$stmt->execute()) server_error($stmt->error);
 
         http_response_code(201);
         echo json_encode(['message' => "Product's quantity increased."]);
     } else {
         // dodajemy do cart'a
-
-        try {
-            $stmt = $db_o->prepare('INSERT INTO cart_items VALUES (NULL, ?, 1, ?)');
-            $stmt->bind_param('ii', $product_id, $cart_id);
-            $stmt->execute();
-        } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(['message' => $e->getMessage()]);
-            exit;
-        }
+        $stmt = $db_o->prepare('INSERT INTO cart_items VALUES (NULL, ?, 1, ?)');
+        $stmt->bind_param('ii', $product_id, $cart_id);
+        if (!$stmt->execute()) server_error($stmt->error);
         
         http_response_code(201);
         echo json_encode(['message' => 'Product added to cart.']);
