@@ -31,9 +31,9 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
     - [ ] plik z funkcjonalnością usuwania przedmiotow
         - [x] dodać logike php
         - [ ] dodać logikę db
-    - [ ] plik z funkcjonalnością usuwania wszystkich przedmiotow (czyszczenia)
+    - [x] plik z funkcjonalnością usuwania wszystkich przedmiotow (czyszczenia)
         - [x] dodać logike php
-        - [ ] dodać logikę db
+        - [x] dodać logikę db
 
 3. `Mailer (frontend)`
 
