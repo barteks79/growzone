@@ -89,6 +89,11 @@ ALTER TABLE `users`
   ADD PRIMARY KEY (`user_id`),
   ADD UNIQUE KEY `email` (`email`);
 
+ALTER TABLE `order_items`
+  ADD PRIMARY KEY (`order_item_id`),
+  ADD KEY `fk_order_items_orders` (`order_id`),
+  ADD KEY `fk_order_items_products` (`product_id`);
+
 
 ALTER TABLE `carts`
   MODIFY `cart_id` int NOT NULL AUTO_INCREMENT;
