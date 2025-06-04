@@ -36,7 +36,7 @@ if (isset($_GET['page']) && is_numeric($_GET['page'])) {
     $pg = 1;
 }
 
-$stmt = $db_o->prepare('SELECT orders.order_date, orders.status, shipping_address.street, shipping_address.building_number, shipping_address.apartment_number, shipping_address.city, shipping_address.postal_code, shipping_address.country, IF(orders.delivery_date IS NOT NULL, orders.delivery_date, "On The Way") as "status_dostawy" from orders inner join shipping_address on orders.shipping_address_id = shipping_address.shipping_address_id WHERE orders.user_id = ? ORDER BY orders.order_date DESC LIMIT 10 OFFSET ?');
+$stmt = $db_o->prepare('SELECT orders.order_date, orders.status, shipping_address.street, shipping_address.building_number, shipping_address.apartment_number, shipping_address.city, shipping_address.postal_code, shipping_address.country, IF(orders.delivery_date IS NOT NULL, orders.delivery_date, "On The Way") as "status_dostawy", orders.order_id from orders inner join shipping_address on orders.shipping_address_id = shipping_address.shipping_address_id WHERE orders.user_id = ? ORDER BY orders.order_date DESC LIMIT 10 OFFSET ?');
 if (!$stmt) {
     die("Query preparation failed: " . $db_o->error);
 }
@@ -112,7 +112,7 @@ $result = $stmt->get_result();
                                     <a href="../admin/index.php" class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-emerald-200"><i data-lucide="shield-user" class="size-5"></i>Admin Panel</a>
                                 <?php endif; ?>
 
-                                <button class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-neutral-200"><i data-lucide="history" class="size-5"></i>History</button>
+                                <a href="../history/index.php?type=list&page=1" class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-neutral-200"><i data-lucide="history" class="size-5"></i>History</a>
                                 <button class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-neutral-200"><i data-lucide="settings" class="size-5"></i>Settings</button>
 
                                 <span class="w-full h-[2px] rounded-full bg-black/20"></span>
@@ -124,25 +124,78 @@ $result = $stmt->get_result();
                 </div>
             </div>
         </nav>
+    <?php if($result->num_rows == 0) : ?>
+        <div class="flex justify-center items-center mt-10 px-4">
+            <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-5xl">
+                <h1 class="text-3xl font-bold text-center mb-4">Your History</h1>
+                <p class="text-center text-gray-600 mb-6">You have no orders.</p>
+            </div>
+        </div>
+    <?php elseif(isset($_GET['type']) && $_GET['type'] == 'list' && $result->num_rows > 0) : ?>
+    <div class="flex justify-center items-center mt-10 px-4">
+        <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-5xl">
+            <h1 class="text-3xl font-bold text-center mb-4">Your History</h1>
+            <p class="text-center text-gray-600 mb-6">Here you can view your past activities and orders.</p>
+            <div class="overflow-x-auto">
+                <table class="table-auto w-full border border-neutral-700 text-sm text-left rounded-xl overflow-hidden">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="border border-black px-4 py-2">Order Date</th>
+                            <th class="border border-black px-4 py-2">Status</th>
+                            <th class="border border-black px-4 py-2">Shipping Address</th>
+                            <th class="border border-black px-4 py-2">Delivery Date</th>
+                            <th class="border border-black px-4 py-2">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
 
-        <div>
-            <h1 class="text-3xl font-bold text-center mt-10">Your History</h1>
-            <p class="text-center text-gray-600 mt-2">Here you can view your past activities and orders.</p>
-            <table>
-                <tr><th>Order date</th><th>Status</th><th>Shipping address</th><th>Delivery date</th></tr>
+                        while ($row = $result->fetch_row()) {
+                            echo '<tr>';
+                            echo '<td class="border border-black px-4 py-2">' . htmlspecialchars($row[0]) . '</td>';
+                            echo '<td class="border border-black px-4 py-2">' . htmlspecialchars($row[1]) . '</td>';
+                            echo '<td class="border border-black px-4 py-2">' .
+                                htmlspecialchars($row[2]) . ' ' . htmlspecialchars($row[3]) .
+                                (isset($row[4]) ? '/' . htmlspecialchars($row[4]) : '') . ', ' .
+                                htmlspecialchars($row[5]) . ', ' . htmlspecialchars($row[6]) . ', ' . htmlspecialchars($row[7]) .
+                                '</td>';
+                            echo '<td class="border border-black px-4 py-2">' . htmlspecialchars($row[8]) . '</td>';
+                            echo '<td class="border border-black px-4 py-2"><a href="index.php?type=details&dtid=' . $row[9] . '" class="hover:text-black transition-colors rounded-lg hover:bg-gray-200 px-2 py-1">See Details</a></td>';
+                            echo '</tr>';
+                        }
+                        
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4 flex justify-center">
                 <?php
-                while ($row = $result->fetch_row()) {
-                    echo '<tr>';
-                    echo '<td>' . htmlspecialchars($row[0]) . '</td>';
-                    echo '<td>' . htmlspecialchars($row[1]) . '</td>';
-                    echo '<td>' . htmlspecialchars($row[2]) . " " . htmlspecialchars($row[3]) . (isset($row[4]) ? '/' . htmlspecialchars($row[4]) : '') . " " . htmlspecialchars($row[7]) . " " . htmlspecialchars($row[5]) . " " . htmlspecialchars($row[6]) . '</td>';
-                    echo '<td>' . htmlspecialchars($row[8]) . '</td>';
-                    echo '</tr>';
+                $stmt = $db_o->prepare('SELECT COUNT(*) FROM orders WHERE user_id = ?');
+                $stmt->bind_param('i', $user['user_id']);
+                $stmt->execute();
+                $count_result = $stmt->get_result();
+                $total_orders = $count_result->fetch_row()[0];
+                $total_pages = ceil($total_orders / 10);
+                for ($i = 1; $i <= $total_pages; $i++) {
+                    if ($i == $pg) {
+                        echo '<span class="px-2 py-1 bg-green-300 rounded-md">' . $i . '</span> ';
+                    } else {
+                        echo '<a href="index.php?type=list&page=' . $i . '" class="px-2 py-1 bg-gray-200 rounded-md hover:bg-gray-300 transition">' . $i . '</a> ';
+                    }
                 }
                 ?>
-            </table>
+            </div>
         </div>
-    </div>
+    <?php endif; ?>
+    <?php if(isset($_GET['type']) && $_GET['type'] == 'details') : ?>
+    <div class="flex justify-center items-center mt-10 px-4">
+        <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-5xl">
+            <h1 class="text-3xl font-bold text-center mb-4">Your Delivey Details</h1>
+            <div class="overflow-x-auto">
+                
+            </div>
+        </div>
+    <?php endif; ?>
 
     <script>
         lucide.createIcons();
