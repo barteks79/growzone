@@ -70,7 +70,7 @@ if (!$user || $user['role'] !== 'admin') {
 
                 <div class="relative group">
                     <button class="size-10 cursor-pointer relative">
-                        <span class="avatar animate-pulse bg-neutral-300 font-bold text-white size-full rounded-full grid place-items-center" data-first-name="<?= htmlspecialchars($user['first_name']) ?>" data-last-name="<?= htmlspecialchars($user['last_name']) ?>">-</span>
+                        <span class="avatar [--primary:var(--color-neutral-300)] bg-[var(--primary)] ring-2 ring-[var(--primary)]/50 font-bold text-white size-full rounded-full grid place-items-center" data-first-name="<?= htmlspecialchars($user['first_name']) ?>" data-last-name="<?= htmlspecialchars($user['last_name']) ?>">-</span>
                         <div class="absolute bg-white p-0.5 rounded-full grid place-items-center -bottom-1.5 -right-1">
                             <i data-lucide="chevron-down" class="size-[14px]"></i>
                         </div>
@@ -80,7 +80,7 @@ if (!$user || $user['role'] !== 'admin') {
                         <div class="bg-transparent h-4"></div>
                         <div class="group-hover:scale-y-100 group-hover:opacity-100 opacity-0 scale-y-0 origin-top transition grid px-2 py-4 rounded-md bg-white shadow-md">
                             <div class="flex items-center gap-3 px-4">
-                                <span class="avatar animate-pulse bg-neutral-300 text-white font-bold rounded-full size-9 grid place-items-center" data-first-name="<?= htmlspecialchars($user['first_name']) ?>" data-last-name="<?= htmlspecialchars($user['last_name']) ?>">-</span>
+                                <span class="avatar [--primary:var(--color-neutral-300)] bg-[var(--primary)] ring-2 ring-[var(--primary)]/50 animate-pulse text-white font-bold rounded-full size-9 grid place-items-center" data-first-name="<?= htmlspecialchars($user['first_name']) ?>" data-last-name="<?= htmlspecialchars($user['last_name']) ?>">-</span>
                                 <div class="flex flex-col items-start">
                                     <span class="text-sm font-medium"><?= htmlspecialchars($user['first_name'] . ' ' . $user['last_name']) ?></span>
                                     <span class="text-xs"><?= htmlspecialchars($user['email']) ?></span>

@@ -87,52 +87,41 @@ $result = $stmt->get_result();
                     <i data-lucide="shopping-cart" class="size-full transition"></i>
                 </a>
 
-                <?php if ($user): ?>
-                    <div class="relative group">
-                        <button class="size-10 cursor-pointer relative">
-                            <span class="avatar animate-pulse bg-neutral-300 font-bold text-white size-full rounded-full grid place-items-center" data-first-name="<?= htmlspecialchars($user['first_name']) ?>" data-last-name="<?= htmlspecialchars($user['last_name']) ?>">-</span>
-                            <div class="absolute bg-white p-0.5 rounded-full grid place-items-center -bottom-1.5 -right-1">
-                                <i data-lucide="chevron-down" class="size-[14px]"></i>
-                            </div>
-                        </button>
+                <div class="relative group">
+                    <button class="size-10 cursor-pointer relative">
+                        <span class="avatar [--primary:var(--color-neutral-300)] bg-[var(--primary)] ring-2 ring-[var(--primary)]/50 animate-pulse font-bold text-white size-full rounded-full grid place-items-center" data-first-name="<?= htmlspecialchars($user['first_name']) ?>" data-last-name="<?= htmlspecialchars($user['last_name']) ?>">-</span>
+                        <div class="absolute bg-white p-0.5 rounded-full grid place-items-center -bottom-1.5 -right-1">
+                            <i data-lucide="chevron-down" class="size-[14px]"></i>
+                        </div>
+                    </button>
 
-                        <div class="absolute z-[2] -right-4 invisible group-hover:visible min-w-[15rem]">
-                            <div class="bg-transparent h-4"></div>
+                    <div class="absolute z-[2] -right-4 invisible group-hover:visible min-w-[15rem]">
+                        <div class="bg-transparent h-4"></div>
                             <div class="group-hover:scale-y-100 group-hover:opacity-100 opacity-0 scale-y-0 origin-top transition grid px-2 py-4 rounded-md bg-white shadow-md">
                                 <div class="flex items-center gap-3 px-4">
-                                    <span class="avatar animate-pulse bg-neutral-300 text-white font-bold rounded-full size-9 grid place-items-center" data-first-name="<?= htmlspecialchars($user['first_name']) ?>" data-last-name="<?= htmlspecialchars($user['last_name']) ?>">-</span>
-                                    <div class="flex flex-col items-start">
-                                        <span class="text-sm font-medium"><?= htmlspecialchars($user['first_name'] . ' ' . $user['last_name']) ?></span>
-                                        <span class="text-xs"><?= htmlspecialchars($user['email']) ?></span>
-                                    </div>
+                                    <span class="[--primary:var(--color-neutral-300)] avatar animate-pulse bg-[var(--primary)] ring-2 ring-[var(--primary)]/50 text-white font-bold rounded-full size-9 grid place-items-center" data-first-name="<?= htmlspecialchars($user['first_name']) ?>" data-last-name="<?= htmlspecialchars($user['last_name']) ?>">-</span>
+                                <div class="flex flex-col items-start">
+                                    <span class="text-sm font-medium"><?= htmlspecialchars($user['first_name'] . ' ' . $user['last_name']) ?></span>
+                                    <span class="text-xs"><?= htmlspecialchars($user['email']) ?></span>
                                 </div>
-                                <div class="mt-4 grid gap-2">
-                                    <span class="w-full h-[2px] rounded-full bg-black/20"></span>
+                            </div>
+                            <div class="mt-4 grid gap-2">
+                                <span class="w-full h-[2px] rounded-full bg-black/20"></span>
 
-                                    <?php if ($user['role'] == 'admin'): ?>
-                                        <a href="../admin/index.php" class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-emerald-200"><i data-lucide="shield-user" class="size-5"></i>Admin Panel</a>
-                                    <?php endif; ?>
+                                <?php if ($user['role'] == 'admin'): ?>
+                                    <a href="../admin/index.php" class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-emerald-200"><i data-lucide="shield-user" class="size-5"></i>Admin Panel</a>
+                                <?php endif; ?>
 
-                                    <button class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-neutral-200"><i data-lucide="history" class="size-5"></i>History</button>
-                                    <button class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-neutral-200"><i data-lucide="settings" class="size-5"></i>Settings</button>
+                                <button class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-neutral-200"><i data-lucide="history" class="size-5"></i>History</button>
+                                <button class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-neutral-200"><i data-lucide="settings" class="size-5"></i>Settings</button>
 
-                                    <span class="w-full h-[2px] rounded-full bg-black/20"></span>
+                                <span class="w-full h-[2px] rounded-full bg-black/20"></span>
 
-                                    <a href="../../php/logout.php" class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-red-200"><i data-lucide="log-out" class="size-5"></i>Log Out</a>
-                                </div>
+                                <a href="../../php/logout.php" class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-red-200"><i data-lucide="log-out" class="size-5"></i>Log Out</a>
                             </div>
                         </div>
                     </div>
-                <?php else: ?>
-                    <a href="../sign-in/index.php" class="box-border relative z-30 inline-flex items-center justify-center w-auto px-6 py-2 overflow-hidden font-bold text-white transition-all duration-300 bg-indigo-600 rounded-md cursor-pointer group ring-offset-2 ring-1 ring-indigo-300 ring-offset-indigo-200 hover:ring-offset-indigo-500 ease focus:outline-none">
-                        <span class="absolute bottom-0 right-0 w-8 h-20 -mb-8 -mr-5 transition-all duration-300 ease-out transform rotate-45 translate-x-1 bg-white opacity-10 group-hover:translate-x-0"></span>
-                        <span class="absolute top-0 left-0 w-20 h-8 -mt-1 -ml-12 transition-all duration-300 ease-out transform -rotate-45 -translate-x-1 bg-white opacity-10 group-hover:translate-x-0"></span>
-                        <span class="relative z-20 flex items-center text-sm">
-                            <i data-lucide="users" class="relative w-5 h-5 mr-2 text-white"></i>
-                            Sign in
-                        </span>
-                    </a>
-                <?php endif; ?>
+                </div>
             </div>
         </nav>
 

@@ -142,7 +142,7 @@ class IntroductionScene {
         this.sky.scale.setScalar(10000);
         this.sceneEnv.add(this.sky);
 
-        const phi = MathUtils.degToRad(90 - 3);
+        const phi = MathUtils.degToRad(90 - 4);
         const theta = MathUtils.degToRad(200);
         const sun = new Vector3();
         sun.setFromSphericalCoords(1, phi, theta);
@@ -172,7 +172,6 @@ class IntroductionScene {
         this.scene.add(this.directionalLight.target);
 
         this.pointLight = new PointLight(0xffffff, 50);
-        this.pointLight.castShadow = true;
         this.pointLight.shadow.mapSize.set(2048, 2048);
         this.pointLight.shadow.intensity = 0.5;
         this.pointLight.position.set(-3, 1, 1.5);

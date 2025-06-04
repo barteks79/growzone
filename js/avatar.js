@@ -17,5 +17,5 @@ export function updateAvatar(target, firstName, lastName) {
 
     const unitIndex = hashStringToUnitInterval(`${first} ${last}`);
     const index = Math.floor(unitIndex * backgroundColors.length);
-    target.style.background = backgroundColors[index];
+    target.style.setProperty('--primary', backgroundColors[index]);
 }
