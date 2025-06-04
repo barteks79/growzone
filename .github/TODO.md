@@ -64,3 +64,4 @@ INSERT INTO nazwa_tabeli (klucz_podstawowy, ..., klucz_obcy) VALUES (1, ..., 3);
     - [x] wszystkie produkty
     - [x] koszyki dla uzytkownika (po user_id)
     - [x] produkt nalezacy do koszyka (po cart_id)
+    - [ ] zliczajace wartosc koszyka dla danego uzytkownika 
