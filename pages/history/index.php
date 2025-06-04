@@ -20,34 +20,45 @@ if (isset($_SESSION['user_id'])) {
     }
 }
 
+if (!$user) {
+    header("Location: ../home/index.php");
+    exit();
+}
+
+
+if (isset($_GET['page']) && is_numeric($_GET['page'])) {
+    $pg = (int)$_GET['page'];
+    if ($pg < 1) {
+        $pg = 1;
+    }
+    $offset = ($pg - 1) * 10;
+} else {
+    $pg = 1;
+}
+
+$stmt = $db_o->prepare('SELECT * FROM orders WHERE user_id = ? ORDER BY date DESC LIMIT 10 OFFSET ?');
+$stmt->bind_param('ii', $user['user_id'], $offset);
+$stmt->execute();
+$result = $stmt->get_result();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GrowZone</title>
+    <title>History | GrowZone</title>
 
     <link rel="shortcut icon" href="../../public/images/icon.png" />
     <link rel="stylesheet" href="./styles.css" />
 
     <script src="https://unpkg.com/@tailwindcss/browser@4.1.7"></script>
     <script src="https://unpkg.com/lucide@0.511.0"></script>
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://cdn.jsdelivr.net/npm/three@0.176.0/build/three.module.js",
-                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.176.0/examples/jsm/",
-                "motion": "https://cdn.jsdelivr.net/npm/motion@12.12.2/+esm"
-            }
-        }
-    </script>
     <script src="./script.js" type="module"></script>
 </head>
 <body class="font-[Inter]">
     <div class="relative h-dvh">
-        <div class="primary-radial-background absolute inset-0 -z-[2]"></div>
-        <canvas id="introduction-canvas" class="absolute size-full -z-[1]"></canvas>
+        <div class="primary-radial-background absolute inset-0 -z-[1]"></div>
 
         <nav class="px-[3vw] py-4 grid place-items-center grid-cols-3">
             <div class="justify-self-start">
@@ -99,7 +110,7 @@ if (isset($_SESSION['user_id'])) {
                                         <a href="../admin/index.php" class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-emerald-200"><i data-lucide="shield-user" class="size-5"></i>Admin Panel</a>
                                     <?php endif; ?>
 
-                                    <a href="../history/index.php" class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-neutral-200"><i data-lucide="history" class="size-5"></i>History</a>
+                                    <button class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-neutral-200"><i data-lucide="history" class="size-5"></i>History</button>
                                     <button class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-neutral-200"><i data-lucide="settings" class="size-5"></i>Settings</button>
 
                                     <span class="w-full h-[2px] rounded-full bg-black/20"></span>
@@ -122,14 +133,19 @@ if (isset($_SESSION['user_id'])) {
             </div>
         </nav>
 
-        <div class="mt-[60px] ml-[100px]">
-            <h2 class="animate-[enter-header_1000ms_ease-out] select-none grid gap-4 font-[GT_Walsheim_Pro] text-8xl text-[#2D2946]">
-                <span>Nature your garden</span>
-                <span class="flex gap-4 items-start">
-                    <span>with</span>
-                    <span id="header-product-text" class="text-emerald-400 text-shadow-[0_6px_var(--color-emerald-700)]">GrowZone</span>
-                </span>
-            </h2>
+        <div>
+            <h1 class="text-3xl font-bold text-center mt-10">Your History</h1>
+            <p class="text-center text-gray-600 mt-2">Here you can view your past activities and orders.</p>
+            <table>
+                <?php
+                while ($row = $result->fetch_assoc()) {
+                    echo '<tr>';
+                    echo '<td>' . htmlspecialchars($row['date']) . '</td>';
+                    echo '<td>' . htmlspecialchars($row['activity']) . '</td>';
+                    echo '</tr>';
+                }
+                ?>
+            </table>
         </div>
     </div>
 
