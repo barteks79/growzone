@@ -28,9 +28,9 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
     - [x] plik z funkcjonalnością dodawania przedmiotow
         - [x] dodać logike php
         - [x] dodać logikę db
-    - [ ] plik z funkcjonalnością usuwania przedmiotow
+    - [x] plik z funkcjonalnością usuwania przedmiotow
         - [x] dodać logike php
-        - [ ] dodać logikę db
+        - [x] dodać logikę db
     - [x] plik z funkcjonalnością usuwania wszystkich przedmiotow (czyszczenia)
         - [x] dodać logike php
         - [x] dodać logikę db

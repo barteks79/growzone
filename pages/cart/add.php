@@ -9,7 +9,7 @@
 
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         http_response_code(405);
-        echo json_encode(['message' => 'Only POST request are allowed.']);
+        echo json_encode(['message' => 'Only POST requests are allowed.']);
         exit;
     }
 

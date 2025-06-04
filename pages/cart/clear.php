@@ -51,7 +51,6 @@
     $stmt->bind_param('i', $user_id);
     if (!$stmt->execute()) server_error($stmt->error);
     
-    http_response_code(200);
-    echo json_encode(['message' => 'Cleared users\'s cart.']);
+    http_response_code(204);
     exit;
 ?>
