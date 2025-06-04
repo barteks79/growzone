@@ -18,7 +18,7 @@ CREATE TABLE `cart_items` (
 CREATE TABLE `orders` (
   `order_id` int NOT NULL,
   `order_date` date NOT NULL,
-  `status` enum('dostarczono','oplacono','wyslano') DEFAULT NULL,
+  `status` enum('dostarczono','wyslano') DEFAULT NULL,
   `shipping_address_id` int DEFAULT NULL,
   `delivery_date` date DEFAULT NULL,
   `user_id` int NOT NULL
@@ -53,6 +53,12 @@ CREATE TABLE `users` (
   `token_expires` DATETIME
 ); 
 
+CREATE TABLE `order_items` (
+  `order_item_id` int NOT NULL,
+  `product_id` int DEFAULT NULL,
+  `quantity` int DEFAULT NULL,
+  `order_id` int DEFAULT NULL
+);
 
 ALTER TABLE `carts`
   ADD PRIMARY KEY (`cart_id`),
@@ -106,6 +112,8 @@ ALTER TABLE `shipping_address`
 ALTER TABLE `users`
   MODIFY `user_id` int NOT NULL AUTO_INCREMENT;
 
+ALTER TABLE `order_items`
+  MODIFY `order_item_id` int NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `carts`
   ADD CONSTRAINT `fk_cart_items_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
@@ -119,4 +127,8 @@ ALTER TABLE `cart_items`
 ALTER TABLE `orders`
   ADD CONSTRAINT `fk_orders_shipping_address` FOREIGN KEY (`shipping_address_id`) REFERENCES `shipping_address` (`shipping_address_id`),
   ADD CONSTRAINT `fk_orders_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+
+ALTER TABLE `order_items`
+  ADD CONSTRAINT `fk_order_items_orders` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_order_items_products` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`);
 COMMIT;
