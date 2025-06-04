@@ -36,7 +36,10 @@ if (isset($_GET['page']) && is_numeric($_GET['page'])) {
     $pg = 1;
 }
 
-$stmt = $db_o->prepare('SELECT * FROM orders WHERE user_id = ? ORDER BY date DESC LIMIT 10 OFFSET ?');
+$stmt = $db_o->prepare('SELECT orders.order_date, orders.status, shipping_address.street, shipping_address.building_number, shipping_address.apartment_number, shipping_address.city, shipping_address.postal_code, shipping_address.country, IF(orders.delivery_date IS NOT NULL, orders.delivery_date, "On The Way") as "status_dostawy" from orders inner join shipping_address on orders.shipping_address_id = shipping_address.shipping_address_id WHERE orders.user_id = ? ORDER BY orders.order_date DESC LIMIT 10 OFFSET ?');
+if (!$stmt) {
+    die("Query preparation failed: " . $db_o->error);
+}
 $stmt->bind_param('ii', $user['user_id'], $offset);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -137,11 +140,14 @@ $result = $stmt->get_result();
             <h1 class="text-3xl font-bold text-center mt-10">Your History</h1>
             <p class="text-center text-gray-600 mt-2">Here you can view your past activities and orders.</p>
             <table>
+                <tr><th>Order date</th><th>Status</th><th>Shipping address</th><th>Delivery date</th></tr>
                 <?php
-                while ($row = $result->fetch_assoc()) {
+                while ($row = $result->fetch_row()) {
                     echo '<tr>';
-                    echo '<td>' . htmlspecialchars($row['date']) . '</td>';
-                    echo '<td>' . htmlspecialchars($row['activity']) . '</td>';
+                    echo '<td>' . htmlspecialchars($row[0]) . '</td>';
+                    echo '<td>' . htmlspecialchars($row[1]) . '</td>';
+                    echo '<td>' . htmlspecialchars($row[2]) . " " . htmlspecialchars($row[3]) . (isset($row[4]) ? '/' . htmlspecialchars($row[4]) : '') . " " . htmlspecialchars($row[7]) . " " . htmlspecialchars($row[5]) . " " . htmlspecialchars($row[6]) . '</td>';
+                    echo '<td>' . htmlspecialchars($row[8]) . '</td>';
                     echo '</tr>';
                 }
                 ?>
