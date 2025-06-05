@@ -105,6 +105,32 @@ if (!$user) {
                 </div>
             </div>
         </nav>
+
+        <main class="flex justify-center items-center mt-10 px-4">
+            <div class="flex flex-col gap-3 bg-white rounded-xl shadow-lg p-6 w-1/2">                
+                <menu class="flex items-center gap-10 px-7">
+                    <div class="flex items-center gap-5">
+                        <div data-active class="grid place-items-center aspect-square shadow-xl bg-gray-600 data-active:bg-emerald-500 h-10 rounded-xl text-white">1</div>
+                        <p class="text-xl font-medium">Koszyk i dostawa</p>
+                    </div>
+
+                    <div class="h-[1px] flex-1 bg-gray-400 rounded-md"></div>
+                    
+                    <div class="flex items-center gap-5">
+                        <div class="grid place-items-center aspect-square shadow-xl bg-gray-600 data-active:bg-emerald-500 h-10 rounded-xl text-white">2</div>
+                        <p class="text-xl font-medium">Dane dostawy</p>
+                    </div>
+                    
+                    <div class="h-[1px] flex-1 bg-gray-400 rounded-md"></div>
+
+                    <div class="flex items-center gap-5">
+                        <div class="grid place-items-center aspect-square shadow-xl bg-gray-600 data-active:bg-emerald-500 h-10 rounded-xl text-white">3</div>
+                        <p class="text-xl font-medium">Podsumowanie</p>
+                    </div>
+                </menu>
+            </div>
+
+        </div>
     </div>
 
     <script>
