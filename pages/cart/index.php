@@ -107,9 +107,11 @@ if (!$user) {
         </nav>
 
         <main class="flex justify-center items-center mt-10 px-4">
-            <div class="flex flex-col gap-3 bg-white rounded-xl shadow-lg p-6 w-2/3 min-w-[950px]">                
-                <menu class="flex items-center gap-10 px-7">
+            <div class="flex flex-col gap-3 bg-white rounded-xl shadow-lg py-4 px-10 w-2/3 min-w-[950px]">                
+                <menu class="flex items-center gap-10 py-6 border-b border-gray-300">
                     <div class="flex items-center gap-5">
+                        <!-- data-active jeżeli jest na danym kroku lub juz go zrobiony -->
+                        <!-- data-done juz go zrobiony -->
                         <div data-active data-done class="group grid place-items-center aspect-square shadow-xl bg-gray-600 data-active:bg-emerald-500 h-10 rounded-xl text-white">
                             <p class="group-data-done:hidden">1</p>
                             <i data-lucide="check" class="hidden group-data-done:block"></i>
@@ -131,8 +133,45 @@ if (!$user) {
                         <p class="text-xl font-medium">Podsumowanie</p>
                     </div>
                 </menu>
-            </div>
 
+                <section class="flex flex-col gap-8 py-4">
+                    <h1 class="text-3xl font-medium">Twój koszyk</h3>
+
+                    <ul class="flex flex-col gap-3">
+                        <li class="flex items-center justify-between">
+                            <div class="flex gap-5">
+                                <div class="size-16 bg-gray-400 rounded-sm"></div>
+                                
+                                <div class="flex flex-col justify-center">
+                                    <h2 class="text-3xl">Roślina 1</h2>
+                                    <p class="uppercase">kod produktu: <span>000000</span></p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center">
+                                <div class="flex items-center gap-5 pr-8 border-r border-gray-400">
+                                    <button class="cursor-pointer border p-2 rounded-md border-gray-400">
+                                        <i data-lucide="plus"></i>
+                                    </button>
+                                    
+                                    <p class="text-2xl font-semibold">2</p>
+    
+                                    <button class="cursor-pointer border p-2 rounded-md border-gray-400">
+                                        <i data-lucide="minus"></i>
+                                    </button>
+                                </div>
+                                
+                                <div class="flex gap-4 pl-8 items-center">
+                                    <p class="text-xl font-bold">399,99 PLN</p>
+                                    <button class="p-2 border border-gray-400 rounded-md">
+                                        <i data-lucide="trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+            </div>
         </div>
     </div>
 
