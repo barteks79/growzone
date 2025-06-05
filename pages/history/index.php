@@ -187,14 +187,72 @@ $result = $stmt->get_result();
             </div>
         </div>
     <?php endif; ?>
-    <?php if(isset($_GET['type']) && $_GET['type'] == 'details') : ?>
-    <div class="flex justify-center items-center mt-10 px-4">
-        <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-5xl">
-            <h1 class="text-3xl font-bold text-center mb-4">Your Delivey Details</h1>
-            <div class="overflow-x-auto">
-                
-            </div>
+    <?php if(isset($_GET['type']) && $_GET['type'] == 'details' && isset($_GET['dtid']) && is_numeric($_GET['dtid'])) : ?>
+    <?php
+    $dtid = $_GET['dtid'];
+    $stmt = $db_o->prepare('SELECT products.name, order_items.quantity, products.price*order_items.quantity FROM products inner join order_items on products.product_id = order_items.product_id WHERE order_items.order_id = ?');
+    if (!$stmt) {
+        die("Query preparation failed: " . $db_o->error);
+    }
+    $stmt->bind_param('i', $dtid);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    ?>
+    <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-5xl mx-auto mt-10 px-4">
+    <h1 class="text-3xl font-bold text-center mb-4">Your Delivery Details</h1><br>
+    <div class="flex justify-evenly gap-10">
+        <div class="overflow-x-auto w-1/2">
+            <table class="table-auto w-full text-sm text-left rounded-xl overflow-hidden">
+                <thead>
+                    <tr>
+                        <th class="px-4 py-2">Product Name</th>
+                        <th class="px-4 py-2">Quantity</th>
+                        <th class="px-4 py-2">Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    while ($row = $result->fetch_row()) {
+                        echo '<tr>';
+                        echo '<td class="px-4 py-2">' . htmlspecialchars($row[0]) . '</td>';
+                        echo '<td class="px-4 py-2">' . htmlspecialchars($row[1]) . '</td>';
+                        echo '<td class="px-4 py-2">' . htmlspecialchars($row[2]) . 'zł</td>';
+                        echo '</tr>';
+                    }
+                    ?>
+                </tbody>
+            </table>
         </div>
+        <?php
+        $stmt = $db_o->prepare('SELECT shipping_address.street, shipping_address.building_number, shipping_address.apartment_number, shipping_address.city, shipping_address.postal_code, shipping_address.country from shipping_address inner join orders on shipping_address.shipping_address_id = orders.shipping_address_id WHERE orders.order_id = ?');
+        if (!$stmt) {
+            die("Query preparation failed: " . $db_o->error);
+        }
+        $stmt->bind_param('i', $dtid);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_row();
+        ?>
+        <div class="max-w-[35%] flex flex-col justify-start">
+            <h2 class="text-2xl font-semibold mb-4">Buyer Information:</h2>
+            <p>
+                Name: <?= htmlspecialchars($user['first_name']) ?><br>
+                Surname: <?= htmlspecialchars($user['last_name']) ?><br><br>
+            </p>
+            <h2 class="text-2xl font-semibold mb-4">Address:</h2>
+            <p>
+                Street: <?= htmlspecialchars($row[0]) . " " . htmlspecialchars($row[1]) . (isset($row[2]) ? '/' . htmlspecialchars($row[2]) : '')?><br>
+                <?= htmlspecialchars($row[4]) . " " . htmlspecialchars($row[3])?><br>
+                <?= htmlspecialchars($row[5]) ?> <br><br>
+            </p>
+            <h2 class="text-2xl font-semibold mb-4">Pay Type:</h2>
+            <p>
+                Bank: Nexus Bank
+            </p>
+        </div>
+    </div>
+</div>
     <?php endif; ?>
 
     <script>
