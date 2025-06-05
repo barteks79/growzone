@@ -107,10 +107,13 @@ if (!$user) {
         </nav>
 
         <main class="flex justify-center items-center mt-10 px-4">
-            <div class="flex flex-col gap-3 bg-white rounded-xl shadow-lg p-6 w-1/2">                
+            <div class="flex flex-col gap-3 bg-white rounded-xl shadow-lg p-6 w-2/3 min-w-[950px]">                
                 <menu class="flex items-center gap-10 px-7">
                     <div class="flex items-center gap-5">
-                        <div data-active class="grid place-items-center aspect-square shadow-xl bg-gray-600 data-active:bg-emerald-500 h-10 rounded-xl text-white">1</div>
+                        <div data-active data-done class="group grid place-items-center aspect-square shadow-xl bg-gray-600 data-active:bg-emerald-500 h-10 rounded-xl text-white">
+                            <p class="group-data-done:hidden">1</p>
+                            <i data-lucide="check" class="hidden group-data-done:block"></i>
+                        </div>
                         <p class="text-xl font-medium">Koszyk i dostawa</p>
                     </div>
 
