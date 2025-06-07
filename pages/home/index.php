@@ -44,9 +44,8 @@ if (isset($_SESSION['user_id'])) {
     </script>
     <script src="./script.js" type="module"></script>
 </head>
-<body class="font-[Inter]">
+<body class="font-[Inter] bg-gradient-to-b from-[#97B3C5] to-[#DDCBC7]">
     <div class="relative h-dvh">
-        <div class="primary-radial-background absolute inset-0 -z-[2]"></div>
         <canvas id="introduction-canvas" class="absolute size-full -z-[1]"></canvas>
 
         <nav class="px-[3vw] py-4 grid place-items-center grid-cols-3">
@@ -95,7 +94,7 @@ if (isset($_SESSION['user_id'])) {
                                 <div class="mt-4 grid gap-2">
                                     <span class="w-full h-[2px] rounded-full bg-black/20"></span>
 
-                                    <?php if ($user['role'] == 'admin'): ?>
+                                    <?php if ($user['is_admin']): ?>
                                         <a href="../admin/index.php" class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-emerald-200"><i data-lucide="shield-user" class="size-5"></i>Admin Panel</a>
                                     <?php endif; ?>
 

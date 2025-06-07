@@ -113,7 +113,7 @@ if (isset($_SESSION['errors'])) {
                             <span class="text-red-600">*</span>
                         </label>
                         <div class="relative">
-                            <input type="email" name="email" id="email" placeholder="Enter your email" class="<?= $email_error ? 'shake-animation border-red-600' : '' ?> border border-gray-400 p-2 pl-3 rounded-md w-full" value="<?= $email ?>" />
+                            <input type="email" name="email" id="email" placeholder="Enter your email" class="<?= $email_error ? 'shake-animation border-red-600' : '' ?> border border-gray-400 p-2 pl-3 pr-9 rounded-md w-full" value="<?= $email ?>" />
                             <div class="absolute right-0.5 bottom-1 p-2">
                                 <i data-lucide="mail" class="size-[18px]"></i>
                             </div>
@@ -127,7 +127,7 @@ if (isset($_SESSION['errors'])) {
                             <span class="text-red-600">*</span>
                         </label>
                         <div class="relative">
-                            <input type="password" name="password" id="password" placeholder="Enter your password" class="<?= $password_error ? 'shake-animation border-red-600' : '' ?> border border-gray-400 p-2 pl-3 rounded-md w-full" value="<?= $password ?>" />
+                            <input type="password" name="password" id="password" placeholder="Enter your password" class="<?= $password_error ? 'shake-animation border-red-600' : '' ?> border border-gray-400 p-2 pl-3 pr-9 rounded-md w-full" value="<?= $password ?>" />
                             <button type="button" id="toggle-password" class="absolute right-0.5 bottom-0.5 p-2">
                                 <i data-lucide="eye" class="size-[22px]"></i>
                             </button>

@@ -20,7 +20,7 @@ if (isset($_SESSION['user_id'])) {
     }
 }
 
-if (!$user || $user['role'] !== 'admin') {
+if (!$user || !$user['is_admin']) {
     header("Location: ../home/index.php");
     exit();
 }
@@ -38,7 +38,7 @@ if (!$user || $user['role'] !== 'admin') {
 
     <script src="https://unpkg.com/@tailwindcss/browser@4.1.7"></script>
     <script src="https://unpkg.com/lucide@0.511.0"></script>
-    <script src="./script.js" type="module"></script>
+    <script src="./script.js" type="module" defer></script>
 </head>
 <body class="font-[Inter]">
     <div class="relative h-dvh">

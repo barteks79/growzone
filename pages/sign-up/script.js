@@ -1,7 +1,7 @@
 import { updateAvatar } from '../../js/avatar.js';
 
 /** @type {HTMLDivElement} */
-const avatar = document.querySelector('#avatar');
+const avatar = document.querySelector('.avatar');
 /** @type {HTMLInputElement} */
 const firstName = document.querySelector('#first-name');
 /** @type {HTMLInputElement} */

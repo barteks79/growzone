@@ -1,139 +1,78 @@
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-CREATE TABLE `carts` (
-  `cart_id` int NOT NULL,
-  `user_id` int NOT NULL
+CREATE TABLE users (
+  user_id       INT          PRIMARY KEY AUTO_INCREMENT,
+  first_name    VARCHAR(20)  NOT NULL,
+  last_name     VARCHAR(30)  NOT NULL,
+  email         VARCHAR(255) NOT NULL,
+  password      VARCHAR(255)     NOT NULL,
+  is_admin      BOOLEAN      NOT NULL    DEFAULT FALSE,
+  reset_token   VARCHAR(100)     NULL,
+  token_expires DATETIME         NULL
 );
 
-
-CREATE TABLE `cart_items` (
-  `cart_item_id` int NOT NULL,
-  `product_id` int DEFAULT NULL,
-  `quantity` int DEFAULT NULL,
-  `cart_id` int DEFAULT NULL
+CREATE TABLE categories (
+  category_id     INT         PRIMARY KEY AUTO_INCREMENT,
+  title           VARCHAR(20) NOT NULL
 );
 
-CREATE TABLE `orders` (
-  `order_id` int NOT NULL,
-  `order_date` date NOT NULL,
-  `status` enum('dostarczono','wyslano') DEFAULT NULL,
-  `shipping_address_id` int DEFAULT NULL,
-  `delivery_date` date DEFAULT NULL,
-  `user_id` int NOT NULL
+CREATE TABLE products (
+  product_id  INT            PRIMARY KEY AUTO_INCREMENT,
+  price       DECIMAL(10, 2) NOT NULL,
+  title       VARCHAR(50)    NOT NULL,
+  description VARCHAR(100)   NOT NULL,
+  category_id INT            NOT NULL,
+  rating      DECIMAL(2, 1)  NOT NULL,
+  pictureFile VARCHAR(10)        NULL,
+  in_stock    BOOLEAN        NOT NULL    DEFAULT TRUE,
+
+  FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE CASCADE
 );
 
-CREATE TABLE `products` (
-  `product_id` int NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `price` decimal(10,2) NOT NULL,
-  `photo` text,
-  `stock_quantity` tinyint(1) NOT NULL DEFAULT '1'
+CREATE TABLE carts (
+  cart_id INT PRIMARY KEY AUTO_INCREMENT,
+  user_id INT NOT NULL,
+
+  FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
-CREATE TABLE `shipping_address` (
-  `shipping_address_id` int NOT NULL,
-  `street` varchar(255) NOT NULL,
-  `building_number` varchar(10) NOT NULL,
-  `apartment_number` varchar(10) DEFAULT NULL,
-  `city` varchar(100) NOT NULL,
-  `postal_code` varchar(20) DEFAULT NULL,
-  `country` varchar(100) DEFAULT NULL
+CREATE TABLE cart_items (
+  cart_item_id INT PRIMARY KEY AUTO_INCREMENT,
+  cart_id      INT NOT NULL,
+  product_id   INT NOT NULL,
+  quantity     INT NOT NULL,
+
+  FOREIGN KEY (cart_id) REFERENCES carts(cart_id) ON DELETE CASCADE,
+  FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE
 );
 
-CREATE TABLE `users` (
-  `user_id` int NOT NULL,
-  `first_name` varchar(20) NOT NULL,
-  `last_name` varchar(30) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `password` text NOT NULL,
-  `role` enum('admin','user') DEFAULT 'user',
-  `reset_token` VARCHAR(100),
-  `token_expires` DATETIME
-); 
-
-CREATE TABLE `order_items` (
-  `order_item_id` int NOT NULL,
-  `product_id` int DEFAULT NULL,
-  `quantity` int DEFAULT NULL,
-  `order_id` int DEFAULT NULL
+CREATE TABLE order_addresses (
+  order_address_id INT          PRIMARY KEY AUTO_INCREMENT,
+  country          VARCHAR(100) NOT NULL,
+  city             VARCHAR(100) NOT NULL,
+  street           VARCHAR(100) NOT NULL,
+  building_number  VARCHAR(10)  NOT NULL,
+  apartment_number VARCHAR(10)      NULL,
+  -- format: XX-XXX
+  postal_code      CHAR(6)      NOT NULL
 );
 
-ALTER TABLE `carts`
-  ADD PRIMARY KEY (`cart_id`),
-  ADD KEY `fk_cart_items_user` (`user_id`);
+CREATE TABLE orders (
+  order_id         INT     PRIMARY KEY AUTO_INCREMENT,
+  user_id          INT     NOT NULL,
+  order_address_id INT     NOT NULL,
+  delivered        BOOLEAN NOT NULL    DEFAULT FALSE,
+  order_date       DATE    NOT NULL,
+  delivery_date    DATE        NULL,
 
+  FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+  FOREIGN KEY (order_address_id) REFERENCES order_addresses(order_address_id) ON DELETE CASCADE
+);
 
-ALTER TABLE `cart_items`
-  ADD PRIMARY KEY (`cart_item_id`),
-  ADD KEY `fk_carts_cart_items` (`cart_id`),
-  ADD KEY `fk_cart_items_products` (`product_id`);
+CREATE TABLE order_items (
+  order_item_id INT PRIMARY KEY AUTO_INCREMENT,
+  order_id      INT NOT NULL,
+  product_id    INT NOT NULL,
+  quantity      INT NOT NULL,
 
-
-ALTER TABLE `orders`
-  ADD PRIMARY KEY (`order_id`),
-  ADD KEY `fk_orders_users` (`user_id`),
-  ADD KEY `fk_orders_shipping_address` (`shipping_address_id`);
-
-
-ALTER TABLE `products`
-  ADD PRIMARY KEY (`product_id`);
-
-
-ALTER TABLE `shipping_address`
-  ADD PRIMARY KEY (`shipping_address_id`);
-
-
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`user_id`),
-  ADD UNIQUE KEY `email` (`email`);
-
-ALTER TABLE `order_items`
-  ADD PRIMARY KEY (`order_item_id`),
-  ADD KEY `fk_order_items_orders` (`order_id`),
-  ADD KEY `fk_order_items_products` (`product_id`);
-
-
-ALTER TABLE `carts`
-  MODIFY `cart_id` int NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `cart_items`
-  MODIFY `cart_item_id` int NOT NULL AUTO_INCREMENT;
-
-
-ALTER TABLE `orders`
-  MODIFY `order_id` int NOT NULL AUTO_INCREMENT;
-
-
-ALTER TABLE `products`
-  MODIFY `product_id` int NOT NULL AUTO_INCREMENT;
-
-
-ALTER TABLE `shipping_address`
-  MODIFY `shipping_address_id` int NOT NULL AUTO_INCREMENT;
-
-
-ALTER TABLE `users`
-  MODIFY `user_id` int NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `order_items`
-  MODIFY `order_item_id` int NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `carts`
-  ADD CONSTRAINT `fk_cart_items_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
-
-
-ALTER TABLE `cart_items`
-  ADD CONSTRAINT `fk_cart_items_products` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`),
-  ADD CONSTRAINT `fk_carts_cart_items` FOREIGN KEY (`cart_id`) REFERENCES `carts` (`cart_id`) ON DELETE CASCADE;
-
-
-ALTER TABLE `orders`
-  ADD CONSTRAINT `fk_orders_shipping_address` FOREIGN KEY (`shipping_address_id`) REFERENCES `shipping_address` (`shipping_address_id`),
-  ADD CONSTRAINT `fk_orders_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
-
-ALTER TABLE `order_items`
-  ADD CONSTRAINT `fk_order_items_orders` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_order_items_products` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`);
-COMMIT;
+  FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
+  FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE  
+);

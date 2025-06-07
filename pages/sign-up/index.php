@@ -115,7 +115,7 @@ if (isset($_SESSION['errors'])) {
         </a>
         <div class="h-full grid place-items-center">
             <main class="bg-white rounded-xl shadow-xl px-8 py-8 min-w-[25rem] flex flex-col items-center">
-                <div id="avatar" class="size-16 mb-8 text-white rounded-full animate-pulse font-bold text-2xl grid place-items-center bg-neutral-300"></div>
+                <div class="avatar [--primary:var(--color-neutral-300)] bg-[var(--primary)] ring-2 ring-[var(--primary)]/50 size-16 mb-8 text-white rounded-full animate-pulse font-bold text-2xl grid place-items-center">-</div>
                 
                 <form action="" method="post" class="grid gap-6 w-full">
                     <div class="grid grid-cols-2 gap-5">
@@ -125,7 +125,7 @@ if (isset($_SESSION['errors'])) {
                                 <span class="text-red-600">*</span>
                             </label>
                             <div class="relative">
-                                <input type="text" name="first-name" id="first-name" placeholder="Your first name" class="<?= $first_name_error ? 'shake-animation border-red-600' : '' ?> border border-gray-400 p-2 pl-3 rounded-md w-full" value="<?= $first_name ?>" />
+                                <input type="text" name="first-name" id="first-name" placeholder="Your first name" class="<?= $first_name_error ? 'shake-animation border-red-600' : '' ?> border border-gray-400 p-2 pl-3 pr-9 rounded-md w-full" value="<?= $first_name ?>" />
                                 <div class="absolute right-0.5 bottom-1 p-2">
                                     <i data-lucide="user" class="size-[18px]"></i>
                                 </div>
@@ -139,7 +139,7 @@ if (isset($_SESSION['errors'])) {
                                 <span class="text-red-600">*</span>
                             </label>
                             <div class="relative">
-                                <input type="text" name="last-name" id="last-name" placeholder="Your last name" class="<?= $last_name_error ? 'shake-animation border-red-600' : '' ?> border border-gray-400 p-2 pl-3 rounded-md w-full" value="<?= $last_name ?>" />
+                                <input type="text" name="last-name" id="last-name" placeholder="Your last name" class="<?= $last_name_error ? 'shake-animation border-red-600' : '' ?> border border-gray-400 p-2 pl-3 pr-9 rounded-md w-full" value="<?= $last_name ?>" />
                                 <div class="absolute right-0.5 bottom-1 p-2">
                                     <i data-lucide="user" class="size-[18px]"></i>
                                 </div>
@@ -154,7 +154,7 @@ if (isset($_SESSION['errors'])) {
                             <span class="text-red-600">*</span>
                         </label>
                         <div class="relative">
-                            <input type="email" name="email" id="email" placeholder="Enter your email" class="<?= $email_error ? 'shake-animation border-red-600' : '' ?> border border-gray-400 p-2 pl-3 rounded-md w-full" value="<?= $email ?>" />
+                            <input type="email" name="email" id="email" placeholder="Enter your email" class="<?= $email_error ? 'shake-animation border-red-600' : '' ?> border border-gray-400 p-2 pl-3 pr-9 rounded-md w-full" value="<?= $email ?>" />
                             <div class="absolute right-0.5 bottom-1 p-2">
                                 <i data-lucide="mail" class="size-[18px]"></i>
                             </div>
@@ -174,7 +174,7 @@ if (isset($_SESSION['errors'])) {
                             </span>
                         </span>
                         <div class="relative">
-                            <input type="password" name="password" id="password" placeholder="Enter your password" class="<?= $password_error ? 'shake-animation border-red-600' : '' ?> border border-gray-400 p-2 pl-3 rounded-md w-full" value="<?= $password ?>" />
+                            <input type="password" name="password" id="password" placeholder="Enter your password" class="<?= $password_error ? 'shake-animation border-red-600' : '' ?> border border-gray-400 p-2 pl-3 pr-9 rounded-md w-full" value="<?= $password ?>" />
                             <button type="button" id="toggle-password" class="absolute right-0.5 bottom-0.5 p-2">
                                 <i data-lucide="eye" class="size-[22px]"></i>
                             </button>

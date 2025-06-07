@@ -38,7 +38,7 @@ if (!$user) {
 
     <script src="https://unpkg.com/@tailwindcss/browser@4.1.7"></script>
     <script src="https://unpkg.com/lucide@0.511.0"></script>
-    <script src="./script.js" type="module"></script>
+    <script src="./script.js" type="module" defer></script>
 </head>
 <body class="font-[Inter]">
     <div class="relative h-dvh">
@@ -89,7 +89,7 @@ if (!$user) {
                             <div class="mt-4 grid gap-2">
                                 <span class="w-full h-[2px] rounded-full bg-black/20"></span>
 
-                                <?php if ($user['role'] == 'admin'): ?>
+                                <?php if ($user['is_admin']): ?>
                                     <a href="../admin/index.php" class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-emerald-200"><i data-lucide="shield-user" class="size-5"></i>Admin Panel</a>
                                 <?php endif; ?>
 

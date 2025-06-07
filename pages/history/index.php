@@ -36,7 +36,7 @@ if (isset($_GET['page']) && is_numeric($_GET['page'])) {
     $pg = 1;
 }
 
-$stmt = $db_o->prepare('SELECT orders.order_date, orders.status, shipping_address.street, shipping_address.building_number, shipping_address.apartment_number, shipping_address.city, shipping_address.postal_code, shipping_address.country, IF(orders.delivery_date IS NOT NULL, orders.delivery_date, "On The Way") as "status_dostawy", orders.order_id from orders inner join shipping_address on orders.shipping_address_id = shipping_address.shipping_address_id WHERE orders.user_id = ? ORDER BY orders.order_date DESC LIMIT 10 OFFSET ?');
+$stmt = $db_o->prepare('SELECT orders.order_date, orders.delivered, order_addresses.street, order_addresses.building_number, order_addresses.apartment_number, order_addresses.city, order_addresses.postal_code, order_addresses.country, IF(orders.delivery_date IS NOT NULL, orders.delivery_date, "On The Way") as "status_dostawy", orders.order_id from orders inner join order_addresses on orders.order_address_id = order_addresses.order_address_id WHERE orders.user_id = ? ORDER BY orders.order_date DESC LIMIT 10 OFFSET ?');
 if (!$stmt) {
     die("Query preparation failed: " . $db_o->error);
 }
@@ -57,7 +57,7 @@ $result = $stmt->get_result();
 
     <script src="https://unpkg.com/@tailwindcss/browser@4.1.7"></script>
     <script src="https://unpkg.com/lucide@0.511.0"></script>
-    <script src="./script.js" type="module"></script>
+    <script src="./script.js" type="module" defer></script>
 </head>
 <body class="font-[Inter]">
     <div class="relative h-dvh">
@@ -108,7 +108,7 @@ $result = $stmt->get_result();
                             <div class="mt-4 grid gap-2">
                                 <span class="w-full h-[2px] rounded-full bg-black/20"></span>
 
-                                <?php if ($user['role'] == 'admin'): ?>
+                                <?php if ($user['is_admin']): ?>
                                     <a href="../admin/index.php" class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-emerald-200"><i data-lucide="shield-user" class="size-5"></i>Admin Panel</a>
                                 <?php endif; ?>
 
@@ -225,7 +225,7 @@ $result = $stmt->get_result();
             </table>
         </div>
         <?php
-        $stmt = $db_o->prepare('SELECT shipping_address.street, shipping_address.building_number, shipping_address.apartment_number, shipping_address.city, shipping_address.postal_code, shipping_address.country from shipping_address inner join orders on shipping_address.shipping_address_id = orders.shipping_address_id WHERE orders.order_id = ?');
+        $stmt = $db_o->prepare('SELECT order_addresses.street, order_addresses.building_number, order_addresses.apartment_number, order_addresses.city, order_addresses.postal_code, order_addresses.country from order_addresses inner join orders on order_addresses.order_address_id = orders.order_address_id WHERE orders.order_id = ?');
         if (!$stmt) {
             die("Query preparation failed: " . $db_o->error);
         }
