@@ -36,7 +36,7 @@ if (isset($_GET['page']) && is_numeric($_GET['page'])) {
     $pg = 1;
 }
 
-$stmt = $db_o->prepare('SELECT orders.order_date, orders.delivered, order_addresses.street, order_addresses.building_number, order_addresses.apartment_number, order_addresses.city, order_addresses.postal_code, order_addresses.country, IF(orders.delivery_date IS NOT NULL, orders.delivery_date, "On The Way") as "status_dostawy", orders.order_id from orders inner join order_addresses on orders.order_address_id = order_addresses.order_address_id WHERE orders.user_id = ? ORDER BY orders.order_date DESC LIMIT 10 OFFSET ?');
+$stmt = $db_o->prepare('SELECT orders.order_date, IF(orders.delivered = 1, "Delivered", "Not Delivered"), order_addresses.street, order_addresses.building_number, order_addresses.apartment_number, order_addresses.city, order_addresses.postal_code, order_addresses.country, IF(orders.delivery_date IS NOT NULL, orders.delivery_date, "On The Way") as "status_dostawy", orders.order_id from orders inner join order_addresses on orders.order_address_id = order_addresses.order_address_id WHERE orders.user_id = ? ORDER BY orders.order_date DESC LIMIT 10 OFFSET ?');
 if (!$stmt) {
     die("Query preparation failed: " . $db_o->error);
 }
@@ -190,7 +190,7 @@ $result = $stmt->get_result();
     <?php if(isset($_GET['type']) && $_GET['type'] == 'details' && isset($_GET['dtid']) && is_numeric($_GET['dtid'])) : ?>
     <?php
     $dtid = $_GET['dtid'];
-    $stmt = $db_o->prepare('SELECT products.name, order_items.quantity, products.price*order_items.quantity FROM products inner join order_items on products.product_id = order_items.product_id WHERE order_items.order_id = ?');
+    $stmt = $db_o->prepare('SELECT products.title, order_items.quantity, products.price*order_items.quantity FROM products inner join order_items on products.product_id = order_items.product_id WHERE order_items.order_id = ?');
     if (!$stmt) {
         die("Query preparation failed: " . $db_o->error);
     }

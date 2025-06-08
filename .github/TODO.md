@@ -46,7 +46,8 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
 
 -   [x] rejestracja (backend)
 -   [x] resetowanie hasła
--   [ ] historia zamówień użytkownika (backend)
+-   [x] historia zamówień użytkownika (backend)
+-   [x] historia zamówień użytkownika (frontend)
 
 ---
 
