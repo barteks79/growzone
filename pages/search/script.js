@@ -127,7 +127,9 @@ async function updateProducts(productName, availability, maxPrice, categories) {
         productPrice.textContent = `$${data['price']}`;
 
         const productDescription = product.querySelector('.product-description');
-        productDescription.textContent = data['description'];
+        const description = data['description'];
+        productDescription.textContent =
+            description.length > 20 ? `${description.substring(0, 50)}...` : description;
 
         const productStarIcon = product.querySelector('.product-star-icon');
         const productStarIconClone = starIcon.cloneNode(true);

@@ -18,7 +18,7 @@ CREATE TABLE products (
   product_id  INT            PRIMARY KEY AUTO_INCREMENT,
   price       DECIMAL(10, 2) NOT NULL,
   title       VARCHAR(50)    NOT NULL,
-  description VARCHAR(100)   NOT NULL,
+  description TEXT           NOT NULL,
   category_id INT            NOT NULL,
   rating      DECIMAL(2, 1)  NOT NULL,
   pictureFile VARCHAR(10)        NULL,

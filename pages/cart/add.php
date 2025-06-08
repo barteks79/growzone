@@ -102,8 +102,8 @@
         echo json_encode(['message' => "Product's quantity increased."]);
     } else {
         // dodajemy do cart'a
-        $stmt = $db_o->prepare('INSERT INTO cart_items VALUES (NULL, ?, 1, ?)');
-        $stmt->bind_param('ii', $product_id, $cart_id);
+        $stmt = $db_o->prepare('INSERT INTO cart_items VALUES (NULL, ?, ?, 1)');
+        $stmt->bind_param('ii', $cart_id, $product_id,);
         if (!$stmt->execute()) server_error($stmt->error);
         
         http_response_code(201);

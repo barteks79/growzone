@@ -113,7 +113,7 @@ if (isset($_SESSION['user_id'])) {
         </nav>
 
         <div class="px-8 pb-8 pt-2 h-[calc(100dvh_-_74px)]">
-            <main class="h-full bg-white relative shadow-md flex gap-6 z-[1] rounded-lg p-6">
+            <main class="h-full bg-white relative shadow-md flex gap-6 rounded-lg p-6">
                 <div class="border-2 border-neutral-300 rounded-md flex flex-col gap-6 p-6 h-full w-[400px]">
                     <h2 class="text-2xl font-semibold">Filter</h2>
 
@@ -204,7 +204,7 @@ if (isset($_SESSION['user_id'])) {
                         </button>
                     </div>
 
-                    <div id="product-container" class="flex flex-wrap gap-4 overflow-y-scroll h-full">
+                    <div id="product-container" class="flex flex-wrap gap-4 pb-4 overflow-y-scroll h-full">
                         <!-- Products -->
                     </div>
 
