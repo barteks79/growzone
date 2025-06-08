@@ -20,10 +20,9 @@ if (!is_null($productName) || !is_null($availability) || !is_null($maxPrice) || 
 
 if (!is_null($productName)) {
     $query .= ' AND products.title LIKE ?';
-    $nigger = '%' . $productName . '%';
 
     array_push($bindTypes, 's');
-    array_push($bindParams, $nigger);
+    array_push($bindParams, "%$productName%");
 }
 
 if (!is_null($availability)) {
@@ -34,7 +33,7 @@ if (!is_null($availability)) {
 if (!is_null($maxPrice)) {
     $query .= ' AND products.price <= ?';
 
-    array_push($bindTypes, 'i');
+    array_push($bindTypes, 'd');
     array_push($bindParams, $maxPrice);
 }
 

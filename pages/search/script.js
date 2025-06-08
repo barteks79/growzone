@@ -2,6 +2,10 @@ import { updateAvatar } from '../../js/avatar.js';
 
 /** @type {HTMLInputElement} */
 const productName = document.querySelector('#product-name');
+/** @type {HTMLDivElement} */
+const productSuggestions = document.querySelector('#product-suggestions');
+/** @type {HTMLButtonElement} */
+const clearSearchButton = document.querySelector('#clear-search-button');
 /** @type {HTMLInputElement} */
 const inStock = document.querySelector('#in-stock');
 /** @type {HTMLInputElement} */
@@ -20,12 +24,15 @@ const starIcon = document.querySelector('#star-icon');
 const xIcon = document.querySelector('#x-icon');
 
 productName.addEventListener('input', submit);
+productName.addEventListener('input', updateSuggestions);
+clearSearchButton.addEventListener('click', clearSearch);
 inStock.addEventListener('change', submit);
 outOfStock.addEventListener('change', submit);
 price.addEventListener('input', submit);
 categories.forEach(category => category.addEventListener('change', submit));
 
 submit();
+updateSuggestions();
 
 function submit() {
     let availability = null;
@@ -48,6 +55,34 @@ function submit() {
         Number(price.value),
         activeCategories.length ? activeCategories : null,
     );
+}
+
+function clearSearch() {
+    productName.value = '';
+    productName.dispatchEvent(new Event('input'));
+}
+
+async function updateSuggestions() {
+    const search = productName.value;
+
+    const response = await fetch('./suggestions.php', {
+        method: 'POST',
+        body: JSON.stringify({ productName: search }),
+    });
+
+    const suggestions = await response.json();
+
+    productSuggestions.innerHTML = '';
+
+    for (const suggestionText of suggestions) {
+        const suggestion = document.createElement('span');
+        suggestion.textContent = suggestionText;
+        suggestion.onclick = () => {
+            productName.value = suggestionText;
+            productName.dispatchEvent(new Event('input'));
+        };
+        productSuggestions.append(suggestion);
+    }
 }
 
 /**

@@ -180,7 +180,7 @@ if (isset($_SESSION['user_id'])) {
                 </div>
 
                 <div class="flex flex-col gap-6 w-full">
-                    <div class="relative">
+                    <div class="relative group">
                         <?php
 
                         $stmt = $db_o->prepare("SELECT COUNT(*) AS product_count FROM products");
@@ -191,20 +191,27 @@ if (isset($_SESSION['user_id'])) {
                         <input type="search" placeholder="Search <?= htmlspecialchars($product_count) ?> products ..." id="product-name" class="border-2 font-medium border-neutral-300 py-2 pl-10 pr-30 rounded-md w-full" onmouseover="this.focus()" />
                         <i data-lucide="search" class="absolute left-2.5 top-2.5 size-[24px] stroke-neutral-400"></i>
 
-                        <button class="absolute py-1 px-2 cursor-pointer hover:brightness-95 transition right-2.5 top-1.5 bg-neutral-300 rounded-md flex gap-2 items-center">
-                            <i data-lucide="arrow-down-wide-narrow" class="size-[20px]"></i>
-                            <span class="font-medium">Sort by</span>
+                        <div class="group-hover:visible invisible absolute z-[1] w-full">
+                            <div class="bg-transparent h-1"></div>
+                            <div id="product-suggestions" class="bg-white shadow-lg rounded-md px-4 max-h-[12rem] overflow-y-scroll py-2 grid *:py-2 *:cursor-pointer">
+                                <!-- Suggestions -->
+                            </div>
+                        </div>
+
+                        <button id="clear-search-button" class="absolute py-1 px-2 cursor-pointer hover:brightness-95 transition right-2.5 top-1.5 bg-neutral-300 rounded-md flex gap-2 items-center">
+                            <i data-lucide="x" class="size-[20px] stroke-3"></i>
+                            <span class="font-medium">Clear</span>
                         </button>
                     </div>
 
-                    <div id="product-container" class="flex flex-wrap gap-4 overflow-y-scroll">
+                    <div id="product-container" class="flex flex-wrap gap-4 overflow-y-scroll h-full">
                         <!-- Products -->
                     </div>
 
                     <template id="product-template">
                         <a class="product-link">
                             <div class="relative w-[20rem] h-[15rem] overflow-hidden rounded-md shadow-sm cursor-pointer transition hover:shadow-md">
-                                <div class="absolute inset-0 bg-gray-50 -z-[1]"></div>
+                                <div class="absolute inset-0 bg-zinc-100 -z-[1]"></div>
 
                                 <div class="flex flex-col justify-between p-4 h-full">
                                     <div class="flex items-center justify-between">
