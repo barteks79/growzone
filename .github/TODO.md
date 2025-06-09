@@ -40,6 +40,15 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
     - [x] stworzyć UI dla strony reset request
     - [x] stworzyć UI dla strony reset password
 
+4. `Koszyk (frontend/backend)`
+
+    - [ ] stworzyć plik http ktory zwraca id zalogowanego uzytkownika
+    - [ ] koszyk i dostawa
+       - [ ] dodawanie do koszyka po kliknieciu '+'
+       - [ ] odejmowanie z koszyka po kliknieciu '+'
+       - [ ] czyszczenie calego koszyka po kliknieciu ikony
+       - [ ] dodac UI wyboru dostawy
+
 ---
 
 ### Bartosz Rymer
