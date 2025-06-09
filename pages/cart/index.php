@@ -8,13 +8,13 @@ $user = null;
 
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
-
+    
     $stmt = $db_o->prepare("SELECT * FROM users WHERE user_id = ?");
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
-
+    
     $result = $stmt->get_result();
-
+    
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
     }
@@ -25,7 +25,12 @@ if (!$user) {
     exit();
 }
 
+$stmt = $db_o->prepare('SELECT * FROM carts WHERE user_id = ?');
+$stmt->bind_param('i', $user_id);
+$stmt->execute();
+$cart = $stmt->get_result()->fetch_assoc();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -134,23 +139,50 @@ if (!$user) {
                         </div>
                     </menu>
                     
-                    <section class="flex flex-col gap-8 py-4">
-                        <h1 class="text-3xl font-medium">Twój koszyk</h3>
-                        
+                    <?php 
+                    ?>
+                    <section id="cart_section" class="flex flex-col gap-8 py-4">
+                        <div class="flex justify-between items-center">
+                            <h1 class="text-3xl font-medium">Twój koszyk</h3>
+                            <div class="flex gap-4 items-center">
+                                <p class="flex items-center gap-1 text-lg font-semibold"><span id="cart_value_span">
+                                <?php
+                                    if (isset($cart['cart_id'])) {
+                                        $cart_id = $cart['cart_id'];
+                                        $stmt = $db_o->prepare('SELECT SUM(ci.quantity * p.price) AS wartosc FROM carts c JOIN cart_items ci ON c.cart_id = ci.cart_id JOIN  products p ON ci.product_id = p.product_id WHERE c.cart_id = ?');
+                                        $stmt->bind_param('i', $cart_id);
+                                        $stmt->execute();
+                                        $cart_value = $stmt->get_result()->fetch_assoc()['wartosc'];
+                                        echo htmlspecialchars(number_format($cart_value, 2));
+                                    } else {
+                                        echo htmlspecialchars(number_format(0, 2));
+                                    }
+                                ?></span> PLN</p>
+                                <button id="clear_cart" class="grid place-items-center border border-gray-400 size-8 rounded-md cursor-pointer">
+                                    <i data-lucide="trash" class="size-4 font-normal pointer-events-none"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <?php
+                            if (isset($cart['cart_id'])): 
+                                $cart_id = $cart['cart_id'];
+                                $stmt = $db_o->prepare('SELECT _ci.quantity, _p.* FROM cart_items _ci INNER JOIN products _p ON _ci.product_id = _p.product_id WHERE cart_id = ?');
+                                $stmt->bind_param('i', $cart_id);
+                                $stmt->execute();
+                                $cart_items = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+                                if (count($cart_items) === 0) {
+                                    echo '<p class="text-center text-gray-600">Nie masz żadnych produktów w koszyku</p>';
+                                } else { ?>
                         <ul class="flex flex-col gap-3">
-                            <?php
-                            $stmt = $db_o->prepare('SELECT * FROM carts WHERE user_id = ?');
-                            $stmt->bind_param('i', $user_id);
-                            $stmt->execute();
-                            $cart_id = $stmt->get_result()->fetch_assoc()['cart_id'];
-                            
-                            $stmt = $db_o->prepare('SELECT _ci.quantity, _p.* FROM cart_items _ci INNER JOIN products _p ON _ci.product_id = _p.product_id WHERE cart_id = ?');
-                            $stmt->bind_param('i', $cart_id);
-                            $stmt->execute();
-                            $cart_items = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-                            ?>
-                        
-                        <?php foreach ($cart_items as $cart_item) { ?>
+                        <?php
+
+                            if (count($cart_items) === 0) {
+                                
+                            }
+
+                            if($cart_items) { foreach ($cart_items as $cart_item) { ?>
                             <li data-product-price="<?= htmlspecialchars($cart_item['price']) ?>" data-product-id="<?= htmlspecialchars($cart_item['product_id']) ?>" class="flex items-center justify-between">
                                 <div class="flex gap-5">
                                     <div class="size-16 bg-gray-400 rounded-sm"></div>
@@ -179,8 +211,11 @@ if (!$user) {
                                     </div>
                                 </div>
                             </li>
-                            <?php }; ?>
+                            <?php }}; ?>
                         </ul>
+                        <?php } else: ?>
+                            <p class="text-center text-gray-600">Nie masz żadnych produktów w koszyku</p>
+                        <?php endif; ?>
                     </section>
                 </div>
             </div>

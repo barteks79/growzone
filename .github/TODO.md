@@ -46,7 +46,7 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
     - [ ] koszyk i dostawa
        - [x] dodawanie do koszyka po kliknieciu '+'
        - [x] odejmowanie z koszyka po kliknieciu '+'
-       - [ ] czyszczenie calego koszyka po kliknieciu ikony
+       - [x] czyszczenie calego koszyka po kliknieciu ikony
        - [ ] dodac UI wyboru dostawy
 
 ---
