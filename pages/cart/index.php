@@ -139,11 +139,9 @@ $cart = $stmt->get_result()->fetch_assoc();
                         </div>
                     </menu>
                     
-                    <?php 
-                    ?>
                     <section id="cart_section" class="flex flex-col gap-8 py-4">
                         <div class="flex justify-between items-center">
-                            <h1 class="text-3xl font-medium">Twój koszyk</h3>
+                            <h2 class="text-3xl font-medium">Twój koszyk</h3>
                             <div class="flex gap-4 items-center">
                                 <p class="flex items-center gap-1 text-lg font-semibold"><span id="cart_value_span">
                                 <?php
@@ -217,6 +215,30 @@ $cart = $stmt->get_result()->fetch_assoc();
                             <p class="text-center text-gray-600">Nie masz żadnych produktów w koszyku</p>
                         <?php endif; ?>
                     </section>
+
+                    <section class="flex flex-col gap-8 py-4">
+                        <h2 class="text-3xl font-medium">Dostawa</h3>
+
+                        <div class="grid grid-cols-4 gap-5">
+                            <article data-selected class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-2 border-gray-400">
+                                <img src="../../public/images/inpost.jpg" alt="Inpost Logo" class="h-24" />    
+                            </article>
+
+                            <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-2 border-gray-400 not-data-selected:cursor-pointer">
+                                <img src="../../public/images/dpd.jpg" alt="DPD Logo" class="h-24" />    
+                            </article>
+
+                            <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-2 border-gray-400 not-data-selected:cursor-pointer">
+                                <img src="../../public/images/poczta_polska.png" alt="Pocza Polska Logo" class="h-24" />    
+                            </article>
+
+                            <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-2 border-gray-400 not-data-selected:cursor-pointer">
+                                <img src="../../public/images/dhl.jpg" alt="DHL Logo" class="h-24" />    
+                            </article>
+                        </div>
+                    </section>
+
+                    <button class="bg-emerald-600 self-end text-white px-12 not-disabled:cursor-pointer disabled:opacity-50 not-disabled:hover:bg-emerald-700 py-2 rounded-md">Dalej</button>
                 </div>
             </div>
         </div>
