@@ -127,4 +127,14 @@ document.addEventListener('DOMContentLoaded', () => {
 	document
 		.querySelectorAll('#clear_cart')
 		.forEach(btn => btn.addEventListener('click', e => clearCart(e)));
+
+	document.querySelectorAll('article').forEach(company =>
+		company.addEventListener('click', e => {
+			document
+				.querySelectorAll('article')
+				.forEach(company2 => company2.removeAttribute('data-selected'));
+
+			e.target.dataset.selected = true;
+		})
+	);
 });

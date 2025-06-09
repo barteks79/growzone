@@ -219,21 +219,21 @@ $cart = $stmt->get_result()->fetch_assoc();
                     <section class="flex flex-col gap-8 py-4">
                         <h2 class="text-3xl font-medium">Dostawa</h3>
 
-                        <div class="grid grid-cols-4 gap-5">
-                            <article data-selected class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-2 border-gray-400">
-                                <img src="../../public/images/inpost.jpg" alt="Inpost Logo" class="h-24" />    
+                        <div id="shipping_companies" class="grid grid-cols-4 gap-5">
+                            <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 border-gray-400">
+                                <img src="../../public/images/inpost.jpg" alt="Inpost Logo" class="h-24 pointer-events-none" />    
                             </article>
 
-                            <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-2 border-gray-400 not-data-selected:cursor-pointer">
-                                <img src="../../public/images/dpd.jpg" alt="DPD Logo" class="h-24" />    
+                            <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 border-gray-400 not-data-selected:cursor-pointer">
+                                <img src="../../public/images/dpd.jpg" alt="DPD Logo" class="h-24 pointer-events-none" />    
                             </article>
 
-                            <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-2 border-gray-400 not-data-selected:cursor-pointer">
-                                <img src="../../public/images/poczta_polska.png" alt="Pocza Polska Logo" class="h-24" />    
+                            <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 border-gray-400 not-data-selected:cursor-pointer">
+                                <img src="../../public/images/poczta_polska.png" alt="Pocza Polska Logo" class="h-24 pointer-events-none" />    
                             </article>
 
-                            <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-2 border-gray-400 not-data-selected:cursor-pointer">
-                                <img src="../../public/images/dhl.jpg" alt="DHL Logo" class="h-24" />    
+                            <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 border-gray-400 not-data-selected:cursor-pointer">
+                                <img src="../../public/images/dhl.jpg" alt="DHL Logo" class="h-24 pointer-events-none" />    
                             </article>
                         </div>
                     </section>
