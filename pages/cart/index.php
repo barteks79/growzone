@@ -167,14 +167,14 @@ if (!$user) {
                                     </div>
                                     
                                     <div class="flex items-center border border-gray-400 rounded-md">
-                                        <button data-action="increase" class="increase grid place-items-center cursor-pointer border-r border-gray-400 size-8">
+                                        <button data-action="increase" class="grid place-items-center cursor-pointer border-r border-gray-400 size-8">
                                             <i data-lucide="plus" class="size-4 font-normal pointer-events-none"></i>
                                         </button>
                                         
                                         <input disabled value="<?= htmlspecialchars($cart_item['quantity']) ?>" class="grid place-items-center size-8 text-sm" />
                                         
-                                        <button class="grid place-items-center cursor-pointer border-l border-gray-400 size-8">
-                                            <i data-lucide="minus" class="size-4 font-normal"></i>
+                                        <button data-action="decrease" class="grid place-items-center cursor-pointer border-l border-gray-400 size-8">
+                                            <i data-lucide="minus" class="size-4 font-normal pointer-events-none"></i>
                                         </button>
                                     </div>
                                 </div>
