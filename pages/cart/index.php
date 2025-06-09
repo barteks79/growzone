@@ -106,13 +106,13 @@ if (!$user) {
             </div>
         </nav>
 
-        <main class="flex justify-center items-center mt-10 px-4">
-            <div class="flex flex-col gap-3 bg-white rounded-xl shadow-lg py-4 px-10 w-2/3 min-w-[950px]">                
+        <main class="flex justify-center items-center mt-10">
+            <div class="flex flex-col gap-3 bg-white rounded-xl shadow-lg py-4 px-10 max-w-[1100px] w-2/3 min-w-[950px]">                
                 <menu class="flex items-center gap-10 py-6 border-b border-gray-300">
                     <div class="flex items-center gap-5">
                         <!-- data-active jeżeli jest na danym kroku lub juz go zrobiony -->
                         <!-- data-done juz go zrobiony -->
-                        <div data-active data-done class="group grid place-items-center aspect-square shadow-xl bg-gray-600 data-active:bg-emerald-500 h-10 rounded-xl text-white">
+                        <div data-active class="group grid place-items-center aspect-square shadow-xl bg-gray-600 data-active:bg-emerald-500 h-10 rounded-xl text-white">
                             <p class="group-data-done:hidden">1</p>
                             <i data-lucide="check" class="hidden group-data-done:block"></i>
                         </div>
@@ -149,22 +149,22 @@ if (!$user) {
                             </div>
 
                             <div class="flex items-center">
-                                <div class="flex items-center gap-5 pr-8 border-r border-gray-400">
-                                    <button class="cursor-pointer border p-2 rounded-md border-gray-400">
-                                        <i data-lucide="plus"></i>
+                                <div class="flex items-center border border-gray-400 rounded-md">
+                                    <button class="grid place-items-center cursor-pointer border-r border-gray-400 size-8">
+                                        <i data-lucide="plus" class="size-4 font-normal"></i>
                                     </button>
                                     
-                                    <p class="text-2xl font-semibold">2</p>
-    
-                                    <button class="cursor-pointer border p-2 rounded-md border-gray-400">
-                                        <i data-lucide="minus"></i>
+                                    <input value="2" class="grid place-items-center size-8 text-sm" />
+
+                                    <button class="grid place-items-center cursor-pointer border-l border-gray-400 size-8">
+                                        <i data-lucide="minus" class="size-4 font-normal"></i>
                                     </button>
                                 </div>
                                 
                                 <div class="flex gap-4 pl-8 items-center">
-                                    <p class="text-xl font-bold">399,99 PLN</p>
-                                    <button class="p-2 border border-gray-400 rounded-md">
-                                        <i data-lucide="trash"></i>
+                                    <p class="text-lg font-semibold">399,99 PLN</p>
+                                    <button class="cursor-pointer p-2 border border-gray-400 rounded-md">
+                                        <i data-lucide="trash" class="size-4 font-normal"></i>
                                     </button>
                                 </div>
                             </div>
