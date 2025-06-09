@@ -42,7 +42,7 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
 
 4. `Koszyk (frontend/backend)`
 
-    - [ ] stworzyć plik http ktory zwraca id zalogowanego uzytkownika
+    - [x] stworzyć plik http ktory zwraca id zalogowanego uzytkownika
     - [ ] koszyk i dostawa
        - [ ] dodawanie do koszyka po kliknieciu '+'
        - [ ] odejmowanie z koszyka po kliknieciu '+'
