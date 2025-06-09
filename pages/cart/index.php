@@ -203,7 +203,7 @@ $cart = $stmt->get_result()->fetch_assoc();
                                             <i data-lucide="plus" class="size-4 font-normal pointer-events-none"></i>
                                         </button>
                                         
-                                        <input disabled value="<?= htmlspecialchars($cart_item['quantity']) ?>" class="grid place-items-center size-8 text-sm" />
+                                        <input disabled value="<?= htmlspecialchars($cart_item['quantity']) ?>" class="text-center size-8 text-sm" />
                                         
                                         <button data-action="decrease" class="grid place-items-center cursor-pointer border-l border-gray-400 size-8">
                                             <i data-lucide="minus" class="size-4 font-normal pointer-events-none"></i>
