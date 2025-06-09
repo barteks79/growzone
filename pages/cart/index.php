@@ -113,11 +113,18 @@ $cart = $stmt->get_result()->fetch_assoc();
             
             <main class="flex justify-center items-center mt-10">
                 <div class="flex flex-col gap-3 bg-white rounded-xl shadow-lg py-4 px-10 max-w-[1100px] w-2/3 min-w-[950px]">                
+                    <?php 
+                        if (!isset($_GET['strona'])) { 
+                            $nastepna_strona = 'dostawa'; 
+                        } else if ($_GET['strona'] === 'dostawa') { 
+                            $nastepna_strona ='podsumowanie'; 
+                        } else if ($_GET['strona'] === 'podsumowanie') {
+                            $nastepna_strona = 'platnosc';
+                        } 
+                    ?>    
                     <menu class="flex items-center gap-10 py-6 border-b border-gray-300">
                         <div class="flex items-center gap-5">
-                            <!-- data-active jeżeli jest na danym kroku lub juz go zrobiony -->
-                            <!-- data-done juz go zrobiony -->
-                            <div data-active class="group grid place-items-center aspect-square shadow-xl bg-gray-600 data-active:bg-emerald-500 h-10 rounded-xl text-white">
+                            <div <?php if ($nastepna_strona === 'podsumowanie' || $nastepna_strona === 'platnosc') echo 'data-done' ?> data-active class="group grid place-items-center aspect-square shadow-xl bg-gray-600 data-active:bg-emerald-500 h-10 rounded-xl text-white">
                                 <p class="group-data-done:hidden">1</p>
                                 <i data-lucide="check" class="hidden group-data-done:block"></i>
                             </div>
@@ -127,18 +134,25 @@ $cart = $stmt->get_result()->fetch_assoc();
                         <div class="h-[1px] flex-1 bg-gray-400 rounded-md"></div>
                         
                         <div class="flex items-center gap-5">
-                            <div class="grid place-items-center aspect-square shadow-xl bg-gray-600 data-active:bg-emerald-500 h-10 rounded-xl text-white">2</div>
+                            <div <?php if ($nastepna_strona === 'podsumowanie' || $nastepna_strona === 'platnosc') echo 'data-active' ?> <?php if ($nastepna_strona === 'platnosc') echo 'data-done' ?> class="group grid place-items-center aspect-square shadow-xl bg-gray-600 data-active:bg-emerald-500 h-10 rounded-xl text-white">
+                                <p class="group-data-done:hidden">2</p>
+                                <i data-lucide="check" class="hidden group-data-done:block"></i>
+                            </div>
                             <p class="text-xl font-medium">Dane dostawy</p>
                         </div>
                         
                         <div class="h-[1px] flex-1 bg-gray-400 rounded-md"></div>
                         
                         <div class="flex items-center gap-5">
-                            <div class="grid place-items-center aspect-square shadow-xl bg-gray-600 data-active:bg-emerald-500 h-10 rounded-xl text-white">3</div>
+                            <div <?php if ($nastepna_strona === 'platnosc') echo 'data-active' ?>  class="group grid place-items-center aspect-square shadow-xl bg-gray-600 data-active:bg-emerald-500 h-10 rounded-xl text-white">
+                                <p class="group-data-done:hidden">3</p>
+                                <i data-lucide="check" class="hidden group-data-done:block"></i>
+                            </div>
                             <p class="text-xl font-medium">Podsumowanie</p>
                         </div>
                     </menu>
                     
+                    <?php if (!isset($_GET['strona'])): ?>
                     <section id="cart_section" class="flex flex-col gap-8 py-4">
                         <div class="flex justify-between items-center">
                             <h2 class="text-3xl font-medium">Twój koszyk</h3>
@@ -237,8 +251,9 @@ $cart = $stmt->get_result()->fetch_assoc();
                             </article>
                         </div>
                     </section>
+                    <?php endif; ?>
 
-                    <button class="bg-emerald-600 self-end text-white px-12 not-disabled:cursor-pointer disabled:opacity-50 not-disabled:hover:bg-emerald-700 py-2 rounded-md">Dalej</button>
+                    <a href="./index.php?strona=<?= $nastepna_strona ?>" class="bg-emerald-600 self-end text-white px-12 not-disabled:cursor-pointer disabled:opacity-50 not-disabled:hover:bg-emerald-700 py-2 rounded-md">Dalej</a>
                 </div>
             </div>
         </div>
