@@ -57,6 +57,9 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
 -   [x] resetowanie hasła
 -   [x] historia zamówień użytkownika (backend)
 -   [x] historia zamówień użytkownika (frontend)
+-   [x] zapłata za produkty (backend)
+-   [x] zapłata za produkty (frontend)
+-   [ ] wysyłanie potwierdzenia zakupu mailem
 
 ---
 
