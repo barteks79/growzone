@@ -114,7 +114,7 @@ if (isset($_SESSION['user_id'])) {
 
         <div class="px-8 pb-8 pt-2 h-[calc(100dvh_-_74px)]">
             <main class="h-full bg-white relative shadow-md flex gap-6 rounded-lg p-6">
-                <div class="border-2 border-neutral-300 rounded-md flex flex-col gap-6 p-6 h-full w-[400px]">
+                <div class="border-2 border-neutral-300 rounded-md flex flex-col gap-6 p-6 h-full w-[400px] overflow-y-scroll">
                     <h2 class="text-2xl font-semibold">Filter</h2>
 
                     <div class="grid gap-2">
@@ -145,7 +145,7 @@ if (isset($_SESSION['user_id'])) {
                             $max_price = htmlspecialchars($prices['max_price']);
 
                             ?>
-                            <input type="range" min="<?= $min_price ?>" max="<?= $max_price ?>" value="100" id="price" class="accent-indigo-400" />
+                            <input type="range" min="<?= $min_price ?>" max="<?= $max_price ?>" step="0.01" value="<?= $max_price ?>" id="price" class="accent-indigo-400" />
                             <div class="flex justify-between text-sm font-medium">
                                 <span>$<?= $min_price ?></span>
                                 <span>$<?= $max_price ?></span>
@@ -188,7 +188,7 @@ if (isset($_SESSION['user_id'])) {
                         $product_count = $stmt->get_result()->fetch_assoc()['product_count'];
 
                         ?>
-                        <input type="search" placeholder="Search <?= htmlspecialchars($product_count) ?> products ..." id="product-name" class="border-2 font-medium border-neutral-300 py-2 pl-10 pr-30 rounded-md w-full" onmouseover="this.focus()" />
+                        <input type="text" placeholder="Search <?= htmlspecialchars($product_count) ?> products ..." id="product-name" class="border-2 font-medium border-neutral-300 py-2 pl-10 pr-30 rounded-md w-full" onmouseover="this.focus()" />
                         <i data-lucide="search" class="absolute left-2.5 top-2.5 size-[24px] stroke-neutral-400"></i>
 
                         <div class="group-hover:visible invisible absolute z-[1] w-full">
@@ -204,14 +204,14 @@ if (isset($_SESSION['user_id'])) {
                         </button>
                     </div>
 
-                    <div id="product-container" class="flex flex-wrap gap-4 pb-4 overflow-y-scroll h-full">
+                    <div id="product-container" class="flex flex-wrap gap-4 pb-4 overflow-y-scroll">
                         <!-- Products -->
                     </div>
 
                     <template id="product-template">
-                        <a class="product-link">
-                            <div class="relative w-[20rem] h-[15rem] overflow-hidden rounded-md shadow-sm cursor-pointer transition hover:shadow-md">
-                                <div class="absolute inset-0 bg-zinc-100 -z-[1]"></div>
+                        <a class="product-link h-fit">
+                            <div class="relative w-[20rem] h-[15rem] overflow-hidden isolate rounded-md shadow-sm cursor-pointer transition hover:shadow-lg group">
+                                <div class="absolute inset-0 bg-neutral-100 group-hover:bg-neutral-50 -z-[1]"></div>
 
                                 <div class="flex flex-col justify-between p-4 h-full">
                                     <div class="flex items-center justify-between">

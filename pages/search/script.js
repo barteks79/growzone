@@ -11,7 +11,7 @@ const inStock = document.querySelector('#in-stock');
 /** @type {HTMLInputElement} */
 const outOfStock = document.querySelector('#out-of-stock');
 /** @type {HTMLInputElement} */
-const price = document.querySelector('#price');
+const maxPrice = document.querySelector('#price');
 /** @type {NodeListOf<HTMLInputElement>} */
 const categories = document.querySelectorAll('.category');
 /** @type {HTMLDivElement} */
@@ -30,7 +30,7 @@ productName.addEventListener('input', updateSuggestions);
 clearSearchButton.addEventListener('click', clearSearch);
 inStock.addEventListener('change', submit);
 outOfStock.addEventListener('change', submit);
-price.addEventListener('input', submit);
+maxPrice.addEventListener('input', submit);
 categories.forEach(category => category.addEventListener('change', submit));
 
 submit();
@@ -43,8 +43,20 @@ function applyURLFilters() {
         productName.value = searchParams.get('productName');
     }
 
+    if (searchParams.has('availability', 'in-stock')) {
+        inStock.checked = true;
+    }
+
+    if (searchParams.has('availability', 'out-of-stock')) {
+        outOfStock.checked = true;
+    }
+
+    if (searchParams.has('maxPrice')) {
+        maxPrice.value = searchParams.get('maxPrice');
+    }
+
     if (searchParams.has('category')) {
-        const activeCategories = searchParams.getAll('category');
+        const activeCategories = searchParams.getAll('category').map(val => val.toLowerCase());
 
         categories.forEach(category => {
             if (activeCategories.includes(category.value.toLowerCase())) {
@@ -72,9 +84,37 @@ function submit() {
     updateProducts(
         productName.value || null,
         availability,
-        Number(price.value),
+        Number(maxPrice.value),
         activeCategories.length ? activeCategories : null,
     );
+
+    const searchParams = new URLSearchParams();
+
+    if (productName.value) {
+        searchParams.set('productName', productName.value);
+    }
+
+    if (availability) {
+        searchParams.set('availability', availability);
+    }
+
+    if (maxPrice.value != maxPrice.max) {
+        searchParams.set('maxPrice', maxPrice.value);
+    }
+
+    for (const category of categories) {
+        if (category.checked) {
+            searchParams.append('category', category.value);
+        }
+    }
+
+    const url = `${location.origin}${location.pathname}`;
+
+    if (searchParams.size) {
+        history.replaceState(null, '', `${url}?${searchParams}`);
+    } else {
+        history.replaceState(null, '', url);
+    }
 
     document.title = `${productName.value ? `"${productName.value}"` : 'Search'} | GrowZone`;
 }

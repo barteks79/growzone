@@ -21,7 +21,7 @@ if (isset($_SESSION['user_id'])) {
 }
 
 if (!$user) {
-    header("Location: ../home/index.php");
+    header("Location: ../sign-in/index.php");
     exit();
 }
 

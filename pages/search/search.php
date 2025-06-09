@@ -54,7 +54,7 @@ if (!is_null($categories)) {
     $query .= ')';
 }
 
-$query .= ' ORDER BY price DESC';
+$query .= ' ORDER BY price ASC';
 
 $stmt = $db_o->prepare($query);
 
