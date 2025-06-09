@@ -1,10 +1,10 @@
--- Hasło to: qwerty123!
+-- password: qwerty123!
 INSERT INTO users
   (first_name,  last_name,     email,                         password,                                                       is_admin, reset_token, token_expires) VALUES
   ('Anna',      'Kowalska',    'anna.kowalska@example.com',   '$2y$10$7R9M7mew4JshAhLRSHqgGu.ADhnviPqy8fgvxsITPLxRvKJFiqx5e', FALSE,    NULL,        NULL),
   ('Jan',       'Nowak',       'jan.nowak@example.com',       '$2y$10$7R9M7mew4JshAhLRSHqgGu.ADhnviPqy8fgvxsITPLxRvKJFiqx5e', FALSE,    NULL,        NULL),
   ('Maria',     'Wiśniewska',  'maria.w@example.com',         '$2y$10$7R9M7mew4JshAhLRSHqgGu.ADhnviPqy8fgvxsITPLxRvKJFiqx5e', FALSE,    NULL,        NULL),
-  ('Piotr',     'Wójcicki',    'piotr.wojcik@example.com',    '$2y$10$7R9M7mew4JshAhLRSHqgGu.ADhnviPqy8fgvxsITPLxRvKJFiqx5e', FALSE,    NULL,        NULL),
+  ('Piotr',     'Wójcik',      'piotr.wojcik@example.com',    '$2y$10$7R9M7mew4JshAhLRSHqgGu.ADhnviPqy8fgvxsITPLxRvKJFiqx5e', FALSE,    NULL,        NULL),
   ('Katarzyna', 'Szucka',      'kasia.szucka@example.com',    '$2y$10$7R9M7mew4JshAhLRSHqgGu.ADhnviPqy8fgvxsITPLxRvKJFiqx5e', TRUE,     NULL,        NULL),
   ('Tomasz',    'Mazur',       't.mazur@example.com',         '$2y$10$7R9M7mew4JshAhLRSHqgGu.ADhnviPqy8fgvxsITPLxRvKJFiqx5e', FALSE,    NULL,        NULL),
   ('Magdalena', 'Krawczyk',    'magda.k@example.com',         '$2y$10$7R9M7mew4JshAhLRSHqgGu.ADhnviPqy8fgvxsITPLxRvKJFiqx5e', FALSE,    NULL,        NULL),

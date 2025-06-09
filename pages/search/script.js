@@ -23,6 +23,8 @@ const starIcon = document.querySelector('#star-icon');
 /** @type {SVGElement} */
 const xIcon = document.querySelector('#x-icon');
 
+applyURLFilters();
+
 productName.addEventListener('input', submit);
 productName.addEventListener('input', updateSuggestions);
 clearSearchButton.addEventListener('click', clearSearch);
@@ -33,6 +35,24 @@ categories.forEach(category => category.addEventListener('change', submit));
 
 submit();
 updateSuggestions();
+
+function applyURLFilters() {
+    const searchParams = new URLSearchParams(window.location.search);
+
+    if (searchParams.has('productName')) {
+        productName.value = searchParams.get('productName');
+    }
+
+    if (searchParams.has('category')) {
+        const activeCategories = searchParams.getAll('category');
+
+        categories.forEach(category => {
+            if (activeCategories.includes(category.value.toLowerCase())) {
+                category.checked = true;
+            }
+        });
+    }
+}
 
 function submit() {
     let availability = null;
@@ -55,6 +75,8 @@ function submit() {
         Number(price.value),
         activeCategories.length ? activeCategories : null,
     );
+
+    document.title = `${productName.value ? `"${productName.value}"` : 'Search'} | GrowZone`;
 }
 
 function clearSearch() {
@@ -105,7 +127,7 @@ async function updateProducts(productName, availability, maxPrice, categories) {
         const product = productTemplate.content.cloneNode(true);
 
         const productLink = product.querySelector('.product-link');
-        productLink.href = `../product/index.php?id=${encodeURIComponent(data['product_id'])}`;
+        productLink.href = `../product/index.php?id=${encodeURIComponent(data['uuid'])}`;
 
         const productCategory = product.querySelector('.product-category');
         productCategory.textContent = data['category'];

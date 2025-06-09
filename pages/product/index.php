@@ -23,10 +23,10 @@ if (isset($_SESSION['user_id'])) {
 $product = null;
 
 if (isset($_GET['id'])) {
-    $product_id = $_GET['id'];
+    $product_uuid = $_GET['id'];
 
-    $stmt = $db_o->prepare("SELECT products.*, categories.title AS category FROM products JOIN categories USING (category_id) WHERE product_id = ?");
-    $stmt->bind_param("i", $product_id);
+    $stmt = $db_o->prepare("SELECT products.*, categories.title AS category FROM products JOIN categories USING (category_id) WHERE products.uuid = ?");
+    $stmt->bind_param("s", $product_uuid);
     $stmt->execute();
 
     $result = $stmt->get_result();
@@ -47,7 +47,7 @@ if (!$product) {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Product | GrowZone</title>
+    <title><?= htmlspecialchars($product['title']) ?> | GrowZone</title>
 
     <link rel="shortcut icon" href="../../public/images/icon.png" />
     <link rel="stylesheet" href="./styles.css" />
@@ -69,10 +69,10 @@ if (!$product) {
 
             <div class="justify-self-center flex gap-10 font-semibold uppercase drop-shadow-2xl">
                 <a href="../home/index.php" class="hover:text-white transition-colors rounded-lg hover:bg-black px-2 py-1">Home</a>
-                <a href="../search/index.php" class="hover:text-white transition-colors rounded-lg hover:bg-black px-2 py-1">Plants</a>
-                <a href="../search/index.php" class="hover:text-white transition-colors rounded-lg hover:bg-black px-2 py-1">Tools</a>
-                <a href="../search/index.php" class="hover:text-white transition-colors rounded-lg hover:bg-black px-2 py-1">Sale</a>
-                <a href="../search/index.php" class="hover:text-white transition-colors rounded-lg hover:bg-black px-2 py-1">Seasonal</a>
+                <a href="../search/index.php?category=seeds" class="hover:text-white transition-colors rounded-lg hover:bg-black px-2 py-1">Seeds</a>
+                <a href="../search/index.php?category=tools" class="hover:text-white transition-colors rounded-lg hover:bg-black px-2 py-1">Tools</a>
+                <a href="../search/index.php?category=pots" class="hover:text-white transition-colors rounded-lg hover:bg-black px-2 py-1">Pots</a>
+                <a href="../search/index.php?category=fertilizers" class="hover:text-white transition-colors rounded-lg hover:bg-black px-2 py-1">Fertilizers</a>
             </div>
 
             <div class="justify-self-end flex gap-8">
@@ -134,63 +134,73 @@ if (!$product) {
         </nav>
 
         <div class="px-8 pb-8 pt-2 h-[calc(100dvh_-_74px)]">
-            <main class="h-full bg-white relative shadow-md grid grid-cols-2 gap-12 rounded-lg p-6 pt-[6rem]">
-                <div class="justify-self-end w-[25rem] h-[30rem] rounded-lg overflow-hidden">
-                    <div class="bg-neutral-300 animate-pulse size-full"></div>
+            <main class="h-full bg-white relative shadow-md flex flex-col gap-12 rounded-lg p-8">
+                <div class="flex items-center gap-4 justify-center font-medium">
+                    <a href="../search/index.php" class="text-neutral-600 hover:text-black">Search</a>
+                    <span>&rightarrow;</span>
+                    <a href="../search/index.php?productName=<?= urlencode($product['title']) ?>" class="text-neutral-600 hover:text-black"><?= htmlspecialchars($product['title']) ?></a>
+                    <span>&rightarrow;</span>
+                    <a href="">Product</a>
                 </div>
-                
-                <div class="flex flex-col gap-6 h-[30rem] max-w-[25rem]">
-                    <h2 class="text-5xl font-semibold"><?= htmlspecialchars($product['title']) ?></h2>
 
-                    <div class="flex items-center gap-6">
-                        <span class="px-3 py-1 font-semibold bg-emerald-400 text-white rounded-md"><?= htmlspecialchars($product['category']) ?></span>
-
-                        <span class="bg-yellow-400 rounded-full flex items-center px-3 py-1 gap-2 text-white">
-                            <i data-lucide="star" class="fill-white size-[18px]"></i>
-                            <span class="font-semibold"><?= htmlspecialchars($product['rating']) ?></span>
-                        </span>
+                <div class="grid grid-cols-2 gap-12">
+                    <div class="justify-self-end w-[25rem] h-[30rem] rounded-lg overflow-hidden">
+                        <div class="bg-neutral-300 animate-pulse size-full"></div>
                     </div>
+                    
+                    <div class="flex flex-col gap-6 h-[30rem] max-w-[25rem]">
+                        <h2 class="text-5xl font-semibold"><?= htmlspecialchars($product['title']) ?></h2>
 
-                    <p class="text-lg"><?= htmlspecialchars($product['description']) ?></p>
+                        <div class="flex items-center gap-6">
+                            <span class="px-3 py-1 font-semibold bg-emerald-400 text-white rounded-md"><?= htmlspecialchars($product['category']) ?></span>
 
-                    <h3 class="text-4xl font-semibold flex gap-1">
-                        <span>$</span>
-                        <?= htmlspecialchars($product['price']) ?>
-                    </h3>
+                            <span class="bg-yellow-400 rounded-full flex items-center px-3 py-1 gap-2 text-white">
+                                <i data-lucide="star" class="fill-white size-[18px]"></i>
+                                <span class="font-semibold"><?= htmlspecialchars($product['rating']) ?></span>
+                            </span>
+                        </div>
 
-                    <?php if ($user): ?>
-                    <a href="./add.php?product_id=<?= urlencode($product_id) ?>" class="mt-auto mb-2 w-fit relative inline-flex items-center justify-center px-10 py-3 overflow-hidden font-medium transition duration-300 ease-out border-2 border-emerald-500 rounded-md shadow-md group">
-                        <span class="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-emerald-500 group-hover:translate-x-0 ease">
-                            <i data-lucide="arrow-right" class="size-6"></i>
-                        </span>
+                        <p class="text-lg"><?= htmlspecialchars($product['description']) ?></p>
 
-                        <span class="absolute flex items-center justify-center gap-3 w-full h-full text-emerald-500 transition-all duration-300 transform group-hover:translate-x-full ease">
-                            <i data-lucide="shopping-cart"></i>
-                            Add to Cart
-                        </span>
+                        <h3 class="text-4xl font-semibold flex gap-1">
+                            <span>$</span>
+                            <?= htmlspecialchars($product['price']) ?>
+                        </h3>
 
-                        <span class="relative invisible flex gap-3">
-                            <i data-lucide="shopping-cart"></i>
-                            Add to Cart
-                        </span>
-                    </a>
-                    <?php else: ?>
-                    <a href="../sign-in/index.php" class="mt-auto mb-2 w-fit relative inline-flex items-center justify-center px-10 py-3 overflow-hidden font-medium transition duration-300 ease-out border-2 border-emerald-500 rounded-md shadow-md group">
-                        <span class="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-emerald-500 group-hover:translate-x-0 ease">
-                            <i data-lucide="arrow-right" class="size-6"></i>
-                        </span>
+                        <?php if ($user): ?>
+                        <a href="./add.php?product_id=<?= urlencode($product['product_id']) ?>" class="mt-auto mb-2 w-fit relative inline-flex items-center justify-center px-10 py-3 overflow-hidden font-medium transition duration-300 ease-out border-2 border-emerald-500 rounded-md shadow-md group">
+                            <span class="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-emerald-500 group-hover:translate-x-0 ease">
+                                <i data-lucide="arrow-right" class="size-6"></i>
+                            </span>
 
-                        <span class="absolute flex items-center justify-center gap-3 w-full h-full text-emerald-500 transition-all duration-300 transform group-hover:translate-x-full ease">
-                            <i data-lucide="log-in"></i>
-                            Sign in to Buy
-                        </span>
+                            <span class="absolute flex items-center justify-center gap-3 w-full h-full text-emerald-500 transition-all duration-300 transform group-hover:translate-x-full ease">
+                                <i data-lucide="shopping-cart"></i>
+                                Add to Cart
+                            </span>
 
-                        <span class="relative invisible flex gap-3">
-                            <i data-lucide="log-in"></i>
-                            Sign in to Buy
-                        </span>
-                    </a>
-                    <?php endif ?>
+                            <span class="relative invisible flex gap-3">
+                                <i data-lucide="shopping-cart"></i>
+                                Add to Cart
+                            </span>
+                        </a>
+                        <?php else: ?>
+                        <a href="../sign-in/index.php" class="mt-auto mb-2 w-fit relative inline-flex items-center justify-center px-10 py-3 overflow-hidden font-medium transition duration-300 ease-out border-2 border-emerald-500 rounded-md shadow-md group">
+                            <span class="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-emerald-500 group-hover:translate-x-0 ease">
+                                <i data-lucide="arrow-right" class="size-6"></i>
+                            </span>
+
+                            <span class="absolute flex items-center justify-center gap-3 w-full h-full text-emerald-500 transition-all duration-300 transform group-hover:translate-x-full ease">
+                                <i data-lucide="log-in"></i>
+                                Sign in to Buy
+                            </span>
+
+                            <span class="relative invisible flex gap-3">
+                                <i data-lucide="log-in"></i>
+                                Sign in to Buy
+                            </span>
+                        </a>
+                        <?php endif ?>
+                    </div>
                 </div>
             </main>
         </div>

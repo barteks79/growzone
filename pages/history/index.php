@@ -72,10 +72,10 @@ $result = $stmt->get_result();
 
             <div class="justify-self-center flex gap-10 font-semibold uppercase drop-shadow-2xl">
                 <a href="../home/index.php" class="hover:text-white transition-colors rounded-lg hover:bg-black px-2 py-1">Home</a>
-                <a href="../search/index.php" class="hover:text-white transition-colors rounded-lg hover:bg-black px-2 py-1">Plants</a>
-                <a href="../search/index.php" class="hover:text-white transition-colors rounded-lg hover:bg-black px-2 py-1">Tools</a>
-                <a href="../search/index.php" class="hover:text-white transition-colors rounded-lg hover:bg-black px-2 py-1">Sale</a>
-                <a href="../search/index.php" class="hover:text-white transition-colors rounded-lg hover:bg-black px-2 py-1">Seasonal</a>
+                <a href="../search/index.php?category=seeds" class="hover:text-white transition-colors rounded-lg hover:bg-black px-2 py-1">Seeds</a>
+                <a href="../search/index.php?category=tools" class="hover:text-white transition-colors rounded-lg hover:bg-black px-2 py-1">Tools</a>
+                <a href="../search/index.php?category=pots" class="hover:text-white transition-colors rounded-lg hover:bg-black px-2 py-1">Pots</a>
+                <a href="../search/index.php?category=fertilizers" class="hover:text-white transition-colors rounded-lg hover:bg-black px-2 py-1">Fertilizers</a>
             </div>
 
             <div class="justify-self-end flex gap-8">

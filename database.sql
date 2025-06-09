@@ -16,6 +16,7 @@ CREATE TABLE categories (
 
 CREATE TABLE products (
   product_id  INT            PRIMARY KEY AUTO_INCREMENT,
+  uuid        VARCHAR(36)    NOT NULL    DEFAULT UUID(),
   price       DECIMAL(10, 2) NOT NULL,
   title       VARCHAR(50)    NOT NULL,
   description TEXT           NOT NULL,
