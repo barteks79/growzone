@@ -26,7 +26,7 @@
         $stmt->bind_param('si', $hashedPassword, $user['user_id']);
         $stmt->execute();
 
-        echo "Hasło zostało pomyślnie zresetowane. Możesz się teraz zalogować.";
+        header('Location: ../home/index.php');
         exit;
     }
 ?>
