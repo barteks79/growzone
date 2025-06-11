@@ -226,7 +226,7 @@ $cart = $stmt->get_result()->fetch_assoc();
                             <?php }}; ?>
                         </ul>
                         <?php } else: ?>
-                            <p class="text-center text-gray-600">Nie masz żadnych produktów w koszyku</p>
+                            <p class="text-center text-gray-600" id="cart_text">Nie masz żadnych produktów w koszyku</p>
                         <?php endif; ?>
                     </section>
 
@@ -253,7 +253,7 @@ $cart = $stmt->get_result()->fetch_assoc();
                     </section>
                     <?php endif; ?>
 
-                    <a href="./index.php?strona=<?= $nastepna_strona ?>" class="bg-emerald-600 self-end text-white px-12 not-disabled:cursor-pointer disabled:opacity-50 not-disabled:hover:bg-emerald-700 py-2 rounded-md">Dalej</a>
+                    <button class="bg-emerald-600 self-end text-white px-12 not-disabled:cursor-pointer disabled:opacity-50 not-disabled:hover:bg-emerald-700 py-2 rounded-md" id="nextBtn">Dalej</button>
                 </div>
             </div>
         </div>

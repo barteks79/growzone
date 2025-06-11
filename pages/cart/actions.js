@@ -137,4 +137,15 @@ document.addEventListener('DOMContentLoaded', () => {
 			e.target.dataset.selected = true;
 		})
 	);
+
+	const button = document.getElementById('nextBtn');
+      button.addEventListener('click', function() {
+        const cartCheck = document.getElementById('cart_text').innerHTML;
+		if (cartCheck){
+			window.location.href='index.php';
+		} else {
+			window.location.href='index.php?strona=dostawa';
+		}
+      });
+
 });
