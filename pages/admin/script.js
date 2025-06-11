@@ -1,8 +1,56 @@
 import { Chart, registerables } from 'chart.js';
 import { updateAvatar } from '../../js/avatar.js';
 
+/** @type {HTMLDivElement} */
 const mainContainer = document.querySelector('#main-container');
 const tab = mainContainer.dataset.tab;
+
+/** @type {HTMLButtonElement} */
+const saveChangesButton = document.querySelector('#save-changes');
+
+/** @type {{id: number, name: string, value: string | number | boolean}[]} */
+const changes = [];
+
+/** @type {NodeListOf<HTMLInputElement>} */
+const inputs = mainContainer.querySelectorAll('input');
+inputs.forEach(input => {
+    input.addEventListener('input', () => {
+        const id = input.closest('.record').dataset.id;
+        const name = input.name;
+        const value = input.type == 'checkbox' ? input.checked : input.value;
+
+        const changeIndex = changes.findIndex(
+            change => change.id == id && change.name == name,
+        );
+
+        if (changeIndex < 0) {
+            changes.push({ id, name, value });
+        } else {
+            changes[changeIndex].value = value;
+        }
+
+        saveChangesButton.disabled = false;
+    });
+});
+
+saveChangesButton.addEventListener('click', async () => {
+    const url = `./save-${tab}.php`;
+
+    await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(changes),
+    });
+
+    changes.length = 0;
+
+    location.reload();
+});
+
+window.addEventListener('beforeunload', event => {
+    if (changes.length) {
+        event.preventDefault();
+    }
+});
 
 Chart.register(...registerables);
 

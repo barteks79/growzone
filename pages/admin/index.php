@@ -143,7 +143,7 @@ if (!$user || !$user['is_admin']) {
                         Uploaded Images
                     </a>
 
-                    <button disabled class="mt-6 flex items-center gap-3 pl-3 pr-6 py-2 rounded-md font-medium transition bg-amber-400/20 disabled:opacity-50 not-disabled:cursor-pointer not-disabled:hover:bg-amber-400/30">
+                    <button disabled id="save-changes" class="mt-6 flex items-center gap-3 pl-3 pr-6 py-2 rounded-md font-medium transition bg-amber-400/20 disabled:opacity-50 not-disabled:cursor-pointer not-disabled:hover:bg-amber-400/30">
                         <i data-lucide="file-up" class="size-[20px]"></i>
                         Save Changes
                     </button>
@@ -229,7 +229,7 @@ if (!$user || !$user['is_admin']) {
                         </div>
 
                         <?php foreach($users as $user): ?>
-                        <div class="flex border-t last:border-b odd:bg-emerald-50">
+                        <div data-id="<?= htmlspecialchars($user['user_id']) ?>" class="record flex border-t last:border-b odd:bg-emerald-50">
                             <div class="border-l w-[6rem] grid place-items-center font-medium"><?= htmlspecialchars($user['user_id']) ?></div>
                             <div class="border-l basis-0 grow">
                                 <input type="text" name="first-name" placeholder="First name" value="<?= htmlspecialchars($user['first_name']) ?>" class="px-3 py-2 w-full" />
@@ -279,7 +279,7 @@ if (!$user || !$user['is_admin']) {
                         </div>
 
                         <?php foreach($orders as $order): ?>
-                        <div class="flex border-t last:border-b odd:bg-emerald-50">
+                        <div data-id="<?= htmlspecialchars($order['order_id']) ?>" class="record flex border-t last:border-b odd:bg-emerald-50">
                             <div class="border-l w-[6rem] grid place-items-center font-medium"><?= htmlspecialchars($order['order_id']) ?></div>
                             <div class="border-l basis-0 grow grid place-items-center"><?= htmlspecialchars($order['first_name']) ?></div>
                             <div class="border-l basis-0 grow grid place-items-center"><?= htmlspecialchars($order['last_name']) ?></div>
@@ -328,7 +328,7 @@ if (!$user || !$user['is_admin']) {
                         </div>
 
                         <?php foreach($products as $product): ?>
-                        <div class="flex border-t last:border-b odd:bg-emerald-50">
+                        <div data-id="<?= htmlspecialchars($product['product_id']) ?>" class="record flex border-t last:border-b odd:bg-emerald-50">
                             <div class="border-l w-[6rem] grid place-items-center font-medium"><?= htmlspecialchars($product['product_id']) ?></div>
                             <div class="border-l basis-0 grow-2">
                                 <input type="text" name="title" placeholder="Title" value="<?= htmlspecialchars($product['title']) ?>" class="px-3 py-2 w-full" />
