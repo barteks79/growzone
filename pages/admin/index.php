@@ -38,6 +38,13 @@ if (!$user || !$user['is_admin']) {
 
     <script src="https://unpkg.com/@tailwindcss/browser@4.1.7"></script>
     <script src="https://unpkg.com/lucide@0.511.0"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "chart.js": "https://cdn.jsdelivr.net/npm/chart.js@4.4.9/+esm"
+            }
+        }
+    </script>
     <script src="./script.js" type="module" defer></script>
 </head>
 <body class="font-[Inter]">
@@ -141,17 +148,55 @@ if (!$user || !$user['is_admin']) {
                         Save Changes
                     </button>
 
-                    <div class="mt-auto">
+                    <div class="mt-auto flex flex-col gap-4">
                         <?php if($tab == 'users'): ?>
                         <?php
                         
-                        $stmt = $db_o->prepare('SELECT SUM(IF(is_admin = FALSE, 1, 0)) AS users, SUM(IF(is_admin = TRUE, 1, 0)) AS admins FROM users;');
+                        $stmt = $db_o->prepare('SELECT SUM(IF(is_admin = FALSE, 1, 0)) AS users, SUM(IF(is_admin = TRUE, 1, 0)) AS admins FROM users ORDER BY user_id');
                         $stmt->execute();
 
                         $data = $stmt->get_result()->fetch_assoc();
 
                         ?>
                         <canvas data-users="<?= htmlspecialchars($data['users']) ?>" data-admins="<?= htmlspecialchars($data['admins']) ?>" id="users-chart" class="w-0"></canvas>
+                        <?php elseif($tab == 'orders'): ?>
+                        <?php
+
+                        $stmt = $db_o->prepare('SELECT order_id, SUM(price * quantity) AS cost, AVG(price) AS average_cost FROM orders JOIN order_items USING (order_id) JOIN products USING (product_id) GROUP BY order_id ORDER BY order_id');
+                        $stmt->execute();
+
+                        $data = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+                        $stmt = $db_o->prepare('SELECT AVG(order_total) AS average_order FROM (SELECT SUM(price * quantity) AS order_total FROM orders JOIN order_items USING (order_id) JOIN products USING (product_id) GROUP BY order_id) AS order_totals');
+                        $stmt->execute();
+
+                        $average_order = $stmt->get_result()->fetch_assoc()['average_order'];
+
+                        for ($i = 0; $i < count($data); ++$i) {
+                            $data[$i]['average_order'] = $average_order;
+                        }
+
+                        ?>
+                        <canvas data-orders='<?= json_encode($data) ?>' id="orders-chart" class="w-0 h-[15rem]"></canvas>
+                        <?php elseif($tab == 'products'): ?>
+                        <?php
+
+                        $stmt = $db_o->prepare('SELECT product_id, rating FROM products ORDER BY product_id');
+                        $stmt->execute();
+
+                        $data = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+                        $stmt = $db_o->prepare('SELECT AVG(rating) AS average_rating FROM products');
+                        $stmt->execute();
+
+                        $average_rating = $stmt->get_result()->fetch_assoc()['average_rating'];
+
+                        for ($i = 0; $i < count($data); ++$i) {
+                            $data[$i]['average_rating'] = $average_rating;
+                        }
+
+                        ?>
+                        <canvas data-products='<?= json_encode($data) ?>' id="products-chart" class="w-0 h-[15rem]"></canvas>
                         <?php endif ?>
                     </div>
                 </div>
@@ -315,28 +360,6 @@ if (!$user || !$user['is_admin']) {
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <script>
-    const mainContainer = document.querySelector('#main-container');
-
-    const tab = mainContainer.dataset.tab;
-
-    if (tab == 'users') {
-            const canvas = document.querySelector('#users-chart');
-            const usersCount = Number(canvas.dataset.users);
-            const adminsCount = Number(canvas.dataset.admins);
-
-            new Chart(canvas, {
-                type: 'pie',
-                data: {
-                    labels: ['Users', 'Admins'],
-                    datasets: [{
-                        data: [usersCount, adminsCount],
-                    }]
-                }
-            });
-    }
-    </script>
 
     <script>
         lucide.createIcons();
