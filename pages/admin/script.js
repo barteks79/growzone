@@ -1,5 +1,9 @@
 import { updateAvatar } from '../../js/avatar.js';
 
+window.addEventListener('beforeunload', event => {
+    //event.preventDefault();
+});
+
 const avatars = document.querySelectorAll('.avatar');
 
 for (const avatar of avatars) {

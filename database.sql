@@ -3,7 +3,7 @@ CREATE TABLE users (
   first_name    VARCHAR(20)  NOT NULL,
   last_name     VARCHAR(30)  NOT NULL,
   email         VARCHAR(255) NOT NULL,
-  password      VARCHAR(255)     NOT NULL,
+  password      VARCHAR(255) NOT NULL,
   is_admin      BOOLEAN      NOT NULL    DEFAULT FALSE,
   reset_token   VARCHAR(100)     NULL,
   token_expires DATETIME         NULL
