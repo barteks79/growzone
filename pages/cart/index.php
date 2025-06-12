@@ -229,28 +229,39 @@ $cart = $stmt->get_result()->fetch_assoc();
                             <h2 class="text-3xl font-medium">Dostawa</h3>
 
                             <div id="shipping_companies" class="grid grid-cols-4 gap-5">
-                                <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 border-gray-400 not-data-selected:cursor-pointer">
+                                <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
                                     <img src="../../public/images/inpost.jpg" alt="Inpost Logo" class="h-24 pointer-events-none" />    
                                 </article>
 
-                                <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 border-gray-400 not-data-selected:cursor-pointer">
+                                <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
                                     <img src="../../public/images/dpd.jpg" alt="DPD Logo" class="h-24 pointer-events-none" />    
                                 </article>
 
-                                <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 border-gray-400 not-data-selected:cursor-pointer">
+                                <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
                                     <img src="../../public/images/poczta_polska.png" alt="Pocza Polska Logo" class="h-24 pointer-events-none" />    
                                 </article>
 
-                                <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 border-gray-400 not-data-selected:cursor-pointer">
+                                <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
                                     <img src="../../public/images/dhl.jpg" alt="DHL Logo" class="h-24 pointer-events-none" />    
                                 </article>
                             </div>
                         </section>
 
                     <?php endif; ?> 
-                    <!-- koniec sekcji koszyk i dosatwa -->
+                    <!-- koniec sekcji koszyk i dostawa -->
 
-                    <button disabled data-next="<?= $nastepna_strona ?>" class="bg-emerald-600 self-end text-white px-12 not-disabled:cursor-pointer disabled:opacity-50 not-disabled:hover:bg-emerald-700 py-2 rounded-md" id="nextBtn">Dalej</button>
+                    <menu class="flex items-center justify-end gap-5">
+                        <?php if ($nastepna_strona !== 'dostawa'): ?>
+                            <button data-previous="<?php 
+                                    if ($nastepna_strona === "podsumowanie") echo "index";
+                                    if ($nastepna_strona === "platnosc") echo "dostawa";
+                                ?>" class="px-12 py-2 rounded-md border border-gray-300 cursor-pointer hover:bg-gray-200/50" id="previousBtn">Wróć</button>
+                        <?php endif; ?>
+    
+                        <?php if ($nastepna_strona === 'dostawa'): ?>
+                            <button disabled data-next="<?= $nastepna_strona ?>" class="bg-emerald-600 text-white px-12 not-disabled:cursor-pointer disabled:opacity-50 not-disabled:hover:bg-emerald-700 py-2 rounded-md" id="nextBtnKoszyk">Dalej</button>
+                        <?php endif; ?>
+                    </menu>
                 </div>
             </div>
         </div>

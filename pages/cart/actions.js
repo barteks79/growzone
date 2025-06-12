@@ -1,4 +1,4 @@
-const nextPageBtn = document.querySelector('#nextBtn');
+const nextPageBtnKoszyk = document.querySelector('#nextBtnKoszyk');
 
 function numberFormat(num, decimals = 2, decPoint = '.', thousandsSep = ',') {
 	const fixed = num.toFixed(decimals);
@@ -46,7 +46,7 @@ async function changeProductQuantity(e, action) {
 		cartItemElement.remove();
 
 		if (isCartEmpty()) {
-			nextPageBtn.disabled = true;
+			nextPageBtnKoszyk.disabled = true;
 			document.querySelector('#cart_text').dataset.shown = true;
 		}
 	}
@@ -90,7 +90,7 @@ async function clearCart(e) {
 
 	valueElement.textContent = '0.00';
 	document.querySelectorAll('li').forEach(li => li.remove());
-	nextPageBtn.disabled = true;
+	nextPageBtnKoszyk.disabled = true;
 	document.querySelector('#cart_text').dataset.shown = true;
 
 	const userId = await getUserId();
@@ -104,7 +104,7 @@ async function clearCart(e) {
 		const productsList = document.querySelector('ul');
 
 		valueElement.textContent = currentValue;
-		nextPageBtn.disabled = false;
+		nextPageBtnKoszyk.disabled = false;
 		cartProductsItems.forEach(item => productsList.append(item));
 	}
 }
@@ -154,19 +154,29 @@ document.addEventListener('DOMContentLoaded', () => {
 				.forEach(company2 => company2.removeAttribute('data-selected'));
 
 			if (!isCartEmpty()) {
-				nextPageBtn.disabled = false;
+				nextPageBtnKoszyk.disabled = false;
 			}
 
 			e.target.dataset.selected = true;
 		})
 	);
 
-	nextPageBtn.addEventListener('click', () => {
+	nextPageBtnKoszyk?.addEventListener('click', () => {
 		if (isNextPageButtonEnabled()) {
-			const nextPage = nextPageBtn.dataset.next;
+			const nextPage = nextPageBtnKoszyk.dataset.next;
 			return (window.location.href = `./index.php?strona=${nextPage}`);
 		}
 
 		window.location.href = './index.php';
+	});
+
+	document.querySelector('#previousBtn')?.addEventListener('click', e => {
+		const previousPage = e.target.dataset.previous;
+
+		if (previousPage === 'index') {
+			return (window.location.href = './index.php');
+		}
+
+		window.location.href = `./index.php?strona=${previousPage}`;
 	});
 });
