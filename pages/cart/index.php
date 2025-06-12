@@ -46,7 +46,7 @@ $cart = $stmt->get_result()->fetch_assoc();
     <script src="./script.js" type="module" defer></script>
 </head>
 <body class="font-[Inter]">
-    <div class="relative h-dvh">
+    <div class="relative min-h-dvh">
         <div class="primary-radial-background absolute inset-0 -z-[1]"></div>
         
         <nav class="px-[3vw] py-4 grid place-items-center grid-cols-3">
@@ -229,7 +229,7 @@ $cart = $stmt->get_result()->fetch_assoc();
                             <h2 class="text-3xl font-medium">Dostawa</h3>
 
                             <div id="shipping_companies" class="grid grid-cols-4 gap-5">
-                                <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 border-gray-400">
+                                <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 border-gray-400 not-data-selected:cursor-pointer">
                                     <img src="../../public/images/inpost.jpg" alt="Inpost Logo" class="h-24 pointer-events-none" />    
                                 </article>
 
