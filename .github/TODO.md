@@ -42,12 +42,23 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
 
 4. `Koszyk (frontend/backend)`
 
-    - [x] stworzyć plik http ktory zwraca id zalogowanego uzytkownika
     - [ ] koszyk i dostawa
        - [x] dodawanie do koszyka po kliknieciu '+'
        - [x] odejmowanie z koszyka po kliknieciu '+'
        - [x] czyszczenie calego koszyka po kliknieciu ikony
-       - [ ] dodac UI wyboru dostawy
+       - [x] dodac UI wyboru dostawy
+       - [ ] zablokowac przycisk "Dalej", jezeli firma kurierska jest nie wybrana lub koszyk jest pusty
+    - [ ] dane dostawy
+       - [ ] formularz dla osoby prywatnej
+       - [ ] formularz dla firm
+       - [ ] jeżeli faktura, to czy elektorniczna czy w wysyłce
+       - [ ] akceptacja regulaminu i polityki GrowZone Inc.
+    - [ ] podsumowanie
+       - [ ] dane adresowe
+       - [ ] dane faktury
+       - [ ] typ dostawy i przewidywana data dostawy
+       - [ ] łączna kwota zamówienia oraz produkty
+    - [x] stworzyć plik http ktory zwraca id zalogowanego uzytkownika
 
 ---
 
