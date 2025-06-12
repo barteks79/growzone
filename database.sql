@@ -21,7 +21,6 @@ CREATE TABLE products (
   title       VARCHAR(50)    NOT NULL,
   description TEXT           NOT NULL,
   category_id INT            NOT NULL,
-  rating      DECIMAL(2, 1)  NOT NULL,
   pictureFile VARCHAR(10)        NULL,
   in_stock    BOOLEAN        NOT NULL    DEFAULT TRUE,
 
@@ -76,4 +75,16 @@ CREATE TABLE order_items (
 
   FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
   FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE  
+);
+
+CREATE TABLE opinions (
+  opinion_id  INT   PRIMARY KEY AUTO_INCREMENT,
+  rating      INT   NOT NULL,
+  description TEXT  NOT NULL,
+  product_id  INT   NOT NULL,
+  user_id     INT   NOT NULL,
+  date		    date  NOT NULL,
+
+  FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );

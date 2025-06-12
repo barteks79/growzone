@@ -34,6 +34,17 @@ if (isset($_GET['id'])) {
     if ($result->num_rows > 0) {
         $product = $result->fetch_assoc();
     }
+
+    $stmt = $db_o->prepare("SELECT round(avg(rating), 1) as rate FROM opinions WHERE product_id = ?");
+    $stmt->bind_param("i", $product['product_id']);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result->num_rows > 0) {
+        $rating = $result->fetch_assoc();
+        $product['rating'] = $rating['rate'] !== null ? $rating['rate'] : 0;
+    } else {
+        $product['rating'] = 0;
+    }
 }
 
 if (!$product) {
@@ -55,6 +66,60 @@ if (!$product) {
     <script src="https://unpkg.com/@tailwindcss/browser@4.1.7"></script>
     <script src="https://unpkg.com/lucide@0.511.0"></script>
     <script src="./script.js" type="module" defer></script>
+
+    <style>
+    .star-rating {
+      display: flex;
+      flex-direction: row-reverse;
+      font-size: 2rem;
+      justify-content: flex-end;
+    }
+
+    .star-rating input {
+      display: none;
+    }
+
+    .star-rating label {
+      color: #ccc;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .star-rating input:checked ~ label,
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+      color: gold;
+    }
+
+    #popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      padding: 20px;
+      border: 2px solid #333;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      z-index: 1000;
+    }
+
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    .rating-label {
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body class="font-[Inter]">
     <div class="relative h-dvh flex flex-col">
@@ -134,7 +199,7 @@ if (!$product) {
         </nav>
 
         <div class="px-8 pb-8 pt-2 h-[calc(100dvh_-_74px)]">
-            <main class="h-full bg-white relative shadow-md flex flex-col gap-12 rounded-lg p-8">
+            <main class="h-full bg-white relative shadow-md flex flex-col gap-12 rounded-lg p-8 items-center">
                 <div class="flex items-center gap-4 justify-center font-medium">
                     <a href="../search/index.php" class="text-neutral-600 hover:text-black">Search</a>
                     <span>&rightarrow;</span>
@@ -202,12 +267,111 @@ if (!$product) {
                         <?php endif ?>
                     </div>
                 </div>
+
+                <div class="flex flex-col gap-6 w-2/3">
+                    <h3 class="text-3xl font-semibold mb-4">Opinions</h3>
+                    <div class="grid grid-cols-1 gap-6">
+                        <div>
+                            <?php
+                            $stmt = $db_o->prepare("SELECT opinions.*, users.first_name as name, users.last_name AS surname FROM opinions inner join users on opinions.user_id = users.user_id WHERE product_id = ? ORDER BY date DESC LIMIT 5");
+                            $stmt->bind_param("i", $product['product_id']);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+                            if ($result->num_rows > 0) {
+                                while ($opinion = $result->fetch_assoc()) {
+                                    echo '<div class="p-4 bg-neutral-100 rounded-lg mb-4">';
+                                    ?>
+                                    <div class="flex items-center gap-4 mb-2">
+                                        <span class="bg-yellow-400 rounded-full flex items-center px-3 py-1 gap-2 text-white w-fit">
+                                            <i data-lucide="star" class="fill-white size-[18px]"></i>
+                                            <span class="font-semibold"><?= htmlspecialchars($opinion['rating']) ?></span>
+                                        </span>
+                                        <h4 class="font-semibold"><?= htmlspecialchars($opinion['name']) . ' ' . htmlspecialchars($opinion['surname']) ?></h4>
+                                    </div>
+                                    <?php
+                                    echo '<p class="text-sm text-gray-600">' . htmlspecialchars($opinion['description']) . '</p>';
+                                    echo '<span class="text-xs text-gray-500">' . htmlspecialchars($opinion['date']) . '</span>';
+                                    echo '</div>';
+                                }
+                            } else {
+                                echo '<p>No opinions yet.</p>';
+                            }
+                            if ($user): ?>
+                            <div id="overlay" onclick="hidePopup()"></div>
+                            <form id="popup" class="bg-white p-6 rounded-lg shadow-lg w-2/8" method="POST">
+                                <p class="rating-label">Jak oceniasz ten produkt?</p>
+                                <div class="star-rating">
+                                    <input type="radio" name="rating" id="star5" value="5">
+                                    <label for="star5">★</label>
+                                    <input type="radio" name="rating" id="star4" value="4">
+                                    <label for="star4">★</label>
+                                    <input type="radio" name="rating" id="star3" value="3">
+                                    <label for="star3">★</label>
+                                    <input type="radio" name="rating" id="star2" value="2">
+                                    <label for="star2">★</label>
+                                    <input type="radio" name="rating" id="star1" value="1">
+                                    <label for="star1">★</label>
+                                </div>
+
+                                <p class="rating-label">Twoja opinia o produkcie</p>
+                                <textarea placeholder="Napisz swoją opinię o produkcie *" class="w-full resize-none p-2 h-50" name="description"></textarea>
+                                <div class="flex items-center justify-between gap-4 mt-4">
+                                    <button type="submit">Wyślij opinię</button>
+                                    <button type="button" onclick="hidePopup()">Zamknij</button>
+                                </div>
+                            </form>
+
+                            <?php
+                            if($_SERVER['REQUEST_METHOD'] === 'POST' && $user && isset($_POST['rating']) && isset($_POST['description'])) {
+                                $rating = $_POST['rating'];
+                                $description = $_POST['description'];
+                                
+                                $stmt = $db_o->prepare("INSERT INTO opinions (product_id, user_id, rating, description, date) VALUES (?, ?, ?, ?, CURDATE())");
+                                $stmt->bind_param("iiis", $product['product_id'], $user['user_id'], $rating, $description);
+                                $stmt->execute();
+
+                                ?>
+                                <script type="text/javascript">
+                                    window.location.href='index.php?id=<?= urlencode($product_uuid) ?>';
+                                </script>
+                                <?php
+                                exit;
+                            }
+                            ?>
+
+                            <button onclick="showPopup()" class="mt-auto mb-2 w-fit relative inline-flex items-center justify-center px-10 py-3 overflow-hidden font-medium transition duration-300 ease-out border-2 border-emerald-500 rounded-md shadow-md group">
+                                <span class="absolute flex items-center justify-center gap-3 w-full h-full text-emerald-500 transition-all duration-300 transform group-hover:cursor-pointer ease">
+                                    <i data-lucide="shopping-cart"></i>
+                                    Add Opinion
+                                </span>
+
+                                <span class="relative invisible flex gap-3">
+                                    <i data-lucide="shopping-cart"></i>
+                                    Add Opinion
+                                </span>
+                            </button>
+                            <?php endif ?>
+                        </div>
+                    </div>
+                </div>
             </main>
         </div>
     </div>
 
     <script>
         lucide.createIcons();
+
+        <?php if ($user): ?>
+        function showPopup() {
+            document.getElementById('popup').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        function hidePopup() {
+            document.getElementById('popup').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+        <?php endif ?>
     </script>
 </body>
 </html>
