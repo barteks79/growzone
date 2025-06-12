@@ -8,8 +8,8 @@ const tab = mainContainer.dataset.tab;
 /** @type {HTMLButtonElement} */
 const saveChangesButton = document.querySelector('#save-changes');
 
-/** @type {{id: number, name: string, value: string | number | boolean}[]} */
-const changes = [];
+/** @type {{id: number, name: string, value?: string | number | boolean}[]} */
+let changes = [];
 
 /** @type {NodeListOf<HTMLInputElement>} */
 const inputs = mainContainer.querySelectorAll('input');
@@ -33,6 +33,21 @@ inputs.forEach(input => {
     });
 });
 
+/** @type {NodeListOf<HTMLButtonElement>} */
+const deleteButtons = mainContainer.querySelectorAll('.delete');
+deleteButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const record = button.closest('.record');
+        const id = record.dataset.id;
+
+        changes = changes.filter(change => change.id != id);
+        changes.push({ id, name: 'delete' });
+
+        record.remove();
+        saveChangesButton.disabled = false;
+    });
+});
+
 saveChangesButton.addEventListener('click', async () => {
     const url = `./save-${tab}.php`;
 
@@ -41,7 +56,7 @@ saveChangesButton.addEventListener('click', async () => {
         body: JSON.stringify(changes),
     });
 
-    changes.length = 0;
+    changes = [];
 
     location.reload();
 });

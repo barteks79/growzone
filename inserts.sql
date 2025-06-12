@@ -5,7 +5,7 @@ INSERT INTO users
   ('Jan',       'Nowak',       'jan.nowak@example.com',       '$2y$10$7R9M7mew4JshAhLRSHqgGu.ADhnviPqy8fgvxsITPLxRvKJFiqx5e', FALSE,    NULL,        NULL),
   ('Maria',     'Wiśniewska',  'maria.w@example.com',         '$2y$10$7R9M7mew4JshAhLRSHqgGu.ADhnviPqy8fgvxsITPLxRvKJFiqx5e', FALSE,    NULL,        NULL),
   ('Piotr',     'Wójcik',      'piotr.wojcik@example.com',    '$2y$10$7R9M7mew4JshAhLRSHqgGu.ADhnviPqy8fgvxsITPLxRvKJFiqx5e', FALSE,    NULL,        NULL),
-  ('Katarzyna', 'Szucka',      'kasia.szucka@example.com',    '$2y$10$7R9M7mew4JshAhLRSHqgGu.ADhnviPqy8fgvxsITPLxRvKJFiqx5e', TRUE,     NULL,        NULL),
+  ('Kasia', 'Szucka',      'kasia.szucka@example.com',    '$2y$10$7R9M7mew4JshAhLRSHqgGu.ADhnviPqy8fgvxsITPLxRvKJFiqx5e', TRUE,     NULL,        NULL),
   ('Tomasz',    'Mazur',       't.mazur@example.com',         '$2y$10$7R9M7mew4JshAhLRSHqgGu.ADhnviPqy8fgvxsITPLxRvKJFiqx5e', FALSE,    NULL,        NULL),
   ('Magdalena', 'Krawczyk',    'magda.k@example.com',         '$2y$10$7R9M7mew4JshAhLRSHqgGu.ADhnviPqy8fgvxsITPLxRvKJFiqx5e', FALSE,    NULL,        NULL),
   ('Paweł',     'Grabowski',   'pawel.grab@example.com',      '$2y$10$7R9M7mew4JshAhLRSHqgGu.ADhnviPqy8fgvxsITPLxRvKJFiqx5e', FALSE,    NULL,        NULL),

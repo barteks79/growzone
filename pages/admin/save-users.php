@@ -9,6 +9,14 @@ foreach ($data as $change) {
     $id = $change['id'];
     $name = $change['name'];
     $value = $change['value'];
+
+    if ($name == 'delete') {
+        $stmt = $db_o->prepare('DELETE FROM users WHERE user_id = ?');
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+
+        continue;
+    }
     
     $query = 'UPDATE users SET ';
 

@@ -244,7 +244,7 @@ if (!$user || !$user['is_admin']) {
                                 <input type="checkbox" name="is-admin" <?= $user['is_admin'] ? 'checked' : '' ?> />
                             </div>
                             <div class="border-x w-[5rem] grid place-items-center">
-                                <button class="p-1.5 cursor-pointer hover:bg-red-300 transition rounded-md bg-red-400">
+                                <button class="delete p-1.5 cursor-pointer hover:bg-red-300 transition rounded-md bg-red-400">
                                     <i data-lucide="trash-2" class="size-[18px] stroke-white"></i>
                                 </button>
                             </div>
@@ -293,7 +293,7 @@ if (!$user || !$user['is_admin']) {
                                 <input type="date" name="delivery-date" placeholder="Delivery date" value="<?= htmlspecialchars($order['delivery_date']) ?>" class="px-3 py-2 w-full" />
                             </div>
                             <div class="border-x w-[5rem] grid place-items-center">
-                                <button class="p-1.5 cursor-pointer hover:bg-red-300 transition rounded-md bg-red-400">
+                                <button class="delete p-1.5 cursor-pointer hover:bg-red-300 transition rounded-md bg-red-400">
                                     <i data-lucide="trash-2" class="size-[18px] stroke-white"></i>
                                 </button>
                             </div>
@@ -346,7 +346,7 @@ if (!$user || !$user['is_admin']) {
                                 <input type="checkbox" name="in-stock" <?= $product['in_stock'] ? 'checked' : '' ?> />
                             </div>
                             <div class="border-x w-[5rem] grid place-items-center">
-                                <button class="p-1.5 cursor-pointer hover:bg-red-300 transition rounded-md bg-red-400">
+                                <button class="delete p-1.5 cursor-pointer hover:bg-red-300 transition rounded-md bg-red-400">
                                     <i data-lucide="trash-2" class="size-[18px] stroke-white"></i>
                                 </button>
                             </div>
