@@ -1,3 +1,5 @@
+const nextPageBtn = document.querySelector('#nextBtn');
+
 function numberFormat(num, decimals = 2, decPoint = '.', thousandsSep = ',') {
 	const fixed = num.toFixed(decimals);
 	let [intPart, decPart] = fixed.split('.');
@@ -42,18 +44,11 @@ async function changeProductQuantity(e, action) {
 	// Usuń produkt jeśli ilość <= 0
 	if (!isIncrease && qtyInput.value <= 0) {
 		cartItemElement.remove();
-	}
 
-	if (!isIncrease && document.querySelectorAll('li').lenght === 0) {
-		const p = document.createElement('p');
-
-		p.dataset.fallback;
-		p.textContent = 'Nie masz żadnych produktów w koszyku';
-		p.setAttribute('class', 'text-center text-gray-600');
-
-		document.querySelector('#cart_section').appendChild(p);
-	} else {
-		document.querySelector('[data-fallback=true]')?.remove();
+		if (isCartEmpty()) {
+			nextPageBtn.disabled = true;
+			document.querySelector('#cart_text').dataset.shown = true;
+		}
 	}
 
 	const prevFullPrice = document.querySelector('#cart_value_span').textContent;
@@ -95,6 +90,8 @@ async function clearCart(e) {
 
 	valueElement.textContent = '0.00';
 	document.querySelectorAll('li').forEach(li => li.remove());
+	nextPageBtn.disabled = true;
+	document.querySelector('#cart_text').dataset.shown = true;
 
 	const userId = await getUserId();
 	const response = await fetch('./clear.php', {
@@ -104,11 +101,33 @@ async function clearCart(e) {
 	});
 
 	if (!response.ok) {
+		const productsList = document.querySelector('ul');
+
 		valueElement.textContent = currentValue;
-		cartProductsItems.forEach(item =>
-			document.querySelector('ul').append(item)
-		);
+		nextPageBtn.disabled = false;
+		cartProductsItems.forEach(item => productsList.append(item));
 	}
+}
+
+function isCartEmpty() {
+	if (document.querySelectorAll('li').length === 0) {
+		return true;
+	}
+	return false;
+}
+
+function isDeliveryCompanySelected() {
+	if (document.querySelector('[data-selected="true"]')) {
+		return true;
+	}
+	return false;
+}
+
+function isNextPageButtonEnabled() {
+	if (isDeliveryCompanySelected() && !isCartEmpty()) {
+		return true;
+	}
+	return false;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -134,18 +153,20 @@ document.addEventListener('DOMContentLoaded', () => {
 				.querySelectorAll('article')
 				.forEach(company2 => company2.removeAttribute('data-selected'));
 
+			if (!isCartEmpty()) {
+				nextPageBtn.disabled = false;
+			}
+
 			e.target.dataset.selected = true;
 		})
 	);
 
-	const button = document.getElementById('nextBtn');
-      button.addEventListener('click', function() {
-        const cartCheck = document.getElementById('cart_text').innerHTML;
-		if (cartCheck){
-			window.location.href='index.php';
-		} else {
-			window.location.href='index.php?strona=dostawa';
+	nextPageBtn.addEventListener('click', () => {
+		if (isNextPageButtonEnabled()) {
+			const nextPage = nextPageBtn.dataset.next;
+			return (window.location.href = `./index.php?strona=${nextPage}`);
 		}
-      });
 
+		window.location.href = './index.php';
+	});
 });

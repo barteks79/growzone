@@ -153,107 +153,104 @@ $cart = $stmt->get_result()->fetch_assoc();
                     </menu>
                     
                     <?php if (!isset($_GET['strona'])): ?>
-                    <section id="cart_section" class="flex flex-col gap-8 py-4">
-                        <div class="flex justify-between items-center">
-                            <h2 class="text-3xl font-medium">Twój koszyk</h3>
-                            <div class="flex gap-4 items-center">
-                                <p class="flex items-center gap-1 text-lg font-semibold"><span id="cart_value_span">
-                                <?php
-                                    if (isset($cart['cart_id'])) {
-                                        $cart_id = $cart['cart_id'];
-                                        $stmt = $db_o->prepare('SELECT SUM(ci.quantity * p.price) AS wartosc FROM carts c JOIN cart_items ci ON c.cart_id = ci.cart_id JOIN  products p ON ci.product_id = p.product_id WHERE c.cart_id = ?');
-                                        $stmt->bind_param('i', $cart_id);
-                                        $stmt->execute();
-                                        $cart_value = $stmt->get_result()->fetch_assoc()['wartosc'];
-                                        echo htmlspecialchars(number_format($cart_value, 2));
-                                    } else {
-                                        echo htmlspecialchars(number_format(0, 2));
-                                    }
-                                ?></span> PLN</p>
-                                <button id="clear_cart" class="grid place-items-center border border-gray-400 size-8 rounded-md cursor-pointer">
-                                    <i data-lucide="trash" class="size-4 font-normal pointer-events-none"></i>
-                                </button>
+                        <section id="cart_section" class="flex flex-col gap-8 py-4">
+                            <div class="flex justify-between items-center">
+                                <h2 class="text-3xl font-medium">Twój koszyk</h3>
+                                <div class="flex gap-4 items-center">
+                                    <p class="flex items-center gap-1 text-lg font-semibold"><span id="cart_value_span">
+                                    <?php
+                                        if (isset($cart['cart_id'])) {
+                                            $cart_id = $cart['cart_id'];
+                                            $stmt = $db_o->prepare('SELECT SUM(ci.quantity * p.price) AS wartosc FROM carts c JOIN cart_items ci ON c.cart_id = ci.cart_id JOIN  products p ON ci.product_id = p.product_id WHERE c.cart_id = ?');
+                                            $stmt->bind_param('i', $cart_id);
+                                            $stmt->execute();
+                                            $cart_value = $stmt->get_result()->fetch_assoc()['wartosc'];
+                                            echo htmlspecialchars(number_format($cart_value, 2));
+                                        } else {
+                                            echo htmlspecialchars(number_format(0, 2));
+                                        }
+                                    ?></span> PLN</p>
+                                    <button id="clear_cart" class="grid place-items-center border border-gray-400 size-8 rounded-md cursor-pointer">
+                                        <i data-lucide="trash" class="size-4 font-normal pointer-events-none"></i>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
 
-                        <?php
-                            if (isset($cart['cart_id'])): 
-                                $cart_id = $cart['cart_id'];
-                                $stmt = $db_o->prepare('SELECT _ci.quantity, _p.* FROM cart_items _ci INNER JOIN products _p ON _ci.product_id = _p.product_id WHERE cart_id = ?');
-                                $stmt->bind_param('i', $cart_id);
-                                $stmt->execute();
-                                $cart_items = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+                            <?php
+                                $cart_items = [];
 
-                                if (count($cart_items) === 0) {
-                                    echo '<p class="text-center text-gray-600">Nie masz żadnych produktów w koszyku</p>';
-                                } else { ?>
-                        <ul class="flex flex-col gap-3">
-                        <?php
+                                if (isset($cart['cart_id'])) { 
+                                    $cart_id = $cart['cart_id'];
+                                    $stmt = $db_o->prepare('SELECT _ci.quantity, _p.* FROM cart_items _ci INNER JOIN products _p ON _ci.product_id = _p.product_id WHERE cart_id = ?');
+                                    $stmt->bind_param('i', $cart_id);
+                                    $stmt->execute();
+                                    $cart_items = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+                                }
+                            ?>
 
-                            if (count($cart_items) === 0) {
-                                
-                            }
-
-                            if($cart_items) { foreach ($cart_items as $cart_item) { ?>
-                            <li data-product-price="<?= htmlspecialchars($cart_item['price']) ?>" data-product-id="<?= htmlspecialchars($cart_item['product_id']) ?>" class="flex items-center justify-between">
-                                <div class="flex gap-5">
-                                    <div class="size-16 bg-gray-400 rounded-sm"></div>
-                                    
-                                    <div class="flex flex-col justify-center">
-                                        <h2 class="text-3xl"><?= htmlspecialchars($cart_item['title']) ?></h2>
-                                        <p class="uppercase">kod produktu: <span>000000</span></p>
-                                    </div>
-                                </div>
-                                
-                                <div class="flex items-center gap-7">
-                                    <div class="flex gap-4 pl-8 items-center">
-                                        <p data-price="true" class="text-lg font-semibold"><span><?= htmlspecialchars(number_format($cart_item['price'] * $cart_item['quantity'], 2)) ?></span> PLN</p>
+                            <ul class="flex flex-col gap-3">
+                                <?php foreach ($cart_items as $cart_item) { ?>
+                                <li data-product-price="<?= htmlspecialchars($cart_item['price']) ?>" data-product-id="<?= htmlspecialchars($cart_item['product_id']) ?>" class="flex items-center justify-between">
+                                    <div class="flex gap-5">
+                                        <div class="size-16 bg-gray-400 rounded-sm"></div>
+                                        
+                                        <div class="flex flex-col justify-center">
+                                            <h2 class="text-3xl"><?= htmlspecialchars($cart_item['title']) ?></h2>
+                                            <p class="uppercase">kod produktu: <span>000000</span></p>
+                                        </div>
                                     </div>
                                     
-                                    <div class="flex items-center border border-gray-400 rounded-md">
-                                        <button data-action="increase" class="grid place-items-center cursor-pointer border-r border-gray-400 size-8">
-                                            <i data-lucide="plus" class="size-4 font-normal pointer-events-none"></i>
-                                        </button>
+                                    <div class="flex items-center gap-7">
+                                        <div class="flex gap-4 pl-8 items-center">
+                                            <p data-price="true" class="text-lg font-semibold"><span><?= htmlspecialchars(number_format($cart_item['price'] * $cart_item['quantity'], 2)) ?></span> PLN</p>
+                                        </div>
                                         
-                                        <input disabled value="<?= htmlspecialchars($cart_item['quantity']) ?>" class="text-center size-8 text-sm" />
-                                        
-                                        <button data-action="decrease" class="grid place-items-center cursor-pointer border-l border-gray-400 size-8">
-                                            <i data-lucide="minus" class="size-4 font-normal pointer-events-none"></i>
-                                        </button>
+                                        <div class="flex items-center border border-gray-400 rounded-md">
+                                            <button data-action="increase" class="grid place-items-center cursor-pointer border-r border-gray-400 size-8">
+                                                <i data-lucide="plus" class="size-4 font-normal pointer-events-none"></i>
+                                            </button>
+                                            
+                                            <input disabled value="<?= htmlspecialchars($cart_item['quantity']) ?>" class="text-center size-8 text-sm" />
+                                            
+                                            <button data-action="decrease" class="grid place-items-center cursor-pointer border-l border-gray-400 size-8">
+                                                <i data-lucide="minus" class="size-4 font-normal pointer-events-none"></i>
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            </li>
-                            <?php }}; ?>
-                        </ul>
-                        <?php } else: ?>
-                            <p class="text-center text-gray-600" id="cart_text">Nie masz żadnych produktów w koszyku</p>
-                        <?php endif; ?>
-                    </section>
+                                </li>
+                                <?php }; ?>
+                                <!-- koniec pętli wyświetlającej produkty w koszyku -->
+                            </ul>
 
-                    <section class="flex flex-col gap-8 py-4">
-                        <h2 class="text-3xl font-medium">Dostawa</h3>
+                            <p <?php if (count($cart_items) === 0) echo "data-shown"; ?> class="hidden text-center text-gray-600 data-shown:inline" id="cart_text">Nie masz żadnych produktów w koszyku</p>
+                        </section>
 
-                        <div id="shipping_companies" class="grid grid-cols-4 gap-5">
-                            <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 border-gray-400">
-                                <img src="../../public/images/inpost.jpg" alt="Inpost Logo" class="h-24 pointer-events-none" />    
-                            </article>
+                        <section class="flex flex-col gap-8 py-4">
+                            <h2 class="text-3xl font-medium">Dostawa</h3>
 
-                            <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 border-gray-400 not-data-selected:cursor-pointer">
-                                <img src="../../public/images/dpd.jpg" alt="DPD Logo" class="h-24 pointer-events-none" />    
-                            </article>
+                            <div id="shipping_companies" class="grid grid-cols-4 gap-5">
+                                <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 border-gray-400">
+                                    <img src="../../public/images/inpost.jpg" alt="Inpost Logo" class="h-24 pointer-events-none" />    
+                                </article>
 
-                            <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 border-gray-400 not-data-selected:cursor-pointer">
-                                <img src="../../public/images/poczta_polska.png" alt="Pocza Polska Logo" class="h-24 pointer-events-none" />    
-                            </article>
+                                <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 border-gray-400 not-data-selected:cursor-pointer">
+                                    <img src="../../public/images/dpd.jpg" alt="DPD Logo" class="h-24 pointer-events-none" />    
+                                </article>
 
-                            <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 border-gray-400 not-data-selected:cursor-pointer">
-                                <img src="../../public/images/dhl.jpg" alt="DHL Logo" class="h-24 pointer-events-none" />    
-                            </article>
-                        </div>
-                    </section>
-                    <?php endif; ?>
+                                <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 border-gray-400 not-data-selected:cursor-pointer">
+                                    <img src="../../public/images/poczta_polska.png" alt="Pocza Polska Logo" class="h-24 pointer-events-none" />    
+                                </article>
 
-                    <button class="bg-emerald-600 self-end text-white px-12 not-disabled:cursor-pointer disabled:opacity-50 not-disabled:hover:bg-emerald-700 py-2 rounded-md" id="nextBtn">Dalej</button>
+                                <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 border-gray-400 not-data-selected:cursor-pointer">
+                                    <img src="../../public/images/dhl.jpg" alt="DHL Logo" class="h-24 pointer-events-none" />    
+                                </article>
+                            </div>
+                        </section>
+
+                    <?php endif; ?> 
+                    <!-- koniec sekcji koszyk i dosatwa -->
+
+                    <button disabled data-next="<?= $nastepna_strona ?>" class="bg-emerald-600 self-end text-white px-12 not-disabled:cursor-pointer disabled:opacity-50 not-disabled:hover:bg-emerald-700 py-2 rounded-md" id="nextBtn">Dalej</button>
                 </div>
             </div>
         </div>

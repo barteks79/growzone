@@ -42,12 +42,12 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
 
 4. `Koszyk (frontend/backend)`
 
-    - [ ] koszyk i dostawa
+    - [x] koszyk i dostawa
        - [x] dodawanie do koszyka po kliknieciu '+'
        - [x] odejmowanie z koszyka po kliknieciu '+'
        - [x] czyszczenie calego koszyka po kliknieciu ikony
        - [x] dodac UI wyboru dostawy
-       - [ ] zablokowac przycisk "Dalej", jezeli firma kurierska jest nie wybrana lub koszyk jest pusty
+       - [x] zablokowac przycisk "Dalej", jezeli firma kurierska jest nie wybrana lub koszyk jest pusty
     - [ ] dane dostawy
        - [ ] formularz dla osoby prywatnej
        - [ ] formularz dla firm
