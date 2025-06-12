@@ -71,6 +71,8 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
 -   [x] zapłata za produkty (backend)
 -   [x] zapłata za produkty (frontend)
 -   [ ] wysyłanie potwierdzenia zakupu mailem
+-   [x] dodanie systemu opinni (backend)
+-   [x] dodanie systemu opinni (frontend)
 
 ---
 
