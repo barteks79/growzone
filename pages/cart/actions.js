@@ -1,3 +1,4 @@
+const nextPageBtnDostawa = document.querySelector('#nextBtnDostawa');
 const nextPageBtnKoszyk = document.querySelector('#nextBtnKoszyk');
 
 function numberFormat(num, decimals = 2, decPoint = '.', thousandsSep = ',') {
@@ -26,15 +27,13 @@ function getCartItemData(e) {
 	return {
 		cartItemElement,
 		productId: Number(cartItemElement.dataset.productId),
-		price: Number(cartItemElement.dataset.productPrice)
+		price: Number(cartItemElement.dataset.productPrice),
 	};
 }
 
 async function changeProductQuantity(e, action) {
 	const isIncrease = action === 'increase';
-	const qtyInput = isIncrease
-		? e.target.nextElementSibling
-		: e.target.previousElementSibling;
+	const qtyInput = isIncrease ? e.target.nextElementSibling : e.target.previousElementSibling;
 	const { cartItemElement, productId, price } = getCartItemData(e);
 	const priceDelta = isIncrease ? price : -price;
 
@@ -53,8 +52,7 @@ async function changeProductQuantity(e, action) {
 
 	const prevFullPrice = document.querySelector('#cart_value_span').textContent;
 	document.querySelector('#cart_value_span').textContent = numberFormat(
-		+document.querySelector('#cart_value_span').textContent.replace(',', '') +
-			priceDelta
+		+document.querySelector('#cart_value_span').textContent.replace(',', '') + priceDelta
 	);
 
 	const prevPrice = updatePrice(cartItemElement, priceDelta);
@@ -63,7 +61,7 @@ async function changeProductQuantity(e, action) {
 	const fetchOptions = {
 		method: isIncrease ? 'POST' : 'DELETE',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ product_id: productId, user_id: userId })
+		body: JSON.stringify({ product_id: productId, user_id: userId }),
 	};
 
 	const endpoint = isIncrease ? './add.php' : './remove.php';
@@ -85,8 +83,7 @@ async function clearCart(e) {
 	const valueElement = e.target.previousElementSibling.querySelector('span');
 	const cartProductsItems = document.querySelectorAll('li');
 
-	const currentValue =
-		e.target.previousElementSibling.querySelector('span').textContent;
+	const currentValue = e.target.previousElementSibling.querySelector('span').textContent;
 
 	valueElement.textContent = '0.00';
 	document.querySelectorAll('li').forEach(li => li.remove());
@@ -97,7 +94,7 @@ async function clearCart(e) {
 	const response = await fetch('./clear.php', {
 		method: 'DELETE',
 		'Content-Type': 'application/json',
-		body: JSON.stringify({ user_id: userId })
+		body: JSON.stringify({ user_id: userId }),
 	});
 
 	if (!response.ok) {
@@ -133,15 +130,11 @@ function isNextPageButtonEnabled() {
 document.addEventListener('DOMContentLoaded', () => {
 	document
 		.querySelectorAll('[data-action=increase]')
-		.forEach(btn =>
-			btn.addEventListener('click', e => changeProductQuantity(e, 'increase'))
-		);
+		.forEach(btn => btn.addEventListener('click', e => changeProductQuantity(e, 'increase')));
 
 	document
 		.querySelectorAll('[data-action=decrease]')
-		.forEach(btn =>
-			btn.addEventListener('click', e => changeProductQuantity(e, 'decrease'))
-		);
+		.forEach(btn => btn.addEventListener('click', e => changeProductQuantity(e, 'decrease')));
 
 	document
 		.querySelectorAll('#clear_cart')
@@ -179,4 +172,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		window.location.href = `./index.php?strona=${previousPage}`;
 	});
+
+	document.querySelectorAll('#sekcja_dostawy input')?.forEach(input =>
+		input.addEventListener('change', e => {
+			if (!e.target.getAttribute('data-optional') && e.target.value) {
+				nextPageBtnDostawa.disabled = false;
+			}
+		})
+	);
 });

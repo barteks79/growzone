@@ -251,7 +251,7 @@ $cart = $stmt->get_result()->fetch_assoc();
                     <!-- koniec sekcji koszyk i dostawa -->
 
                     <?php if ($nastepna_strona === 'podsumowanie'): ?>
-                        <section class="flex flex-col gap-8 py-4">
+                        <section id="#sekcja_dostawy" class="flex flex-col gap-8 py-4">
                             <h2 class="text-3xl font-medium">Dane Dostawy</h2>
                             <div class="grid grid-cols-2 gap-5">
                                 <div class="flex flex-col w-full gap-1 text-gray-700">
@@ -284,7 +284,7 @@ $cart = $stmt->get_result()->fetch_assoc();
                                 
                                 <div class="flex flex-col w-full gap-1 text-gray-700">
                                     <label>Numer mieszkania</label>
-                                    <input class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black" />
+                                    <input data-optional class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black" />
                                 </div>
                             </div>
                         </section>
@@ -300,6 +300,10 @@ $cart = $stmt->get_result()->fetch_assoc();
     
                         <?php if ($nastepna_strona === 'dostawa'): ?>
                             <button disabled data-next="<?= $nastepna_strona ?>" class="bg-emerald-600 text-white px-12 not-disabled:cursor-pointer disabled:opacity-50 not-disabled:hover:bg-emerald-700 py-2 rounded-md" id="nextBtnKoszyk">Dalej</button>
+                        <?php endif; ?>
+
+                        <?php if ($nastepna_strona === 'podsumowanie'): ?>
+                            <button disabled data-next="<?= $nastepna_strona ?>" class="bg-emerald-600 text-white px-12 not-disabled:cursor-pointer disabled:opacity-50 not-disabled:hover:bg-emerald-700 py-2 rounded-md" id="nextBtnDostawa">Dalej</button>
                         <?php endif; ?>
                     </menu>
                 </div>
