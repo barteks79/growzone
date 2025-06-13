@@ -1,6 +1,14 @@
 <?php
 session_start();
 
+require '../../php/phpmailer/src/PHPMailer.php';
+require '../../php/phpmailer/src/SMTP.php';
+require '../../php/phpmailer/src/Exception.php';
+require '../../php/env.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 require_once __DIR__ . '/../../php/db.php';
 
 $user = null;
@@ -41,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['payment_method'])) {
         $card_number = $_POST['card_number'];
         $card_exp = $_POST['card_exp'];
         $card_cvv = $_POST['card_cvv'];
+        $emailPayment = 'Credit Card';
         
         if (isset($card_number) && strlen($card_number) === 19 && isset($card_exp) && strlen($card_exp) === 5 && isset($card_cvv) && strlen($card_cvv) === 3) {
             $payment_status = 'success';
@@ -51,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['payment_method'])) {
         $bank_number = $_POST['bank_number'];
         $name = $_POST['name'];
         $surname = $_POST['surname'];
-        
+        $emailPayment = 'Bank Transfer';
         
         if (isset($bank_number) && strlen($bank_number) === 32 && isset($name) && isset($surname)) {
             $payment_status = 'success';
@@ -83,6 +92,149 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['payment_method'])) {
         $stmt = $db_o->prepare('DELETE FROM carts WHERE cart_id = ?');
         $stmt->bind_param('i', $cart['cart_id']);
         $stmt->execute();
+
+        // CZESC EMAILA =============================================================================================================================
+
+        // DO ZROBIENIA: imie, produkty, firma dostawcza
+
+        // ORDERS
+        $stmt = $db_o->prepare('SELECT * FROM WHERE user_id = ? ORDER BY order_id DESC LIMIT 1');
+        $stmt->bind_param('i', $user_id);
+        $stmt->execute();
+        $order = $stmt->get_result()->fetch_assoc();
+
+        // NUMER ZAMOWIENIA
+        $orderNumber = rand(10000000, 99999999);
+
+        // WARTOSC
+        $cart_id = $cart['cart_id'];
+        $stmt = $db_o->prepare('SELECT SUM(ci.quantity * p.price) AS wartosc FROM carts c JOIN cart_items ci ON c.cart_id = ci.cart_id JOIN  products p ON ci.product_id = p.product_id WHERE c.cart_id = ?');
+        $stmt->bind_param('i', $cart_id);
+        $stmt->execute();
+        $cart_value = $stmt->get_result()->fetch_assoc()['wartosc'];
+
+        // ADRES
+        $stmt = $db_o->prepare("SELECT CONCAT(order_addresses.street, ' ', order_addresses.building_number, IF(apartment_number IS NOT NULL, CONCAT('/', apartment_number), ''), ', ', city, ', ', postal_code, ', ', country) FROM order_addresses WHERE order_address_id = ?");
+        $stmt->bind_param('i', $order['order_address_id']);
+        $stmt->execute();
+        $shippingAddress = $stmt->get_result()->fetch_row()[0];
+
+        // EMAIL
+        $mail = new PHPMailer(true);
+        $mail->CharSet = 'UTF-8';
+        $mail->Encoding = 'base64';
+
+        $env = get_env();
+
+        try {
+            $mail->isSMTP();
+            $mail->Host       = $env['HOST'];
+            $mail->SMTPAuth   = $env['AUTH'] === 'true' ? true : false;
+            $mail->Username   = $env['USERNAME'];
+            $mail->Password   = $env['PASSWORD'];
+            $mail->SMTPSecure = $env['SECURE'];
+            $mail->Port       = (int)$env['PORT'];
+
+            $mail->setFrom('growzone.help@gmail.com', 'GrowZone');
+            $mail->addAddress($email);
+
+            $mail->isHTML(true);
+            $mail->Subject = 'Potwierdzenie zakupu - GrowZone';
+
+            $mail->Body = '
+            <!DOCTYPE html>
+            <html lang="pl">
+            <head>
+            <meta charset="UTF-8">
+            <title>Potwierdzenie zakupu</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f3f4f6;
+                    margin: 0;
+                    padding: 0;
+                }
+                .container {
+                    background-color: #ffffff;
+                    max-width: 600px;
+                    margin: 30px auto;
+                    padding: 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+                }
+                h2 {
+                    color: #065f46;
+                }
+                p, td {
+                    font-size: 14px;
+                    color: #1f2937;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 15px;
+                }
+                th, td {
+                    padding: 8px 4px;
+                    border-bottom: 1px solid #e5e7eb;
+                    text-align: left;
+                }
+                .footer {
+                    text-align: center;
+                    font-size: 12px;
+                    color: #6b7280;
+                    margin-top: 20px;
+                }
+            </style>
+            </head>
+            <body>
+            <div class="container">
+                <h2>Dziękujemy za zakupy w GrowZone!</h2>
+                <p>Twoje zamówienie zostało przyjęte i jest w trakcie realizacji.</p>
+
+                <h3>📦 Szczegóły zamówienia</h3>
+                <p><strong>Numer zamówienia:</strong> '.$orderNumber.'</p>
+                <p><strong>Data zakupu:</strong> '.$order['order_date'].'</p>
+                
+                <h3>🛍️ Produkty</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Produkt</th>
+                            <th>Ilość</th>
+                            <th>Cena</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        '.$productRows.'
+                        <tr>
+                            <td colspan="2"><strong>Łącznie</strong></td>
+                            <td><strong>'.$cart_value.' zł</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>📍 Adres dostawy</h3>
+                <p>'.$fullName.'<br>'.$shippingAddress.'</p>
+
+                <h3>💳 Metoda płatności</h3>
+                <p>'.$emailPayment.'</p>
+
+                <div class="footer">
+                    W razie pytań napisz do nas: <a href="mailto:growzone.help@gmail.com">growzone.help@gmail.com</a><br>
+                    &copy; 2025 GrowZone
+                </div>
+            </div>
+            </body>
+            </html>';
+
+
+            $mail->send();
+            echo "Wysłano wiadomość e-mail z linkiem do resetu.";
+        } catch (Exception $e) {
+            echo "Błąd wysyłania: {$mail->ErrorInfo}";
+            header("Location: ../home/index.php?email=$mail->ErrorInfo");
+        }
         
         header("Location: ../home/index.php");
     } else {
