@@ -250,6 +250,46 @@ $cart = $stmt->get_result()->fetch_assoc();
                     <?php endif; ?> 
                     <!-- koniec sekcji koszyk i dostawa -->
 
+                    <?php if ($nastepna_strona === 'podsumowanie'): ?>
+                        <section class="flex flex-col gap-8 py-4">
+                            <h2 class="text-3xl font-medium">Dane Dostawy</h2>
+                            <div class="grid grid-cols-2 gap-5">
+                                <div class="flex flex-col w-full gap-1 text-gray-700">
+                                    <label>Kraj<span class="text-red-500 ml-1">*<span></label>
+                                    <select class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black">
+                                        <option disabled selected>Wybierz kraj</option>
+                                        <option value="pl">Polska</option>
+                                    </select>
+                                </div>
+
+                                <div class="flex flex-col w-full gap-1 text-gray-700">
+                                    <label>Miasto<span class="text-red-500 ml-1">*<span></label>
+                                    <input placeholder="Warszawa" class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black" />
+                                </div>
+                                
+                                <div class="flex flex-col w-full gap-1 text-gray-700">
+                                    <label>Ulica<span class="text-red-500 ml-1">*<span></label>
+                                    <input placeholder="Polna" class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black" />
+                                </div>
+
+                                <div class="flex flex-col w-full gap-1 text-gray-700">
+                                    <label>Kod pocztowy<span class="text-red-500 ml-1">*<span></label>
+                                    <input placeholder="00-000" class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black" />
+                                </div>
+
+                                <div class="flex flex-col w-full gap-1 text-gray-700">
+                                    <label>Numer budynku<span class="text-red-500 ml-1">*<span></label>
+                                    <input placeholder="7" class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black" />
+                                </div>
+                                
+                                <div class="flex flex-col w-full gap-1 text-gray-700">
+                                    <label>Numer mieszkania</label>
+                                    <input class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black" />
+                                </div>
+                            </div>
+                        </section>
+                    <?php endif; ?>
+
                     <menu class="flex items-center justify-end gap-5">
                         <?php if ($nastepna_strona !== 'dostawa'): ?>
                             <button data-previous="<?php 

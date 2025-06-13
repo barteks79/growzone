@@ -49,9 +49,7 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
        - [x] dodac UI wyboru dostawy
        - [x] zablokowac przycisk "Dalej", jezeli firma kurierska jest nie wybrana lub koszyk jest pusty
     - [ ] dane dostawy
-       - [ ] formularz dla osoby prywatnej
-       - [ ] formularz dla firm
-       - [ ] jeżeli faktura, to czy elektorniczna czy w wysyłce
+       - [x] formularz z danymi dostawy 
        - [ ] akceptacja regulaminu i polityki GrowZone Inc.
     - [ ] podsumowanie
        - [ ] dane adresowe
