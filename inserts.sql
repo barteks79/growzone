@@ -330,23 +330,57 @@ INSERT INTO order_items
 -- Generate extra random reviews
 CREATE TEMPORARY TABLE temp_reviews AS
 SELECT 
-    _p.product_id,
-    _u.user_id,
-    -- Range: [1, 5], strong bias towards 5
-    ROUND(1 + POW(RAND(), 0.3) * (5 - 1)) AS rating,
-    CASE 
-        WHEN FLOOR(1 + RAND() * 5) = 1 THEN CONCAT('Okropny produkt. Nie polecam. ', _p.title, ' jest kompletną porażką.')
-        WHEN FLOOR(1 + RAND() * 5) = 2 THEN CONCAT('Nie dokońca zachwycony produktem ', _p.title, '. Wiele aspektów jest do poprawienia.')
-        WHEN FLOOR(1 + RAND() * 5) = 3 THEN CONCAT('Średni produkt. ', _p.title, ' nie zachwyca, ale nie jest porażką.')
-        WHEN FLOOR(1 + RAND() * 5) = 4 THEN CONCAT('Super produkt! ', _p.title, ' działa świetnie i jestem w miarę zachwycony.')
-        ELSE CONCAT('Wyborny produkt! ', _p.title, ' przeszedł moje wszelkie oczekiwania. Bardzo polecam!')
+    product_id,
+    user_id,
+    rating,
+    CASE
+        WHEN rating = 5 THEN CASE FLOOR(1 + RAND() * 3)
+            WHEN 1 THEN CONCAT('Wyborny produkt z kategorii ', category, '! ', title, ' przeszedł moje wszelkie oczekiwania. Bardzo polecam!')
+            WHEN 2 THEN CONCAT('Rewelacja! ', title, ' to najlepszy zakup w tej kategorii ', category, ' w tym roku.')
+            WHEN 3 THEN CONCAT('Fantastyczny produkt! ', title, ' jest dokładnie tym, czego szukałem.')
+        END
+
+        WHEN rating = 4 THEN CASE FLOOR(1 + RAND() * 3)
+            WHEN 1 THEN CONCAT('Super produkt z kategorii ', category, '! ', title, ' działa świetnie i jestem w miarę zachwycony.')
+            WHEN 2 THEN CONCAT('Bardzo dobry produkt. ', title, ' spełnił moje oczekiwania.')
+            WHEN 3 THEN CONCAT('Polecam! ', title, ' to dobry wybór w kategorii ', category, '.')
+        END
+
+        WHEN rating = 3 THEN CASE FLOOR(1 + RAND() * 3)
+            WHEN 1 THEN CONCAT('Średni produkt z kategorii ', category, '. ', title, ' nie zachwyca, ale nie jest porażką.')
+            WHEN 2 THEN CONCAT(title, ' jest w porządku, ale nic specjalnego.')
+            WHEN 3 THEN CONCAT('Tak sobie. ', title, ' spełnia minimum, ale nic więcej.')
+        END
+
+        WHEN rating = 2 THEN CASE FLOOR(1 + RAND() * 3)
+            WHEN 1 THEN CONCAT('Nie do końca zachwycony produktem ', title, ' z kategorii ', category, '. Wiele aspektów jest do poprawienia.')
+            WHEN 2 THEN CONCAT(title, ' mógłby być lepszy, sporo rzeczy mnie zawiodło.')
+            WHEN 3 THEN CONCAT('Słaby produkt z kategorii ', category, '. ', title, ' nie spełnił moich oczekiwań.')
+        END
+
+        WHEN rating = 1 THEN CASE FLOOR(1 + RAND() * 3)
+            WHEN 1 THEN CONCAT('Okropny produkt z kategorii ', category, '. Nie polecam. ', title, ' jest kompletną porażką.')
+            WHEN 2 THEN CONCAT('Zdecydowanie odradzam zakup ', title, ' z kategorii ', category, '. Szkoda pieniędzy.')
+            WHEN 3 THEN CONCAT('Najgorszy produkt jaki miałem. ', title, ' to totalna strata czasu.')
+        END
     END AS description,
     DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND() * 365) DAY) AS created_at
-FROM 
-    users _u
-    CROSS JOIN (SELECT 1 AS n UNION SELECT 2 UNION SELECT 3) AS _r
-    CROSS JOIN (SELECT * FROM products WHERE product_id BETWEEN 1 AND (SELECT COUNT(*) FROM products)) AS _p
-LIMIT 2880;  -- 48 products × 20 users × 3 = 2880 total reviews
+FROM (
+    SELECT 
+        _p.product_id AS product_id,
+        _c.title AS category,
+        _u.user_id AS user_id,
+        _p.title AS title,
+        -- Range: [1, 5], strong bias towards 5, 4
+        IF(RAND() < 0.8, IF(RAND() < 0.75, 5, 4), ROUND(1 + RAND() * 4)) AS rating,
+        DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND() * 365) DAY) AS created_at
+    FROM 
+        users _u
+        CROSS JOIN (SELECT 1 AS n UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5) AS _r
+        CROSS JOIN products _p
+        JOIN categories _c ON _c.category_id = _p.category_id
+    LIMIT 4800 -- 48 products × 20 users × 5 = 4800 total reviews
+) AS _t;
 
 INSERT INTO reviews (rating, description, user_id, product_id, created_at)
 SELECT rating, description, user_id, product_id, created_at FROM temp_reviews;

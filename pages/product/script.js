@@ -8,7 +8,7 @@ starResults.forEach((result, i) => {
     const bar = result.querySelector('.bar');
     const counter = result.querySelector('.counter');
 
-    const transition = { duration: count * 0.05, delay: i * 0.1 };
+    const transition = { duration: 2, delay: i * 0.1, ease: [0.25, 1, 0.5, 1] };
 
     animate(bar, { '--progress-num': count }, transition);
     animate(0, count, {

@@ -212,7 +212,7 @@ if (!$product) {
 
                 <?php
 
-                $stmt = $db_o->prepare('SELECT * FROM reviews JOIN users USING (user_id) WHERE product_id = ? ORDER BY rating DESC');
+                $stmt = $db_o->prepare('SELECT * FROM reviews JOIN users USING (user_id) WHERE product_id = ? ORDER BY rating DESC, RAND()');
                 $stmt->bind_param('i', $product['product_id']);
                 $stmt->execute();
 
@@ -224,7 +224,7 @@ if (!$product) {
                     <div class="justify-self-end w-[25rem] flex flex-col gap-6">
                         <?php $tab = (isset($_GET['tab']) && $user) ? 'send' : 'reviews' ?>
 
-                        <div data-selected="<?= $tab ?>" class="group bg-gray-100 px-8 text-xs font-semibold rounded-lg flex gap-6">
+                        <div data-selected="<?= $tab ?>" class="group bg-gray-100 px-8 text-sm font-semibold rounded-lg flex gap-6">
                             <a href="?id=<?= urlencode($product['uuid']) ?>">
                                 <button class="relative text-neutral-600 py-3 group-data-[selected=reviews]:text-emerald-600 group-data-[selected=reviews]:before:visible before:invisible before:absolute before:w-full before:h-[3px] before:bg-emerald-600 before:rounded-full before:bottom-0 cursor-pointer hover:text-emerald-600">Reviews</button>
                             </a>
@@ -290,7 +290,7 @@ if (!$product) {
                                     </button>
                                 </div>
                                 <div class="text-sm mt-2 max-w-[20rem]">
-                                    <textarea id="send-review-description" class="resize-none border rounded-sm" cols="30" rows="3"></textarea>
+                                    <textarea id="send-review-description" class="resize-none border rounded-sm border-neutral-400 p-2" cols="30" rows="3"></textarea>
                                 </div>
                                 <button id="send-review-button" disabled data-user-id="<?= htmlspecialchars($user['user_id']) ?>" data-product-id="<?= htmlspecialchars($product['product_id']) ?>" class="not-disabled:cursor-pointer transition not-disabled:hover:brightness-110 disabled:opacity-50 bg-emerald-500 text-white rounded-md px-4 py-2 text-sm mt-2 font-semibold w-fit">Send review</button>
                             </div>
@@ -323,7 +323,7 @@ if (!$product) {
                             $total = count($reviews);
 
                             ?>
-                            <div data-count="<?= $ratings['five_stars'] ?>" class="star-result flex items-center font-semibold font-mono gap-3">
+                            <div data-count="<?= $ratings['five_stars'] ?>" class="star-result flex items-center font-semibold gap-3">
                                 <span class="text-neutral-600">5</span>
                                 <div class="bar w-[19rem] h-3 bg-gray-200 rounded-full overflow-hidden">
                                     <div class="w-[var(--progress)] h-full rounded-full bg-amber-400" style="--progress: calc(var(--progress-num, 0) / <?= $total ?> * 100%)"></div>
