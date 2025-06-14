@@ -25,7 +25,7 @@ $product = null;
 if (isset($_GET['id'])) {
     $product_uuid = $_GET['id'];
 
-    $stmt = $db_o->prepare("SELECT products.*, categories.title AS category FROM products JOIN categories USING (category_id) WHERE products.uuid = ?");
+    $stmt = $db_o->prepare("SELECT products.*, categories.title AS category, ROUND((SELECT AVG(rating) FROM reviews WHERE product_id = products.product_id), 1) AS rating FROM products JOIN categories USING (category_id) WHERE products.uuid = ?");
     $stmt->bind_param("s", $product_uuid);
     $stmt->execute();
 
@@ -33,17 +33,6 @@ if (isset($_GET['id'])) {
 
     if ($result->num_rows > 0) {
         $product = $result->fetch_assoc();
-    }
-
-    $stmt = $db_o->prepare("SELECT round(avg(rating), 1) as rate FROM opinions WHERE product_id = ?");
-    $stmt->bind_param("i", $product['product_id']);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if ($result->num_rows > 0) {
-        $rating = $result->fetch_assoc();
-        $product['rating'] = $rating['rate'] !== null ? $rating['rate'] : 0;
-    } else {
-        $product['rating'] = 0;
     }
 }
 
@@ -65,64 +54,17 @@ if (!$product) {
 
     <script src="https://unpkg.com/@tailwindcss/browser@4.1.7"></script>
     <script src="https://unpkg.com/lucide@0.511.0"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "motion": "https://cdn.jsdelivr.net/npm/motion@12.12.2/+esm"
+            }
+        }
+    </script>
     <script src="./script.js" type="module" defer></script>
-
-    <style>
-    .star-rating {
-      display: flex;
-      flex-direction: row-reverse;
-      font-size: 2rem;
-      justify-content: flex-end;
-    }
-
-    .star-rating input {
-      display: none;
-    }
-
-    .star-rating label {
-      color: #ccc;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-
-    .star-rating input:checked ~ label,
-    .star-rating label:hover,
-    .star-rating label:hover ~ label {
-      color: gold;
-    }
-
-    #popup {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #fff;
-      padding: 20px;
-      border: 2px solid #333;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      z-index: 1000;
-    }
-
-    #overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 999;
-    }
-
-    .rating-label {
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
-  </style>
 </head>
 <body class="font-[Inter]">
-    <div class="relative h-dvh flex flex-col">
+    <div class="relative min-h-dvh flex flex-col">
         <div class="primary-radial-background absolute inset-0 -z-[1]"></div>
 
         <nav class="px-[3vw] py-4 grid place-items-center grid-cols-3">
@@ -198,8 +140,8 @@ if (!$product) {
             </div>
         </nav>
 
-        <div class="px-8 pb-8 pt-2 h-[calc(100dvh_-_74px)]">
-            <main class="h-full bg-white relative shadow-md flex flex-col gap-12 rounded-lg p-8 items-center">
+        <div class="px-8 pb-8 pt-2 min-h-[calc(100dvh_-_74px)]">
+            <main class="h-full bg-white relative shadow-md flex flex-col gap-12 rounded-lg p-8">
                 <div class="flex items-center gap-4 justify-center font-medium">
                     <a href="../search/index.php" class="text-neutral-600 hover:text-black">Search</a>
                     <span>&rightarrow;</span>
@@ -268,89 +210,154 @@ if (!$product) {
                     </div>
                 </div>
 
-                <div class="flex flex-col gap-6 w-2/3">
-                    <h3 class="text-3xl font-semibold mb-4">Opinions</h3>
-                    <div class="grid grid-cols-1 gap-6">
-                        <div>
-                            <?php
-                            $stmt = $db_o->prepare("SELECT opinions.*, users.first_name as name, users.last_name AS surname FROM opinions inner join users on opinions.user_id = users.user_id WHERE product_id = ? ORDER BY date DESC LIMIT 5");
-                            $stmt->bind_param("i", $product['product_id']);
-                            $stmt->execute();
-                            $result = $stmt->get_result();
-                            if ($result->num_rows > 0) {
-                                while ($opinion = $result->fetch_assoc()) {
-                                    echo '<div class="p-4 bg-neutral-100 rounded-lg mb-4">';
-                                    ?>
-                                    <div class="flex items-center gap-4 mb-2">
-                                        <span class="bg-yellow-400 rounded-full flex items-center px-3 py-1 gap-2 text-white w-fit">
-                                            <i data-lucide="star" class="fill-white size-[18px]"></i>
-                                            <span class="font-semibold"><?= htmlspecialchars($opinion['rating']) ?></span>
-                                        </span>
-                                        <h4 class="font-semibold"><?= htmlspecialchars($opinion['name']) . ' ' . htmlspecialchars($opinion['surname']) ?></h4>
-                                    </div>
-                                    <?php
-                                    echo '<p class="text-sm text-gray-600">' . htmlspecialchars($opinion['description']) . '</p>';
-                                    echo '<span class="text-xs text-gray-500">' . htmlspecialchars($opinion['date']) . '</span>';
-                                    echo '</div>';
-                                }
-                            } else {
-                                echo '<p>No opinions yet.</p>';
-                            }
-                            if ($user): ?>
-                            <div id="overlay" onclick="hidePopup()"></div>
-                            <form id="popup" class="bg-white p-6 rounded-lg shadow-lg w-2/8" method="POST">
-                                <p class="rating-label">Jak oceniasz ten produkt?</p>
-                                <div class="star-rating">
-                                    <input type="radio" name="rating" id="star5" value="5">
-                                    <label for="star5">★</label>
-                                    <input type="radio" name="rating" id="star4" value="4">
-                                    <label for="star4">★</label>
-                                    <input type="radio" name="rating" id="star3" value="3">
-                                    <label for="star3">★</label>
-                                    <input type="radio" name="rating" id="star2" value="2">
-                                    <label for="star2">★</label>
-                                    <input type="radio" name="rating" id="star1" value="1">
-                                    <label for="star1">★</label>
-                                </div>
+                <?php
 
-                                <p class="rating-label">Twoja opinia o produkcie</p>
-                                <textarea placeholder="Napisz swoją opinię o produkcie *" class="w-full resize-none p-2 h-50" name="description"></textarea>
-                                <div class="flex items-center justify-between gap-4 mt-4">
-                                    <button type="submit">Wyślij opinię</button>
-                                    <button type="button" onclick="hidePopup()">Zamknij</button>
-                                </div>
-                            </form>
+                $stmt = $db_o->prepare('SELECT * FROM reviews JOIN users USING (user_id) WHERE product_id = ? ORDER BY rating DESC');
+                $stmt->bind_param('i', $product['product_id']);
+                $stmt->execute();
 
-                            <?php
-                            if($_SERVER['REQUEST_METHOD'] === 'POST' && $user && isset($_POST['rating']) && isset($_POST['description'])) {
-                                $rating = $_POST['rating'];
-                                $description = $_POST['description'];
-                                
-                                $stmt = $db_o->prepare("INSERT INTO opinions (product_id, user_id, rating, description, date) VALUES (?, ?, ?, ?, CURDATE())");
-                                $stmt->bind_param("iiis", $product['product_id'], $user['user_id'], $rating, $description);
-                                $stmt->execute();
+                $reviews = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+                ?>
+                <span class="w-full h-[3px] bg-gray-100 rounded-full"></span>
+                <div class="grid grid-cols-2 gap-12">
+                    <div class="justify-self-end w-[25rem] flex flex-col gap-6">
+                        <?php $tab = (isset($_GET['tab']) && $user) ? 'send' : 'reviews' ?>
+
+                        <div data-selected="<?= $tab ?>" class="group bg-gray-100 px-8 text-xs font-semibold rounded-lg flex gap-6">
+                            <a href="?id=<?= urlencode($product['uuid']) ?>">
+                                <button class="relative text-neutral-600 py-3 group-data-[selected=reviews]:text-emerald-600 group-data-[selected=reviews]:before:visible before:invisible before:absolute before:w-full before:h-[3px] before:bg-emerald-600 before:rounded-full before:bottom-0 cursor-pointer hover:text-emerald-600">Reviews</button>
+                            </a>
+                            <a href="?id=<?= urlencode($product['uuid']) ?>&tab=send">
+                                <button <?= !$user ? 'disabled' : '' ?> class="disabled:opacity-50 relative text-neutral-600 py-3 group-data-[selected=send]:text-emerald-600 group-data-[selected=send]:before:visible before:invisible before:absolute before:w-full before:h-[3px] before:bg-emerald-600 before:rounded-full before:bottom-0 cursor-pointer not-disabled:hover:text-emerald-600">Send review</button>
+                            </a>
+                        </div>
+
+                        <?php if($tab == 'reviews'): ?>
+                        <div class="grid gap-1">
+                            <h4 class="font-semibold text-xl">Reviews</h4>
+                            <span class="text-neutral-600 text-xs font-medium">Showing all <?= htmlspecialchars(count($reviews)) ?> reviews</span>
+                        </div>
+
+                        <div class="grid gap-8">
+                            <?php foreach ($reviews as $review): ?>
+                            <div class="flex gap-2">
+                                <?php
+
+                                $first_name = htmlspecialchars($review['first_name']);
+                                $last_name = htmlspecialchars($review['last_name']);
 
                                 ?>
-                                <script type="text/javascript">
-                                    window.location.href='index.php?id=<?= urlencode($product_uuid) ?>';
-                                </script>
-                                <?php
-                                exit;
-                            }
+                                <div data-first-name="<?= $first_name ?>" data-last-name="<?= $last_name ?>" class="avatar [--primary:var(--color-neutral-300)] bg-[var(--primary)] ring-2 ring-[var(--primary)]/50 rounded-full size-7 grid place-items-center text-xs font-semibold text-white">-</div>
+                                <div class="grid">
+                                    <span class="font-semibold text-sm"><?= $first_name . ' ' . $last_name ?></span>
+                                    <div class="flex mt-0.5">
+                                        <?php for ($i = 0; $i < intval($review['rating']); ++$i): ?>
+                                        <i data-lucide="star" class="fill-amber-400 stroke-0 size-[14px]"></i>
+                                        <?php endfor ?>
+                                        <?php for ($i = 5; $i > intval($review['rating']); --$i): ?>
+                                        <i data-lucide="star" class="fill-neutral-400 stroke-0 size-[14px]"></i>
+                                        <?php endfor ?>
+                                    </div>
+                                    <div class="text-sm mt-2 max-w-[20rem]"><?= htmlspecialchars($review['description']) ?></div>
+                                    <span class="font-medium text-xs mt-2 text-neutral-600"><?= htmlspecialchars($review['created_at']) ?></span>
+                                </div>
+                            </div>
+                            <?php endforeach ?>
+                        </div>
+                        <?php else: ?>
+                        <h4 class="font-semibold text-xl">Send review</h4>
+
+                        <div class="flex gap-2">
+                            <div data-first-name="<?= htmlspecialchars($user['first_name']) ?>" data-last-name="<?= htmlspecialchars($user['last_name']) ?>" class="avatar [--primary:var(--color-neutral-300)] bg-[var(--primary)] ring-2 ring-[var(--primary)]/50 rounded-full size-7 grid place-items-center text-xs font-semibold text-white">-</div>
+                            <div class="grid">
+                                <span class="font-semibold text-sm"><?= htmlspecialchars($user['first_name'] . ' ' . $user['last_name']) ?></span>
+                                <div id="send-review-star-container" data-star="0" class="group flex mt-0.5">
+                                    <button class="send-review-star">
+                                        <i data-lucide="star" class="cursor-pointer fill-neutral-400 group-data-[star=1]:fill-amber-400 group-data-[star=2]:fill-amber-400 group-data-[star=3]:fill-amber-400 group-data-[star=4]:fill-amber-400 group-data-[star=5]:fill-amber-400 stroke-0 size-[20px]"></i>
+                                    </button>
+                                    <button class="send-review-star">
+                                        <i data-lucide="star" class="cursor-pointer fill-neutral-400 group-data-[star=2]:fill-amber-400 group-data-[star=3]:fill-amber-400 group-data-[star=4]:fill-amber-400 group-data-[star=5]:fill-amber-400 stroke-0 size-[20px]"></i>
+                                    </button>
+                                    <button class="send-review-star">
+                                        <i data-lucide="star" class="cursor-pointer fill-neutral-400 group-data-[star=3]:fill-amber-400 group-data-[star=4]:fill-amber-400 group-data-[star=5]:fill-amber-400 stroke-0 size-[20px]"></i>
+                                    </button>
+                                    <button class="send-review-star">
+                                        <i data-lucide="star" class="cursor-pointer fill-neutral-400 group-data-[star=4]:fill-amber-400 group-data-[star=5]:fill-amber-400 stroke-0 size-[20px]"></i>
+                                    </button>
+                                    <button class="send-review-star">
+                                        <i data-lucide="star" class="cursor-pointer fill-neutral-400 group-data-[star=5]:fill-amber-400 stroke-0 size-[20px]"></i>
+                                    </button>
+                                </div>
+                                <div class="text-sm mt-2 max-w-[20rem]">
+                                    <textarea id="send-review-description" class="resize-none border rounded-sm" cols="30" rows="3"></textarea>
+                                </div>
+                                <button id="send-review-button" disabled data-user-id="<?= htmlspecialchars($user['user_id']) ?>" data-product-id="<?= htmlspecialchars($product['product_id']) ?>" class="not-disabled:cursor-pointer transition not-disabled:hover:brightness-110 disabled:opacity-50 bg-emerald-500 text-white rounded-md px-4 py-2 text-sm mt-2 font-semibold w-fit">Send review</button>
+                            </div>
+                        </div>
+                        <?php endif ?>
+                    </div>
+
+                    <div class="w-[25rem]">
+                        <div class="rounded-t-lg px-4 py-2 flex items-center justify-between border border-gray-300">
+                            <div class="flex gap-1 relative">
+                                <i data-lucide="star" class="fill-amber-400 stroke-0"></i>
+                                <i data-lucide="star" class="fill-amber-400 stroke-0"></i>
+                                <i data-lucide="star" class="fill-amber-400 stroke-0"></i>
+                                <i data-lucide="star" class="fill-amber-400 stroke-0"></i>
+                                <i data-lucide="star" class="fill-amber-400 stroke-0"></i>
+                                <div class="w-[var(--progress)] absolute h-full overflow-hidden mix-blend-color top-0 right-0 bg-white" style="--progress: calc(((5 - <?= htmlspecialchars($product['rating']) ?>) / 5) * 100%)"></div>
+                            </div>
+
+                            <div class="font-semibold text-2xl"><?= htmlspecialchars($product['rating']) ?></div>
+                        </div>
+
+                        <div class="rounded-b-lg px-4 py-2 grid border-b border-x border-gray-300">
+                            <?php
+
+                            $stmt = $db_o->prepare('SELECT SUM(IF(rating = 5, 1, 0)) AS five_stars, SUM(IF(rating = 4, 1, 0)) AS four_stars, SUM(IF(rating = 3, 1, 0)) AS three_stars, SUM(IF(rating = 2, 1, 0)) AS two_stars, SUM(IF(rating = 1, 1, 0)) AS one_stars FROM reviews WHERE product_id = ?');
+                            $stmt->bind_param('i', $product['product_id']);
+                            $stmt->execute();
+
+                            $ratings = $stmt->get_result()->fetch_assoc();
+                            $total = count($reviews);
+
                             ?>
-
-                            <button onclick="showPopup()" class="mt-auto mb-2 w-fit relative inline-flex items-center justify-center px-10 py-3 overflow-hidden font-medium transition duration-300 ease-out border-2 border-emerald-500 rounded-md shadow-md group">
-                                <span class="absolute flex items-center justify-center gap-3 w-full h-full text-emerald-500 transition-all duration-300 transform group-hover:cursor-pointer ease">
-                                    <i data-lucide="shopping-cart"></i>
-                                    Add Opinion
-                                </span>
-
-                                <span class="relative invisible flex gap-3">
-                                    <i data-lucide="shopping-cart"></i>
-                                    Add Opinion
-                                </span>
-                            </button>
-                            <?php endif ?>
+                            <div data-count="<?= $ratings['five_stars'] ?>" class="star-result flex items-center font-semibold font-mono gap-3">
+                                <span class="text-neutral-600">5</span>
+                                <div class="bar w-[19rem] h-3 bg-gray-200 rounded-full overflow-hidden">
+                                    <div class="w-[var(--progress)] h-full rounded-full bg-amber-400" style="--progress: calc(var(--progress-num, 0) / <?= $total ?> * 100%)"></div>
+                                </div>
+                                <span class="counter text-sm ml-auto">0</span>
+                            </div>
+                            <div data-count="<?= $ratings['four_stars'] ?>" class="star-result flex items-center font-semibold font-mono gap-3">
+                                <span class="text-neutral-600">4</span>
+                                <div class="bar w-[19rem] h-3 bg-gray-200 rounded-full overflow-hidden">
+                                    <div class="w-[var(--progress)] h-full rounded-full bg-amber-400" style="--progress: calc(var(--progress-num, 0) / <?= $total ?> * 100%)"></div>
+                                </div>
+                                <span class="counter text-sm ml-auto">0</span>
+                            </div>
+                            <div data-count="<?= $ratings['three_stars'] ?>" class="star-result flex items-center font-semibold font-mono gap-3">
+                                <span class="text-neutral-600">3</span>
+                                <div class="bar w-[19rem] h-3 bg-gray-200 rounded-full overflow-hidden">
+                                    <div class="w-[var(--progress)] h-full rounded-full bg-amber-400" style="--progress: calc(var(--progress-num, 0) / <?= $total ?> * 100%)"></div>
+                                </div>
+                                <span class="counter text-sm ml-auto">0</span>
+                            </div>
+                            <div data-count="<?= $ratings['two_stars'] ?>" class="star-result flex items-center font-semibold font-mono gap-3">
+                                <span class="text-neutral-600">2</span>
+                                <div class="bar w-[19rem] h-3 bg-gray-200 rounded-full overflow-hidden">
+                                    <div class="w-[var(--progress)] h-full rounded-full bg-amber-400" style="--progress: calc(var(--progress-num, 0) / <?= $total ?> * 100%)"></div>
+                                </div>
+                                <span class="counter text-sm ml-auto">0</span>
+                            </div>
+                            <div data-count="<?= $ratings['one_stars'] ?>" class="star-result flex items-center font-semibold font-mono gap-3">
+                                <span class="text-neutral-600">1</span>
+                                <div class="bar w-[19rem] h-3 bg-gray-200 rounded-full overflow-hidden">
+                                    <div class="w-[var(--progress)] h-full rounded-full bg-amber-400" style="--progress: calc(var(--progress-num, 0) / <?= $total ?> * 100%)"></div>
+                                </div>
+                                <span class="counter text-sm ml-auto">0</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -360,18 +367,6 @@ if (!$product) {
 
     <script>
         lucide.createIcons();
-
-        <?php if ($user): ?>
-        function showPopup() {
-            document.getElementById('popup').style.display = 'block';
-            document.getElementById('overlay').style.display = 'block';
-        }
-
-        function hidePopup() {
-            document.getElementById('popup').style.display = 'none';
-            document.getElementById('overlay').style.display = 'none';
-        }
-        <?php endif ?>
     </script>
 </body>
 </html>

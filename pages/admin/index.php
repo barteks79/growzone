@@ -181,12 +181,12 @@ if (!$user || !$user['is_admin']) {
                         <?php elseif($tab == 'products'): ?>
                         <?php
 
-                        $stmt = $db_o->prepare('SELECT product_id, rating FROM products ORDER BY product_id');
+                        $stmt = $db_o->prepare('SELECT product_id, ROUND(AVG(rating), 2) AS rating FROM products JOIN reviews USING (product_id) GROUP BY product_id ORDER BY product_id');
                         $stmt->execute();
 
                         $data = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-                        $stmt = $db_o->prepare('SELECT AVG(rating) AS average_rating FROM products');
+                        $stmt = $db_o->prepare('SELECT AVG(rating) AS average_rating FROM reviews');
                         $stmt->execute();
 
                         $average_rating = $stmt->get_result()->fetch_assoc()['average_rating'];
@@ -303,7 +303,7 @@ if (!$user || !$user['is_admin']) {
                     <?php elseif($tab == 'products'): ?>
                     <?php
 
-                    $stmt = $db_o->prepare('SELECT product_id, title, price, description, rating, in_stock FROM products ORDER BY product_id');
+                    $stmt = $db_o->prepare('SELECT product_id, title, price, description, in_stock FROM products ORDER BY product_id');
                     $stmt->execute();
 
                     $products = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
@@ -322,7 +322,6 @@ if (!$user || !$user['is_admin']) {
                             <div class="border-l py-2 basis-0 grow-2 text-center">Title</div>
                             <div class="border-l py-2 basis-0 grow text-center">Price</div>
                             <div class="border-l py-2 basis-0 grow-3 text-center">Description</div>
-                            <div class="border-l py-2 basis-0 grow text-center">Rating</div>
                             <div class="border-l py-2 w-[5rem] text-center">In stock</div>
                             <div class="border-x py-2 w-[5rem] text-center">Delete</div>
                         </div>
@@ -338,9 +337,6 @@ if (!$user || !$user['is_admin']) {
                             </div>
                             <div class="border-l basis-0 grow-3">
                                 <input type="text" name="description" placeholder="Description" value="<?= htmlspecialchars($product['description']) ?>" class="px-3 py-2 w-full" />
-                            </div>
-                            <div class="border-l basis-0 grow">
-                                <input type="number" name="rating" min="1" max="5" step="0.1" placeholder="Rating" value="<?= htmlspecialchars($product['rating']) ?>" class="px-3 py-2 w-full" />
                             </div>
                             <div class="border-l w-[5rem] grid place-items-center">
                                 <input type="checkbox" name="in-stock" <?= $product['in_stock'] ? 'checked' : '' ?> />

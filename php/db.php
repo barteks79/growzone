@@ -5,5 +5,5 @@
     $database = "growzone";
 
     $db_o = new mysqli($hostname, $username, $password, $database);
-    $db_o->set_charset('utf8');
+    $db_o->set_charset('utf8mb4');
 ?>

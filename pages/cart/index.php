@@ -259,6 +259,7 @@ $cart = $stmt->get_result()->fetch_assoc();
                                     <select class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black">
                                         <option disabled selected>Wybierz kraj</option>
                                         <option value="pl">Polska</option>
+                                        <option value="ne">Niger</option>
                                     </select>
                                 </div>
 

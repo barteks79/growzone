@@ -27,6 +27,18 @@ CREATE TABLE products (
   FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE CASCADE
 );
 
+CREATE TABLE reviews (
+  review_id   INT   PRIMARY KEY AUTO_INCREMENT,
+  rating      INT   NOT NULL,
+  description TEXT  NOT NULL,
+  user_id     INT   NOT NULL,
+  product_id  INT   NOT NULL,
+  created_at  DATE  NOT NULL,
+
+  FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+  FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE
+);
+
 CREATE TABLE carts (
   cart_id INT PRIMARY KEY AUTO_INCREMENT,
   user_id INT NOT NULL,
@@ -75,16 +87,4 @@ CREATE TABLE order_items (
 
   FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
   FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE  
-);
-
-CREATE TABLE opinions (
-  opinion_id  INT   PRIMARY KEY AUTO_INCREMENT,
-  rating      INT   NOT NULL,
-  description TEXT  NOT NULL,
-  product_id  INT   NOT NULL,
-  user_id     INT   NOT NULL,
-  date		    date  NOT NULL,
-
-  FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE,
-  FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );

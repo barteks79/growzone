@@ -10,7 +10,7 @@ $availability = $data['availability'] ?? null;
 $maxPrice = $data['maxPrice'] ?? null;
 $categories = $data['categories'] ?? null;
 
-$query = 'SELECT products.*, categories.title AS category FROM products JOIN categories USING (category_id)';
+$query = 'SELECT products.*, categories.title AS category, ROUND((SELECT AVG(rating) FROM reviews WHERE product_id = products.product_id), 1) AS rating FROM products JOIN categories USING (category_id)';
 $bindTypes = [];
 $bindParams = [];
 

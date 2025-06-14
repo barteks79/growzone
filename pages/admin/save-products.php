@@ -35,11 +35,6 @@ foreach ($data as $change) {
         $type = 's';
     }
 
-    if ($name == 'rating') {
-        $query .= 'rating';
-        $type = 'd';
-    }
-
     if ($name == 'in-stock') {
         $query .= 'in_stock';
         $type = 'i';
