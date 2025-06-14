@@ -85,20 +85,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['payment_method'])) {
         $stmt->bind_param('ii', $order[0], $cart['cart_id']);
         $stmt->execute();
 
-        $stmt = $db_o->prepare('DELETE FROM cart_items WHERE cart_id = ?');
-        $stmt->bind_param('i', $cart['cart_id']);
-        $stmt->execute();
-
-        $stmt = $db_o->prepare('DELETE FROM carts WHERE cart_id = ?');
-        $stmt->bind_param('i', $cart['cart_id']);
-        $stmt->execute();
-
         // CZESC EMAILA =============================================================================================================================
 
-        // DO ZROBIENIA: imie, produkty, firma dostawcza
+        // DO ZROBIENIA: produkty, firma dostawcza
+
+        // EMAIL
+        $email = $user['email'];
+        if (!$email) {
+            $email = '';
+        }
 
         // ORDERS
-        $stmt = $db_o->prepare('SELECT * FROM WHERE user_id = ? ORDER BY order_id DESC LIMIT 1');
+        $stmt = $db_o->prepare('SELECT * FROM orders WHERE user_id = ? ORDER BY order_id DESC LIMIT 1');
         $stmt->bind_param('i', $user_id);
         $stmt->execute();
         $order = $stmt->get_result()->fetch_assoc();
@@ -106,12 +104,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['payment_method'])) {
         // NUMER ZAMOWIENIA
         $orderNumber = rand(10000000, 99999999);
 
+        // PRODUKTY
+        $stmt = $db_o->prepare('SELECT products.title, order_items.quantity, products.price*order_items.quantity FROM products inner join order_items on products.product_id = order_items.product_id WHERE order_items.order_id = ?');
+        $stmt->bind_param('i', $order['order_id']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $productRows = '';
+        while ($row = $result->fetch_row()) {
+            $productRows .= '<tr>
+                <td>' . htmlspecialchars($row['0']) . '</td>
+                <td>' . htmlspecialchars($row['1']) . '</td>
+                <td>' . htmlspecialchars(number_format($row['2'], 2)) . ' zł</td>
+            </tr>';
+        }
+
         // WARTOSC
         $cart_id = $cart['cart_id'];
         $stmt = $db_o->prepare('SELECT SUM(ci.quantity * p.price) AS wartosc FROM carts c JOIN cart_items ci ON c.cart_id = ci.cart_id JOIN  products p ON ci.product_id = p.product_id WHERE c.cart_id = ?');
         $stmt->bind_param('i', $cart_id);
         $stmt->execute();
         $cart_value = $stmt->get_result()->fetch_assoc()['wartosc'];
+
+        // IMIE
+        $fullName = $user['first_name'] . ' ' . $user['last_name'];
 
         // ADRES
         $stmt = $db_o->prepare("SELECT CONCAT(order_addresses.street, ' ', order_addresses.building_number, IF(apartment_number IS NOT NULL, CONCAT('/', apartment_number), ''), ', ', city, ', ', postal_code, ', ', country) FROM order_addresses WHERE order_address_id = ?");
@@ -139,23 +154,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['payment_method'])) {
             $mail->addAddress($email);
 
             $mail->isHTML(true);
-            $mail->Subject = 'Potwierdzenie zakupu - GrowZone';
+            $mail->Subject = 'Purchase confirmation - GrowZone';
 
             $mail->Body = '
             <!DOCTYPE html>
             <html lang="pl">
             <head>
             <meta charset="UTF-8">
-            <title>Potwierdzenie zakupu</title>
+            <title>Purchase confirmation</title>
             <style>
                 body {
                     font-family: Arial, sans-serif;
-                    background-color: #f3f4f6;
+                    background: #ecfdf5;
                     margin: 0;
                     padding: 0;
                 }
                 .container {
-                    background-color: #ffffff;
+                    background-color: #f0fdf4;
                     max-width: 600px;
                     margin: 30px auto;
                     padding: 20px;
@@ -189,39 +204,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['payment_method'])) {
             </head>
             <body>
             <div class="container">
-                <h2>Dziękujemy za zakupy w GrowZone!</h2>
-                <p>Twoje zamówienie zostało przyjęte i jest w trakcie realizacji.</p>
+                <h2>Thank you for shopping at GrowZone!</h2>
+                <p>Your order has been accepted and is being processed.</p>
 
-                <h3>📦 Szczegóły zamówienia</h3>
-                <p><strong>Numer zamówienia:</strong> '.$orderNumber.'</p>
-                <p><strong>Data zakupu:</strong> '.$order['order_date'].'</p>
+                <h3>📦 Order details</h3>
+                <p><strong>Order number:</strong> '.$orderNumber.'</p>
+                <p><strong>Delivery company:</strong> '.$deliveryCompany.'</p>
+                <p><strong>Date of purchase:</strong> '.$order['order_date'].'</p>
                 
-                <h3>🛍️ Produkty</h3>
+                <h3>🛍️ Products</h3>
                 <table>
                     <thead>
                         <tr>
-                            <th>Produkt</th>
-                            <th>Ilość</th>
-                            <th>Cena</th>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
                         </tr>
                     </thead>
                     <tbody>
                         '.$productRows.'
                         <tr>
-                            <td colspan="2"><strong>Łącznie</strong></td>
+                            <td colspan="2"><strong>Total</strong></td>
                             <td><strong>'.$cart_value.' zł</strong></td>
                         </tr>
                     </tbody>
                 </table>
 
-                <h3>📍 Adres dostawy</h3>
+                <h3>📍 Delivery address</h3>
                 <p>'.$fullName.'<br>'.$shippingAddress.'</p>
 
-                <h3>💳 Metoda płatności</h3>
+                <h3>💳 Payment method</h3>
                 <p>'.$emailPayment.'</p>
 
                 <div class="footer">
-                    W razie pytań napisz do nas: <a href="mailto:growzone.help@gmail.com">growzone.help@gmail.com</a><br>
+                    If you have any questions, please contact us: <a href="mailto:growzone.help@gmail.com">growzone.help@gmail.com</a><br>
                     &copy; 2025 GrowZone
                 </div>
             </div>
@@ -235,6 +251,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['payment_method'])) {
             echo "Błąd wysyłania: {$mail->ErrorInfo}";
             header("Location: ../home/index.php?email=$mail->ErrorInfo");
         }
+
+        $stmt = $db_o->prepare('DELETE FROM cart_items WHERE cart_id = ?');
+        $stmt->bind_param('i', $cart['cart_id']);
+        $stmt->execute();
+
+        $stmt = $db_o->prepare('DELETE FROM carts WHERE cart_id = ?');
+        $stmt->bind_param('i', $cart['cart_id']);
+        $stmt->execute();
         
         header("Location: ../home/index.php");
     } else {

@@ -50,14 +50,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mail->addAddress($email);
 
         $mail->isHTML(true);
-        $mail->Subject = 'Reset hasła';
+        $mail->Subject = 'Reset your password - GrowZone';
 
         $mail->Body = '
         <!DOCTYPE html>
         <html lang="pl">
         <head>
         <meta charset="UTF-8">
-        <title>Reset hasła</title>
+        <title>Reset your password</title>
         <style>
             body {
             margin: 0;
@@ -94,10 +94,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </head>
         <body style="background: #d1fae5;">
         <div class="email-container">
-            <h1>Zresetuj hasło</h1>
-            <p>Kliknij przycisk poniżej, aby zresetować swoje hasło. Link jest ważny przez 1 godzinę.</p>
-            <a href="' . $resetLink . '" class="btn">Zresetuj hasło</a>
-            <p>Jeśli to nie Ty próbujesz zresetować hasło, zignoruj tę wiadomość.</p>
+            <h1>Reset your password</h1>
+            <p>Click the button below to reset your password. The link is valid for 1 hour.</p>
+            <a href="' . $resetLink . '" class="btn">Reset your password</a>
+            <p>If you are not trying to change your password, please contact our support team.</p>
         </div>
         </body>
         </html>';

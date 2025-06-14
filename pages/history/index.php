@@ -191,9 +191,6 @@ $result = $stmt->get_result();
     <?php
     $dtid = $_GET['dtid'];
     $stmt = $db_o->prepare('SELECT products.title, order_items.quantity, products.price*order_items.quantity FROM products inner join order_items on products.product_id = order_items.product_id WHERE order_items.order_id = ?');
-    if (!$stmt) {
-        die("Query preparation failed: " . $db_o->error);
-    }
     $stmt->bind_param('i', $dtid);
     $stmt->execute();
     $result = $stmt->get_result();
