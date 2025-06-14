@@ -212,7 +212,7 @@ if (!$product) {
 
                 <?php
 
-                $stmt = $db_o->prepare('SELECT * FROM reviews JOIN users USING (user_id) WHERE product_id = ? ORDER BY rating DESC, RAND()');
+                $stmt = $db_o->prepare('SELECT * FROM reviews JOIN users USING (user_id) WHERE product_id = ? ORDER BY created_at DESC, RAND()');
                 $stmt->bind_param('i', $product['product_id']);
                 $stmt->execute();
 
