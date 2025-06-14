@@ -266,8 +266,6 @@ if (!$product) {
                             <?php endforeach ?>
                         </div>
                         <?php else: ?>
-                        <h4 class="font-semibold text-xl">Send review</h4>
-
                         <div class="flex gap-2">
                             <div data-first-name="<?= htmlspecialchars($user['first_name']) ?>" data-last-name="<?= htmlspecialchars($user['last_name']) ?>" class="avatar [--primary:var(--color-neutral-300)] bg-[var(--primary)] ring-2 ring-[var(--primary)]/50 rounded-full size-7 grid place-items-center text-xs font-semibold text-white">-</div>
                             <div class="grid">
@@ -290,7 +288,7 @@ if (!$product) {
                                     </button>
                                 </div>
                                 <div class="text-sm mt-2 max-w-[20rem]">
-                                    <textarea id="send-review-description" class="resize-none border rounded-sm border-neutral-400 p-2" cols="30" rows="3"></textarea>
+                                    <textarea id="send-review-description" placeholder="Describe your experience" class="resize-none border rounded-sm border-neutral-400 p-2" cols="30" rows="3"></textarea>
                                 </div>
                                 <button id="send-review-button" disabled data-user-id="<?= htmlspecialchars($user['user_id']) ?>" data-product-id="<?= htmlspecialchars($product['product_id']) ?>" class="not-disabled:cursor-pointer transition not-disabled:hover:brightness-110 disabled:opacity-50 bg-emerald-500 text-white rounded-md px-4 py-2 text-sm mt-2 font-semibold w-fit">Send review</button>
                             </div>
