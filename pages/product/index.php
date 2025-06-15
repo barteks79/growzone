@@ -212,7 +212,7 @@ if (!$product) {
 
                 <?php
 
-                $stmt = $db_o->prepare('SELECT * FROM reviews JOIN users USING (user_id) WHERE product_id = ? ORDER BY created_at DESC, RAND()');
+                $stmt = $db_o->prepare('SELECT * FROM reviews JOIN users USING (user_id) WHERE product_id = ? ORDER BY created_at DESC, review_id DESC');
                 $stmt->bind_param('i', $product['product_id']);
                 $stmt->execute();
 
@@ -288,7 +288,7 @@ if (!$product) {
                                     </button>
                                 </div>
                                 <div class="text-sm mt-2 max-w-[20rem]">
-                                    <textarea id="send-review-description" placeholder="Describe your experience" class="resize-none border rounded-sm border-neutral-400 p-2" cols="30" rows="3"></textarea>
+                                    <textarea id="send-review-description" placeholder="Describe your experience ..." class="resize-none border rounded-sm border-neutral-400 p-2" cols="30" rows="3"></textarea>
                                 </div>
                                 <button id="send-review-button" disabled data-user-id="<?= htmlspecialchars($user['user_id']) ?>" data-product-id="<?= htmlspecialchars($product['product_id']) ?>" class="not-disabled:cursor-pointer transition not-disabled:hover:brightness-110 disabled:opacity-50 bg-emerald-500 text-white rounded-md px-4 py-2 text-sm mt-2 font-semibold w-fit">Send review</button>
                             </div>

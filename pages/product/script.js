@@ -52,7 +52,10 @@ sendReviewButton?.addEventListener('click', async () => {
         body: JSON.stringify({ rating, description, user_id, product_id }),
     });
 
-    window.location.reload();
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.delete('tab');
+
+    window.location.search = searchParams.toString();
 });
 
 const avatars = document.querySelectorAll('.avatar');

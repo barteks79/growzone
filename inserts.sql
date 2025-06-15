@@ -334,43 +334,54 @@ SELECT
     user_id,
     rating,
     CASE
-        WHEN rating = 5 THEN CASE FLOOR(1 + RAND() * 3)
-            WHEN 1 THEN CONCAT('Wyborny produkt z kategorii ', category, '! ', title, ' przeszedł moje wszelkie oczekiwania. Bardzo polecam!')
-            WHEN 2 THEN CONCAT('Rewelacja! ', title, ' to najlepszy zakup w tej kategorii ', category, ' w tym roku.')
-            WHEN 3 THEN CONCAT('Fantastyczny produkt! ', title, ' jest dokładnie tym, czego szukałem.')
+        WHEN rating = 5 THEN CASE FLOOR(1 + RAND() * 5)
+            WHEN 1 THEN CONCAT('Wyborny produkt z kategorii ', category, '! ', title, ' przeszedł moje wszelkie oczekiwania za tę cenę ', price, ' zł. Bardzo polecam!')
+            WHEN 2 THEN CONCAT('Rewelacja! ', title, ' to najlepszy zakup w tej kategorii ', category, ' w tym roku, wart każdej złotówki (', price, ' zł).')
+            WHEN 3 THEN CONCAT('Fantastyczny produkt! ', title, ' jest dokładnie tym, czego szukałem i cena ', price, ' zł jest jak najbardziej adekwatna.')
+            WHEN 4 THEN 'Zdecydowanie pięć gwiazdek. Wszystko działa bez zarzutu.'
+            WHEN 5 THEN 'Absolutnie polecam każdemu, kto szuka czegoś naprawdę solidnego.'
         END
 
-        WHEN rating = 4 THEN CASE FLOOR(1 + RAND() * 3)
-            WHEN 1 THEN CONCAT('Super produkt z kategorii ', category, '! ', title, ' działa świetnie i jestem w miarę zachwycony.')
-            WHEN 2 THEN CONCAT('Bardzo dobry produkt. ', title, ' spełnił moje oczekiwania.')
-            WHEN 3 THEN CONCAT('Polecam! ', title, ' to dobry wybór w kategorii ', category, '.')
+        WHEN rating = 4 THEN CASE FLOOR(1 + RAND() * 5)
+            WHEN 1 THEN CONCAT('Super produkt z kategorii ', category, '! ', title, ' działa świetnie i jestem w miarę zachwycony, zwłaszcza za ', price, ' zł.')
+            WHEN 2 THEN CONCAT('Bardzo dobry produkt. ', title, ' spełnił moje oczekiwania i cena ', price, ' zł jest rozsądna.')
+            WHEN 3 THEN CONCAT('Polecam! ', title, ' to dobry wybór w kategorii ', category, ' za ', price, ' zł.')
+            WHEN 4 THEN 'Całkiem udany zakup, niewiele można mu zarzucić.'
+            WHEN 5 THEN 'Ogólnie wszystko w porządku, jestem zadowolony.'
         END
 
-        WHEN rating = 3 THEN CASE FLOOR(1 + RAND() * 3)
-            WHEN 1 THEN CONCAT('Średni produkt z kategorii ', category, '. ', title, ' nie zachwyca, ale nie jest porażką.')
-            WHEN 2 THEN CONCAT(title, ' jest w porządku, ale nic specjalnego.')
-            WHEN 3 THEN CONCAT('Tak sobie. ', title, ' spełnia minimum, ale nic więcej.')
+        WHEN rating = 3 THEN CASE FLOOR(1 + RAND() * 5)
+            WHEN 1 THEN CONCAT('Średni produkt z kategorii ', category, '. ', title, ' nie zachwyca, ale za ', price, ' zł trudno wymagać więcej.')
+            WHEN 2 THEN CONCAT(title, ' jest w porządku za tę cenę (', price, ' zł), ale nic specjalnego.')
+            WHEN 3 THEN CONCAT('Tak sobie. ', title, ' spełnia minimum, ale nic więcej — cena ', price, ' zł trochę za wysoka.')
+            WHEN 4 THEN 'Nie jestem ani zadowolony, ani rozczarowany — średnia ocena.'
+            WHEN 5 THEN 'Może być, ale spodziewałem się czegoś więcej.'
         END
 
-        WHEN rating = 2 THEN CASE FLOOR(1 + RAND() * 3)
-            WHEN 1 THEN CONCAT('Nie do końca zachwycony produktem ', title, ' z kategorii ', category, '. Wiele aspektów jest do poprawienia.')
-            WHEN 2 THEN CONCAT(title, ' mógłby być lepszy, sporo rzeczy mnie zawiodło.')
-            WHEN 3 THEN CONCAT('Słaby produkt z kategorii ', category, '. ', title, ' nie spełnił moich oczekiwań.')
+        WHEN rating = 2 THEN CASE FLOOR(1 + RAND() * 5)
+            WHEN 1 THEN CONCAT('Nie do końca zachwycony produktem ', title, ' z kategorii ', category, '. Wiele aspektów jest do poprawienia, zwłaszcza za ', price, ' zł.')
+            WHEN 2 THEN CONCAT(title, ' mógłby być lepszy, sporo rzeczy mnie zawiodło, a cena ', price, ' zł nie jest tego warta.')
+            WHEN 3 THEN CONCAT('Słaby produkt z kategorii ', category, '. ', title, ' nie spełnił moich oczekiwań i szkoda było ', price, ' zł.')
+            WHEN 4 THEN 'Raczej nie polecam, można znaleźć coś lepszego.'
+            WHEN 5 THEN 'Nie spełnił moich oczekiwań, trochę rozczarowanie.'
         END
 
-        WHEN rating = 1 THEN CASE FLOOR(1 + RAND() * 3)
-            WHEN 1 THEN CONCAT('Okropny produkt z kategorii ', category, '. Nie polecam. ', title, ' jest kompletną porażką.')
-            WHEN 2 THEN CONCAT('Zdecydowanie odradzam zakup ', title, ' z kategorii ', category, '. Szkoda pieniędzy.')
-            WHEN 3 THEN CONCAT('Najgorszy produkt jaki miałem. ', title, ' to totalna strata czasu.')
+        WHEN rating = 1 THEN CASE FLOOR(1 + RAND() * 5)
+            WHEN 1 THEN CONCAT('Okropny produkt z kategorii ', category, '. Nie polecam. ', title, ' jest kompletną porażką i strata ', price, ' zł.')
+            WHEN 2 THEN CONCAT('Zdecydowanie odradzam zakup ', title, ' z kategorii ', category, '. Szkoda pieniędzy — ', price, ' zł wyrzucone w błoto.')
+            WHEN 3 THEN CONCAT('Najgorszy produkt jaki miałem. ', title, ' to totalna strata czasu i pieniędzy (', price, ' zł).')
+            WHEN 4 THEN 'Tragedia, żałuję, że to kupiłem.'
+            WHEN 5 THEN 'Nigdy więcej, kompletna strata pieniędzy i nerwów.'
         END
     END AS description,
     DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND() * 365) DAY) AS created_at
 FROM (
     SELECT 
         _p.product_id AS product_id,
+        _p.title AS title,
+        _p.price AS price,
         _c.title AS category,
         _u.user_id AS user_id,
-        _p.title AS title,
         -- Range: [1, 5], strong bias towards 5, 4
         IF(RAND() < 0.8, IF(RAND() < 0.75, 5, 4), ROUND(1 + RAND() * 4)) AS rating,
         DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND() * 365) DAY) AS created_at
