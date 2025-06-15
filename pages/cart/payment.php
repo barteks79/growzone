@@ -90,8 +90,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['payment_method'])) {
             $stmt->execute();
             $order_address_id = $stmt->get_result()->fetch_row()[0];
 
-            $stmt = $db_o->prepare('INSERT INTO orders VALUES(NULL, ?, 1, 0, curdate(), NULL)');
-            $stmt->bind_param('i', $user_id);
+            $stmt = $db_o->prepare('INSERT INTO orders VALUES(NULL, ?, ?, 0, curdate(), NULL)');
+            $stmt->bind_param('ii', $user_id, $order_address_id);
             $stmt->execute();
         
             $stmt = $db_o->prepare('SELECT * FROM orders WHERE user_id = ? ORDER BY order_id DESC LIMIT 1');
