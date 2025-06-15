@@ -158,10 +158,12 @@ function formatBytes($bytes, $precision = 2) {
                         Uploaded Images
                     </a>
 
+                    <?php if($tab != 'images'): ?>
                     <button disabled id="save-changes" class="mt-6 flex items-center gap-3 pl-3 pr-6 py-2 rounded-md font-medium transition bg-amber-400/20 disabled:opacity-50 not-disabled:cursor-pointer not-disabled:hover:bg-amber-400/30">
                         <i data-lucide="file-up" class="size-[20px]"></i>
                         Save Changes
                     </button>
+                    <?php endif ?>
 
                     <div class="mt-auto flex flex-col gap-4">
                         <?php if($tab == 'users'): ?>
@@ -377,7 +379,7 @@ function formatBytes($bytes, $precision = 2) {
                         <div class="bg-green-100 rounded-lg p-4">
                             <i data-lucide="upload" class="size-[36px] stroke-lime-600"></i>
                         </div>
-                        <span class="font-medium mt-6">Drop your images here, or <span class="text-emerald-500">browse</span></span>
+                        <span class="font-medium mt-4">Drop your images here, or <span class="text-emerald-500">browse</span></span>
                         <span class="text-xs text-neutral-600 mt-2">Supports PNG, JPG & WEBP up to any size</span>
                     </button>
 
@@ -402,9 +404,12 @@ function formatBytes($bytes, $precision = 2) {
 
                             <div class="ml-auto flex items-center gap-4">
                                 <span class="font-medium"><?= htmlspecialchars($upload['created_at']) ?></span>
-                                <button class="delete p-1.5 cursor-pointer hover:bg-red-300 transition rounded-md bg-red-400">
-                                    <i data-lucide="trash-2" class="size-[18px] stroke-white"></i>
-                                </button>
+                                <form action="./delete-image.php" method="post">
+                                    <input type="hidden" name="upload_id" value="<?= htmlspecialchars($upload['upload_id']) ?>" />
+                                    <button class="p-1.5 cursor-pointer hover:bg-red-300 transition rounded-md bg-red-400">
+                                        <i data-lucide="trash-2" class="size-[18px] stroke-white"></i>
+                                    </button>
+                                </form>
                             </div>
                         </div>
                         <?php endforeach ?>

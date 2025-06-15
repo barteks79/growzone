@@ -47,7 +47,7 @@ deleteButtons.forEach(button => {
     });
 });
 
-saveChangesButton.addEventListener('click', async () => {
+saveChangesButton?.addEventListener('click', async () => {
     const url = `./save-${tab}.php`;
 
     await fetch(url, {
@@ -70,9 +70,9 @@ imageUploadButton?.addEventListener('click', () => {
     fileInput.multiple = true;
 
     fileInput.addEventListener('change', () => {
-        for (const file of fileInput.files) {
-            changes.push(file);
-        }
+        if (!fileInput.files) return;
+
+        sendImageData([...fileInput.files]);
     });
 
     fileInput.click();
@@ -96,10 +96,21 @@ imageUploadButton?.addEventListener('drop', event => {
 
     if (!files) return;
 
-    for (const file of files) {
-        changes.push(file);
-    }
+    sendImageData([...files]);
 });
+
+/** @param {File[]} files */
+async function sendImageData(files) {
+    const formData = new FormData();
+
+    files.forEach((file, index) => {
+        formData.set(`image${index}`, file);
+    });
+
+    await fetch('./save-images.php', { method: 'POST', body: formData });
+
+    window.location.reload();
+}
 
 window.addEventListener('beforeunload', event => {
     if (changes.length) {
