@@ -275,7 +275,7 @@ $cart = $stmt->get_result()->fetch_assoc();
 
                                 <div class="flex flex-col w-full gap-1 text-gray-700">
                                     <label>Kod pocztowy<span class="text-red-500 ml-1">*<span></label>
-                                    <input value="<?= $_SESSION['postalCode'] ?? '' ?>" name="kod_pocztowy" placeholder="00-000" class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black" />
+                                    <input id="postal-code" value="<?= $_SESSION['postalCode'] ?? '' ?>" name="kod_pocztowy" placeholder="00-000" class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black" />
                                 </div>
 
                                 <div class="flex flex-col w-full gap-1 text-gray-700">
