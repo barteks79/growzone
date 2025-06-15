@@ -232,19 +232,19 @@ $cart = $stmt->get_result()->fetch_assoc();
                             <h2 class="text-3xl font-medium">Dostawa</h3>
 
                             <div id="shipping_companies" class="grid grid-cols-4 gap-5">
-                                <article <?php if (isset($_SESSION['company']) && $_SESSION['company'] === 'inpost') echo 'data-selected'; ?> data-company="inpost" class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
+                                <article <?php if (isset($_SESSION['company']) && $_SESSION['company'] === 'Inpost') echo 'data-selected'; ?> data-company="Inpost" class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
                                     <img src="../../public/images/inpost.jpg" alt="Inpost Logo" class="h-24 pointer-events-none" />    
                                 </article>
 
-                                <article <?php if (isset($_SESSION['company']) && $_SESSION['company'] === 'dpd') echo 'data-selected'; ?> data-company="dpd" class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
+                                <article <?php if (isset($_SESSION['company']) && $_SESSION['company'] === 'DPD') echo 'data-selected'; ?> data-company="DPD" class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
                                     <img src="../../public/images/dpd.jpg" alt="DPD Logo" class="h-24 pointer-events-none" />    
                                 </article>
 
-                                <article <?php if (isset($_SESSION['company']) && $_SESSION['company'] === 'poczta_polska') echo 'data-selected'; ?> data-company="poczta_polska" class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
+                                <article <?php if (isset($_SESSION['company']) && $_SESSION['company'] === 'Poczta Polska') echo 'data-selected'; ?> data-company="Poczta Polska" class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
                                     <img src="../../public/images/poczta_polska.png" alt="Pocza Polska Logo" class="h-24 pointer-events-none" />    
                                 </article>
 
-                                <article <?php if (isset($_SESSION['company']) && $_SESSION['company'] === 'dhl') echo 'data-selected'; ?> data-company="dhl" class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
+                                <article <?php if (isset($_SESSION['company']) && $_SESSION['company'] === 'DHL') echo 'data-selected'; ?> data-company="DHL" class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
                                     <img src="../../public/images/dhl.jpg" alt="DHL Logo" class="h-24 pointer-events-none" />    
                                 </article>
                             </div>
@@ -295,9 +295,9 @@ $cart = $stmt->get_result()->fetch_assoc();
                     <?php endif; ?>
 
                     <?php if ($nastepna_strona === 'platnosc'): ?>
-                        <section id="sekcja_dostawy" class="grid grid-cols-2 gap-4 py-4">
-                            <div class="flex flex-col border-r border-gray-400">
-                                <h3 class="text-2xl font-semibold">Order Summary</h3>
+                        <section id="sekcja_dostawy" class="grid grid-cols-2 gap-10 py-4">
+                            <div class="flex flex-col border-r border-gray-400 gap-3">
+                                <h2 class="text-3xl font-medium">Order Summary</h2>
                                 <ul class="flex flex-col pr-7 [&>li]:border-b [&>li]:border-gray-400">
                                 <?php
                                     $cart_id = $cart['cart_id'];
@@ -326,6 +326,48 @@ $cart = $stmt->get_result()->fetch_assoc();
                                     </span>
                                 </div>
                             </div>
+
+                            <div class="flex flex-col gap-3">
+                                <h2 class="text-3xl font-medium">Shipping</h2>
+                                <ul class="flex flex-col [&>*]:text-md [&>li]:py-2 [&>li]:border-t [&>li]:border-gray-400">
+                                    <li class="flex justify-between py-2">
+                                        <p class="font-medium">Delivery Company</p>
+                                        <span class="text-gray-700"><?= $_SESSION['company'] ?? '' ?></span>
+                                    </li>
+
+                                    <li class="flex justify-between py-2">
+                                        <p class="font-medium">Country</p>
+                                        <span class="text-gray-700"><?= $_SESSION['country'] ?? '' ?></span>
+                                    </li>
+
+                                    <li class="flex justify-between py-2">
+                                        <p class="font-medium">City</p>
+                                        <span class="text-gray-700"><?= $_SESSION['city'] ?? '' ?></span>
+                                    </li>
+                                    
+                                    <li class="flex justify-between py-2">
+                                        <p class="font-medium">Street</p>
+                                        <span class="text-gray-700"><?= $_SESSION['street'] ?? '' ?></span>
+                                    </li>
+
+                                    <li class="flex justify-between py-2">
+                                        <p class="font-medium">Postal Code</p>
+                                        <span class="text-gray-700"><?= $_SESSION['postalCode'] ?? '' ?></span>
+                                    </li>
+
+                                    <li class="flex justify-between py-2">
+                                        <p class="font-medium">Building Number</p>
+                                        <span class="text-gray-700"><?= $_SESSION['building'] ?? '' ?></span>
+                                    </li>
+
+                                    <?php if (isset($_SESSION['apartment']) && $_SESSION['apartment'] !== ''): ?>
+                                        <li class="flex justify-between py-2">
+                                            <p class="font-medium">Apartment Number</p>
+                                            <span class="text-gray-700"><?= $_SESSION['apartment'] ?? '' ?></span>
+                                        </li>
+                                    <?php endif; ?>
+                                </ul>
+                            </div>
                         </section>
                     <?php endif ?>
 
@@ -343,6 +385,10 @@ $cart = $stmt->get_result()->fetch_assoc();
 
                         <?php if ($nastepna_strona === 'podsumowanie'): ?>
                             <button disabled data-next="<?= $nastepna_strona ?>" class="bg-emerald-600 text-white px-12 not-disabled:cursor-pointer disabled:opacity-50 not-disabled:hover:bg-emerald-700 py-2 rounded-md" id="nextBtnDostawa">Dalej</button>
+                        <?php endif; ?>
+
+                        <?php if ($nastepna_strona === 'platnosc'): ?>
+                            <button data-next="platnosc" class="bg-emerald-600 text-white px-12 not-disabled:cursor-pointer disabled:opacity-50 not-disabled:hover:bg-emerald-700 py-2 rounded-md" id="nextBtnPodsumowanie">Zapłać</button>
                         <?php endif; ?>
                     </menu>
                 </div>
