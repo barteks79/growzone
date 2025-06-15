@@ -73,7 +73,10 @@ CREATE TABLE order_addresses (
   building_number  VARCHAR(10)  NOT NULL,
   apartment_number VARCHAR(10)      NULL,
   -- format: XX-XXX
-  postal_code      CHAR(6)      NOT NULL
+  postal_code      CHAR(6)      NOT NULL,
+  user_id          INT          NOT NULL,
+
+  FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE orders (

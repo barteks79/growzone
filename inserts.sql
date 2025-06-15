@@ -273,17 +273,17 @@ INSERT INTO cart_items
   (3,       8,          5);
 
 INSERT INTO order_addresses
-  (country,  city,         street,         building_number, apartment_number, postal_code) VALUES 
-  ('Polska', 'Warszawa',   'Broadway',     '123',           '45',             '10-001'),
-  ('Polska', 'Warszawa',   'Sunset Blvd',  '456',           NULL,             '90-200'),
-  ('Polska', 'Grójec',     'Michigan Ave', '789',           '12',             '60-300'),
-  ('Polska', 'Piaseczno',  'Main Street',  '321',           '3B',             '77-450'),
-  ('Polska', 'Warszawa',   'Market St',    '654',           NULL,             '19-500'),
-  ('Polska', 'Kraków',     'Central Ave',  '987',           '7',              '85-600'),
-  ('Polska', 'Sandomierz', 'Alamo St',     '147',           '22',             '42-700'),
-  ('Polska', 'Warszawa',   'Harbor Dr',    '258',           '15A',            '91-800'),
-  ('Polska', 'Wrocław',    'Elm Street',   '369',           NULL,             '75-900'),
-  ('Polska', 'Warszawa',   'First St',     '951',           '102',            '95-010');
+  (country,  city,         street,         building_number, apartment_number, postal_code,  user_id) VALUES 
+  ('Polska', 'Warszawa',   'Broadway',     '123',           '45',             '10-001',     '1'),
+  ('Polska', 'Warszawa',   'Sunset Blvd',  '456',           NULL,             '90-200',     '2'),
+  ('Polska', 'Grójec',     'Michigan Ave', '789',           '12',             '60-300',     '3'),
+  ('Polska', 'Piaseczno',  'Main Street',  '321',           '3B',             '77-450',     '4'),
+  ('Polska', 'Warszawa',   'Market St',    '654',           NULL,             '19-500',     '5'),
+  ('Polska', 'Kraków',     'Central Ave',  '987',           '7',              '85-600',     '6'),
+  ('Polska', 'Sandomierz', 'Alamo St',     '147',           '22',             '42-700',     '7'),
+  ('Polska', 'Warszawa',   'Harbor Dr',    '258',           '15A',            '91-800',     '8'),
+  ('Polska', 'Wrocław',    'Elm Street',   '369',           NULL,             '75-900',     '9'),
+  ('Polska', 'Warszawa',   'First St',     '951',           '102',            '95-010',     '10');
 
 INSERT INTO orders
   (user_id, order_address_id, delivered, order_date,   delivery_date) VALUES
