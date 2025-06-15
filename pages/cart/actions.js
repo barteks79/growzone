@@ -163,10 +163,28 @@ document.addEventListener('DOMContentLoaded', () => {
 		})
 	);
 
-	nextPageBtnKoszyk?.addEventListener('click', () => {
+	nextPageBtnKoszyk?.addEventListener('click', async () => {
 		if (isNextPageButtonEnabled()) {
 			const nextPage = nextPageBtnKoszyk.dataset.next;
-			return (window.location.href = `./index.php?strona=${nextPage}`);
+
+			const selectedCompany = document.querySelector(
+				'#shipping_companies [data-selected="true"]'
+			).dataset.company;
+
+			console.log(selectedCompany);
+
+			const response = await fetch(
+				'http://localhost/growzone/php/add-to-session.php',
+				{
+					method: 'PUT',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ company: selectedCompany })
+				}
+			);
+
+			console.log(response);
+			// return (window.location.href = `./index.php?strona=${nextPage}`);
+			return;
 		}
 
 		window.location.href = './index.php';

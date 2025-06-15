@@ -229,19 +229,19 @@ $cart = $stmt->get_result()->fetch_assoc();
                             <h2 class="text-3xl font-medium">Dostawa</h3>
 
                             <div id="shipping_companies" class="grid grid-cols-4 gap-5">
-                                <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
+                                <article data-company="inpost" class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
                                     <img src="../../public/images/inpost.jpg" alt="Inpost Logo" class="h-24 pointer-events-none" />    
                                 </article>
 
-                                <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
+                                <article data-company="dpd" class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
                                     <img src="../../public/images/dpd.jpg" alt="DPD Logo" class="h-24 pointer-events-none" />    
                                 </article>
 
-                                <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
+                                <article data-comany="poczta_polska" class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
                                     <img src="../../public/images/poczta_polska.png" alt="Pocza Polska Logo" class="h-24 pointer-events-none" />    
                                 </article>
 
-                                <article class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
+                                <article data-company="dhl" class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
                                     <img src="../../public/images/dhl.jpg" alt="DHL Logo" class="h-24 pointer-events-none" />    
                                 </article>
                             </div>
@@ -262,6 +262,8 @@ $cart = $stmt->get_result()->fetch_assoc();
                                         <option value="ne">Niger</option>
                                     </select>
                                 </div>
+
+                                <?php print_r($_SESSION) ?>
 
                                 <div class="flex flex-col w-full gap-1 text-gray-700">
                                     <label>Miasto<span class="text-red-500 ml-1">*<span></label>

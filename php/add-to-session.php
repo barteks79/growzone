@@ -21,7 +21,7 @@
     }
 
     foreach ($body as $key => $value) {
-        $_SESSION[$body] = $key;
+        $_SESSION[$key] = $value;
     }
     
     http_response_code(201);
