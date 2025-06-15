@@ -94,8 +94,7 @@ if (!$user) {
                                 <?php endif; ?>
 
                                 <a href="../history/index.php?type=list&page=1" class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-neutral-200"><i data-lucide="history" class="size-5"></i>History</a>
-
-                                <a href="../settings/index.php" class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-neutral-200"><i data-lucide="settings" class="size-5"></i>Settings</a>
+                                <button class="px-4 py-1.5 mx-2 flex items-center gap-3 font-medium rounded-md transition duration-100 cursor-pointer hover:bg-neutral-200"><i data-lucide="settings" class="size-5"></i>Settings</button>
 
                                 <span class="w-full h-[2px] rounded-full bg-black/20"></span>
 
@@ -108,8 +107,47 @@ if (!$user) {
         </nav>
     <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-5xl mx-auto mt-10 px-4">
         <h1 class="text-3xl font-bold text-center mb-4">Your Settings</h1><br>
-        <div class="flex justify-evenly gap-10">
-            
+        <div class="flex justify-evenly gap-10 w-2/3 mt-4">
+            <div class="flex items-center justify-start gap-6">
+                <span class="[--primary:var(--color-neutral-300)] avatar animate-pulse bg-[var(--primary)] ring-2 ring-[var(--primary)]/50 text-white font-bold rounded-full size-9 grid place-items-center"
+                        style="width: 128px; height: 128px; font-size: 64px;"
+                        data-first-name="<?= htmlspecialchars($user['first_name']) ?>"
+                        data-last-name="<?= htmlspecialchars($user['last_name']) ?>">
+                    -
+                </span>
+            </div>
+            <div>
+                <div class="flex items-center justify-center h-[128px]">
+                    <span style="font-size: 60px;"><?= htmlspecialchars($user['first_name'] . ' ' . $user['last_name']) ?></span>
+                </div>
+            </div>
+        </div>
+        <hr class="my-8 border-t-2 border-gray-200 rounded-full mt-10">
+        <div class="mt-8 space-y-6 text-base p-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-4">
+                <div>
+                    <p class="text-gray-500 font-medium">First Name</p>
+                    <p class="text-black font-semibold"><?= htmlspecialchars($user['first_name']) ?></p>
+                </div>
+
+                <div>
+                    <p class="text-gray-500 font-medium">Surname</p>
+                    <p class="text-black font-semibold"><?= htmlspecialchars($user['last_name']) ?></p>
+                </div>
+
+                <div class="sm:col-span-2">
+                    <p class="text-gray-500 font-medium">Email</p>
+                    <p class="text-black font-semibold"><?= htmlspecialchars($user['email']) ?></p>
+                </div>
+            </div>
+
+            <div>
+                <a href="./change-password.php"
+                        class="mt-4 inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold px-6 py-2 rounded-lg shadow transition">
+                    <i data-lucide="lock"></i>
+                    Change Password
+                </a>
+            </div>
         </div>
     </div>
 
