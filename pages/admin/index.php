@@ -25,6 +25,21 @@ if (!$user || !$user['is_admin']) {
     exit();
 }
 
+
+
+function formatBytes($bytes, $precision = 2) { 
+    $units = array('B', 'KB', 'MB', 'GB', 'TB'); 
+   
+    $bytes = max($bytes, 0); 
+    $pow = floor(($bytes ? log($bytes) : 0) / log(1024)); 
+    $pow = min($pow, count($units) - 1);
+
+    $bytes /= (1 << (10 * $pow));
+   
+    return round($bytes, $precision) . ' ' . $units[$pow]; 
+} 
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -350,6 +365,14 @@ if (!$user || !$user['is_admin']) {
                         <?php endforeach ?>
                     </div>
                     <?php elseif($tab == 'images'): ?>
+                    <?php
+
+                    $stmt = $db_o->prepare('SELECT * FROM uploads ORDER BY created_at DESC, upload_id DESC');
+                    $stmt->execute();
+
+                    $uploads = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+                    ?>
                     <button id="image-upload-button" class="border-gray-300 flex cursor-pointer flex-col items-center rounded-md border-2 border-dashed py-8 hover:bg-gray-50/50">
                         <div class="bg-green-100 rounded-lg p-4">
                             <i data-lucide="upload" class="size-[36px] stroke-lime-600"></i>
@@ -359,53 +382,32 @@ if (!$user || !$user['is_admin']) {
                     </button>
 
                     <div class="grid gap-4 overflow-y-scroll pb-4 no-scrollbar">
-                        <?php for ($i = 0; $i < 10; ++$i): ?>
+                        <?php foreach ($uploads as $upload): ?>
                         <div class="flex items-center gap-4 px-6 py-4 rounded-md bg-gray-100">
+                            <?php $ext = pathinfo($upload['file_path'], PATHINFO_EXTENSION) ?>
+                            <?php if($ext == 'png'): ?>
                             <img src="../../public/images/png-file.png" width="42" alt="png file" />
-
-                            <div class="grid gap-0.5">
-                                <span class="text-sm font-semibold">Picture name.png</span>
-                                <span class="text-sm text-neutral-600">200 KB</span>
-                            </div>
-
-                            <div class="ml-auto flex items-center gap-4">
-                                <span class="font-medium">2024-06-04</span>
-                                <button class="delete p-1.5 cursor-pointer hover:bg-red-300 transition rounded-md bg-red-400">
-                                    <i data-lucide="trash-2" class="size-[18px] stroke-white"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-4 px-6 py-4 rounded-md bg-gray-100">
+                            <?php elseif($ext == 'jpg' || $ext == 'jpeg'): ?>
                             <img src="../../public/images/jpg-file.png" width="42" alt="jpg file" />
-
-                            <div class="grid gap-0.5">
-                                <span class="text-sm font-semibold">Picture name.jpg</span>
-                                <span class="text-sm text-neutral-600">200 KB</span>
-                            </div>
-
-                            <div class="ml-auto flex items-center gap-4">
-                                <span class="font-medium">2024-06-04</span>
-                                <button class="delete p-1.5 cursor-pointer hover:bg-red-300 transition rounded-md bg-red-400">
-                                    <i data-lucide="trash-2" class="size-[18px] stroke-white"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-4 px-6 py-4 rounded-md bg-gray-100">
+                            <?php elseif($ext == 'webp'): ?>
                             <img src="../../public/images/webp-file.png" width="42" alt="webp file" />
+                            <?php else: ?>
+                            <img src="../../public/images/image-file.png" width="42" alt="image file" />
+                            <?php endif ?>
 
                             <div class="grid gap-0.5">
-                                <span class="text-sm font-semibold">Picture name.webp</span>
-                                <span class="text-sm text-neutral-600">200 KB</span>
+                                <span class="text-sm font-semibold"><?= htmlspecialchars($upload['title'] ) ?></span>
+                                <span class="text-sm text-neutral-600"><?= formatBytes($upload['size']) ?></span>
                             </div>
 
                             <div class="ml-auto flex items-center gap-4">
-                                <span class="font-medium">2024-06-04</span>
+                                <span class="font-medium"><?= htmlspecialchars($upload['created_at']) ?></span>
                                 <button class="delete p-1.5 cursor-pointer hover:bg-red-300 transition rounded-md bg-red-400">
                                     <i data-lucide="trash-2" class="size-[18px] stroke-white"></i>
                                 </button>
                             </div>
                         </div>
-                        <?php endfor ?>
+                        <?php endforeach ?>
                     </div>
                     <?php endif ?>
                 </div>

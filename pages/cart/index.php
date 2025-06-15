@@ -181,7 +181,7 @@ $cart = $stmt->get_result()->fetch_assoc();
 
                                 if (isset($cart['cart_id'])) { 
                                     $cart_id = $cart['cart_id'];
-                                    $stmt = $db_o->prepare('SELECT _ci.quantity, _p.* FROM cart_items _ci INNER JOIN products _p ON _ci.product_id = _p.product_id WHERE cart_id = ?');
+                                    $stmt = $db_o->prepare('SELECT _ci.quantity, _p.*, _u.file_path AS picture_path FROM cart_items _ci INNER JOIN products _p USING (product_id) LEFT JOIN uploads _u USING (upload_id) WHERE cart_id = ?');
                                     $stmt->bind_param('i', $cart_id);
                                     $stmt->execute();
                                     $cart_items = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
@@ -191,13 +191,16 @@ $cart = $stmt->get_result()->fetch_assoc();
                             <ul class="flex flex-col gap-3">
                                 <?php foreach ($cart_items as $cart_item) { ?>
                                 <li data-product-price="<?= htmlspecialchars($cart_item['price']) ?>" data-product-id="<?= htmlspecialchars($cart_item['product_id']) ?>" class="flex items-center justify-between">
-                                    <div class="flex gap-5">
-                                        <div class="size-16 bg-gray-400 rounded-sm"></div>
-                                        
-                                        <div class="flex flex-col justify-center">
-                                            <h2 class="text-3xl"><?= htmlspecialchars($cart_item['title']) ?></h2>
-                                            <p class="uppercase">kod produktu: <span>000000</span></p>
+                                    <div class="flex gap-5 items-center">
+                                        <?php if($cart_item['picture_path']): ?>
+                                        <div class="size-16 bg-gray-100 p-2 rounded-sm">
+                                            <img src="../../uploads/<?= htmlspecialchars($cart_item['picture_path']) ?>" alt="product picture" class="drop-shadow-2xl" />
                                         </div>
+                                        <?php else: ?>
+                                        <div class="size-16 bg-gray-200 p-2 rounded-sm animate-pulse"></div>
+                                        <?php endif ?>
+                                        
+                                        <h2 class="text-3xl font-semibold"><?= htmlspecialchars($cart_item['title']) ?></h2>
                                     </div>
                                     
                                     <div class="flex items-center gap-7">

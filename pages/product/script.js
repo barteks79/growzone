@@ -1,6 +1,38 @@
 import { animate } from 'motion';
 import { updateAvatar } from '../../js/avatar.js';
 
+const productPictureContainer = document.querySelector('#product-picture-container');
+const productPicture = productPictureContainer?.querySelector('#product-picture');
+
+let isMouseEntered = false;
+
+productPictureContainer?.addEventListener('mouseenter', () => {
+    isMouseEntered = true;
+    animateItems();
+});
+
+productPictureContainer?.addEventListener('mousemove', e => {
+    const rect = productPictureContainer.getBoundingClientRect();
+    const x = (e.clientX - rect.left - rect.width / 2) / 25;
+    const y = (e.clientY - rect.top - rect.height / 2) / 25;
+    productPictureContainer.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+});
+
+productPictureContainer?.addEventListener('mouseleave', () => {
+    isMouseEntered = false;
+    productPictureContainer.style.transform = `rotateY(0deg) rotateX(0deg)`;
+    animateItems();
+});
+
+function animateItems() {
+    if (isMouseEntered) {
+        productPicture.style.transform =
+            'translateY(-10px) translateZ(30px) rotateX(5deg) rotateY(-5deg)';
+    } else {
+        productPicture.style.transform = '';
+    }
+}
+
 const starResults = document.querySelectorAll('.star-result');
 
 starResults.forEach((result, i) => {

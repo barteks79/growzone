@@ -10,8 +10,16 @@ CREATE TABLE users (
 );
 
 CREATE TABLE categories (
-  category_id     INT         PRIMARY KEY AUTO_INCREMENT,
-  title           VARCHAR(20) NOT NULL
+  category_id INT         PRIMARY KEY AUTO_INCREMENT,
+  title       VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE uploads (
+  upload_id  INT          PRIMARY KEY AUTO_INCREMENT,
+  file_path  VARCHAR(255) NOT NULL,
+  title      VARCHAR(255) NOT NULL,
+  size       INT          NOT NULL,
+  created_at DATE         NOT NULL
 );
 
 CREATE TABLE products (
@@ -21,10 +29,11 @@ CREATE TABLE products (
   title       VARCHAR(50)    NOT NULL,
   description TEXT           NOT NULL,
   category_id INT            NOT NULL,
-  pictureFile VARCHAR(10)        NULL,
+  upload_id   INT                NULL,
   in_stock    BOOLEAN        NOT NULL    DEFAULT TRUE,
 
-  FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE CASCADE
+  FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE CASCADE,
+  FOREIGN KEY (upload_id) REFERENCES uploads(upload_id) ON DELETE CASCADE
 );
 
 CREATE TABLE reviews (

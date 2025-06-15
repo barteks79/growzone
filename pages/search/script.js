@@ -169,6 +169,15 @@ async function updateProducts(productName, availability, maxPrice, categories) {
         const productLink = product.querySelector('.product-link');
         productLink.href = `../product/index.php?id=${encodeURIComponent(data['uuid'])}`;
 
+        const pictureContainer = product.querySelector('.picture-container');
+        const pictureMask = product.querySelector('.picture-mask');
+        if (data['picture_path']) {
+            const img = document.createElement('img');
+            img.src = `../../uploads/${data['picture_path']}`;
+            pictureContainer.append(img);
+            pictureMask.classList.toggle('hidden');
+        }
+
         const productCategory = product.querySelector('.product-category');
         productCategory.textContent = data['category'];
 
