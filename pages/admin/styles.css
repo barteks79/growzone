@@ -1,5 +1,16 @@
 @import '../../public/fonts/Inter/include.css';
 
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
 .primary-radial-background {
     background: hsl(150 100% 96.2%);
     background-image: radial-gradient(

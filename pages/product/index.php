@@ -141,7 +141,7 @@ if (!$product) {
         </nav>
 
         <div class="px-8 pb-8 pt-2 min-h-[calc(100dvh_-_74px)]">
-            <main class="h-full bg-white relative shadow-md flex flex-col gap-12 rounded-lg p-8">
+            <main class="h-full bg-white relative shadow-md flex flex-col gap-12 rounded-lg p-8 pb-12">
                 <div class="flex items-center gap-4 justify-center font-medium">
                     <a href="../search/index.php" class="text-neutral-600 hover:text-black">Search</a>
                     <span>&rightarrow;</span>
@@ -226,10 +226,10 @@ if (!$product) {
 
                         <div data-selected="<?= $tab ?>" class="group bg-gray-100 px-8 text-sm font-semibold rounded-lg flex gap-6">
                             <a href="?id=<?= urlencode($product['uuid']) ?>">
-                                <button class="relative text-neutral-600 py-3 group-data-[selected=reviews]:text-emerald-600 group-data-[selected=reviews]:before:visible before:invisible before:absolute before:w-full before:h-[3px] before:bg-emerald-600 before:rounded-full before:bottom-0 cursor-pointer hover:text-emerald-600">Reviews</button>
+                                <button class="relative text-neutral-600 py-3 group-data-[selected=reviews]:text-emerald-600 group-data-[selected=reviews]:before:visible before:invisible before:absolute before:w-full before:h-[3px] before:bg-emerald-600 before:rounded-full before:-bottom-1 cursor-pointer hover:text-emerald-600">Reviews</button>
                             </a>
                             <a href="?id=<?= urlencode($product['uuid']) ?>&tab=send">
-                                <button <?= !$user ? 'disabled' : '' ?> class="disabled:opacity-50 relative text-neutral-600 py-3 group-data-[selected=send]:text-emerald-600 group-data-[selected=send]:before:visible before:invisible before:absolute before:w-full before:h-[3px] before:bg-emerald-600 before:rounded-full before:bottom-0 cursor-pointer not-disabled:hover:text-emerald-600">Send review</button>
+                                <button <?= !$user ? 'disabled' : '' ?> class="disabled:opacity-50 relative text-neutral-600 py-3 group-data-[selected=send]:text-emerald-600 group-data-[selected=send]:before:visible before:invisible before:absolute before:w-full before:h-[3px] before:bg-emerald-600 before:rounded-full before:-bottom-1 cursor-pointer not-disabled:hover:text-emerald-600">Send review</button>
                             </a>
                         </div>
 
@@ -248,7 +248,7 @@ if (!$product) {
                                 $last_name = htmlspecialchars($review['last_name']);
 
                                 ?>
-                                <div data-first-name="<?= $first_name ?>" data-last-name="<?= $last_name ?>" class="avatar [--primary:var(--color-neutral-300)] bg-[var(--primary)] ring-2 ring-[var(--primary)]/50 rounded-full size-7 grid place-items-center text-xs font-semibold text-white">-</div>
+                                <div data-first-name="<?= $first_name ?>" data-last-name="<?= $last_name ?>" class="avatar [--primary:var(--color-neutral-300)] bg-[var(--primary)] ring-2 ring-[var(--primary)]/50 rounded-full size-7 grid place-items-center text-xs font-semibold text-white mt-1">-</div>
                                 <div class="grid">
                                     <span class="font-semibold text-sm"><?= $first_name . ' ' . $last_name ?></span>
                                     <div class="flex mt-0.5">
@@ -267,7 +267,7 @@ if (!$product) {
                         </div>
                         <?php else: ?>
                         <div class="flex gap-2">
-                            <div data-first-name="<?= htmlspecialchars($user['first_name']) ?>" data-last-name="<?= htmlspecialchars($user['last_name']) ?>" class="avatar [--primary:var(--color-neutral-300)] bg-[var(--primary)] ring-2 ring-[var(--primary)]/50 rounded-full size-7 grid place-items-center text-xs font-semibold text-white">-</div>
+                            <div data-first-name="<?= htmlspecialchars($user['first_name']) ?>" data-last-name="<?= htmlspecialchars($user['last_name']) ?>" class="avatar [--primary:var(--color-neutral-300)] bg-[var(--primary)] ring-2 ring-[var(--primary)]/50 rounded-full size-7 grid place-items-center text-xs font-semibold text-white mt-1">-</div>
                             <div class="grid">
                                 <span class="font-semibold text-sm"><?= htmlspecialchars($user['first_name'] . ' ' . $user['last_name']) ?></span>
                                 <div id="send-review-star-container" data-star="0" class="group flex mt-0.5">

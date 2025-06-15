@@ -8,7 +8,6 @@ const tab = mainContainer.dataset.tab;
 /** @type {HTMLButtonElement} */
 const saveChangesButton = document.querySelector('#save-changes');
 
-/** @type {{id: number, name: string, value?: string | number | boolean}[]} */
 let changes = [];
 
 /** @type {NodeListOf<HTMLInputElement>} */
@@ -59,6 +58,47 @@ saveChangesButton.addEventListener('click', async () => {
     changes = [];
 
     location.reload();
+});
+
+/** @type {HTMLButtonElement} */
+const imageUploadButton = document.querySelector('#image-upload-button');
+
+imageUploadButton?.addEventListener('click', () => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.multiple = true;
+
+    fileInput.addEventListener('change', () => {
+        for (const file of fileInput.files) {
+            changes.push(file);
+        }
+    });
+
+    fileInput.click();
+});
+
+imageUploadButton?.addEventListener('dragenter', event => {
+    event.stopPropagation();
+    event.preventDefault();
+});
+
+imageUploadButton?.addEventListener('dragover', event => {
+    event.stopPropagation();
+    event.preventDefault();
+});
+
+imageUploadButton?.addEventListener('drop', event => {
+    event.stopPropagation();
+    event.preventDefault();
+
+    const files = event.dataTransfer?.files;
+
+    if (!files) return;
+
+    for (const file of files) {
+        changes.push(file);
+    }
 });
 
 window.addEventListener('beforeunload', event => {
