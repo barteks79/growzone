@@ -229,19 +229,19 @@ $cart = $stmt->get_result()->fetch_assoc();
                             <h2 class="text-3xl font-medium">Dostawa</h3>
 
                             <div id="shipping_companies" class="grid grid-cols-4 gap-5">
-                                <article <?php if ($_SESSION['company'] === 'inpost') echo 'data-selected'; ?> data-company="inpost" class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
+                                <article <?php if (isset($_SESSION['company']) && $_SESSION['company'] === 'inpost') echo 'data-selected'; ?> data-company="inpost" class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
                                     <img src="../../public/images/inpost.jpg" alt="Inpost Logo" class="h-24 pointer-events-none" />    
                                 </article>
 
-                                <article <?php if ($_SESSION['company'] === 'dpd') echo 'data-selected'; ?> data-company="dpd" class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
+                                <article <?php if (isset($_SESSION['company']) && $_SESSION['company'] === 'dpd') echo 'data-selected'; ?> data-company="dpd" class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
                                     <img src="../../public/images/dpd.jpg" alt="DPD Logo" class="h-24 pointer-events-none" />    
                                 </article>
 
-                                <article <?php if ($_SESSION['company'] === 'poczta_polska') echo 'data-selected'; ?> data-company="poczta_polska" class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
+                                <article <?php if (isset($_SESSION['company']) && $_SESSION['company'] === 'poczta_polska') echo 'data-selected'; ?> data-company="poczta_polska" class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
                                     <img src="../../public/images/poczta_polska.png" alt="Pocza Polska Logo" class="h-24 pointer-events-none" />    
                                 </article>
 
-                                <article <?php if ($_SESSION['company'] === 'dhl') echo 'data-selected'; ?> data-company="dhl" class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
+                                <article <?php if (isset($_SESSION['company']) && $_SESSION['company'] === 'dhl') echo 'data-selected'; ?> data-company="dhl" class="flex flex-col items-center justify-center aspect-square border border-gray-300 rounded-lg data-selected:border-3 data-selected:border-gray-400 not-data-selected:cursor-pointer">
                                     <img src="../../public/images/dhl.jpg" alt="DHL Logo" class="h-24 pointer-events-none" />    
                                 </article>
                             </div>
@@ -257,9 +257,9 @@ $cart = $stmt->get_result()->fetch_assoc();
                                 <div class="flex flex-col w-full gap-1 text-gray-700">
                                     <label>Kraj<span class="text-red-500 ml-1">*<span></label>
                                     <select value="<?= $_SESSION['country'] ?? '' ?>" class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black">
-                                        <option disabled <?php if (!$_SESSION['country']) echo 'selected' ?> value="">Wybierz kraj</option>
-                                        <option <?php if ($_SESSION['country'] === 'polska') echo 'selected' ?> value="polska">Polska</option>
-                                        <option <?php if ($_SESSION['country'] === 'niger') echo 'selected' ?> value="niger">Niger</option>
+                                        <option disabled <?php if (!isset($_SESSION['country'])) echo 'selected' ?> value="">Wybierz kraj</option>
+                                        <option <?php if (isset($_SESSION['country']) && $_SESSION['country'] === 'polska') echo 'selected' ?> value="polska">Polska</option>
+                                        <option <?php if (isset($_SESSION['country']) && $_SESSION['country'] === 'niger') echo 'selected' ?> value="niger">Niger</option>
                                     </select>
                                 </div>
 
