@@ -119,7 +119,11 @@ function isCartEmpty() {
 }
 
 function isDeliveryCompanySelected() {
-	if (document.querySelector('[data-selected="true"]')) {
+	if (
+		[...document.querySelectorAll('article')].some(company =>
+			company.hasAttribute('data-selected')
+		)
+	) {
 		return true;
 	}
 	return false;
@@ -149,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		.querySelectorAll('#clear_cart')
 		.forEach(btn => btn.addEventListener('click', e => clearCart(e)));
 
-	document.querySelectorAll('article').forEach(company =>
+	document.querySelectorAll('article').forEach(company => {
 		company.addEventListener('click', e => {
 			document
 				.querySelectorAll('article')
@@ -160,34 +164,29 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 
 			e.target.dataset.selected = true;
-		})
-	);
+		});
+	});
+
+	if (isDeliveryCompanySelected() && !isCartEmpty()) {
+		nextPageBtnKoszyk.disabled = false;
+	}
 
 	nextPageBtnKoszyk?.addEventListener('click', async () => {
 		if (isNextPageButtonEnabled()) {
 			const nextPage = nextPageBtnKoszyk.dataset.next;
 
 			const selectedCompany = document.querySelector(
-				'#shipping_companies [data-selected="true"]'
+				'#shipping_companies [data-selected]'
 			).dataset.company;
 
-			console.log(selectedCompany);
+			await fetch('http://localhost/growzone/php/add-to-session.php', {
+				method: 'PUT',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ company: selectedCompany })
+			});
 
-			const response = await fetch(
-				'http://localhost/growzone/php/add-to-session.php',
-				{
-					method: 'PUT',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ company: selectedCompany })
-				}
-			);
-
-			console.log(response);
-			// return (window.location.href = `./index.php?strona=${nextPage}`);
-			return;
+			window.location.href = `./index.php?strona=${nextPage}`;
 		}
-
-		window.location.href = './index.php';
 	});
 
 	document.querySelector('#previousBtn')?.addEventListener('click', e => {
