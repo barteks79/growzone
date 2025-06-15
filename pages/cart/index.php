@@ -256,36 +256,36 @@ $cart = $stmt->get_result()->fetch_assoc();
                             <div class="grid grid-cols-2 gap-5">
                                 <div class="flex flex-col w-full gap-1 text-gray-700">
                                     <label>Kraj<span class="text-red-500 ml-1">*<span></label>
-                                    <select class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black">
-                                        <option disabled selected value="">Wybierz kraj</option>
-                                        <option value="pl">Polska</option>
-                                        <option value="ne">Niger</option>
+                                    <select value="<?= $_SESSION['country'] ?? '' ?>" class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black">
+                                        <option disabled <?php if (!$_SESSION['country']) echo 'selected' ?> value="">Wybierz kraj</option>
+                                        <option <?php if ($_SESSION['country'] === 'polska') echo 'selected' ?> value="polska">Polska</option>
+                                        <option <?php if ($_SESSION['country'] === 'niger') echo 'selected' ?> value="niger">Niger</option>
                                     </select>
                                 </div>
 
                                 <div class="flex flex-col w-full gap-1 text-gray-700">
                                     <label>Miasto<span class="text-red-500 ml-1">*<span></label>
-                                    <input name="miasto" placeholder="Warszawa" class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black" />
+                                    <input value="<?= $_SESSION['city'] ?? '' ?>" name="miasto" placeholder="Warszawa" class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black" />
                                 </div>
                                 
                                 <div class="flex flex-col w-full gap-1 text-gray-700">
                                     <label>Ulica<span class="text-red-500 ml-1">*<span></label>
-                                    <input name="ulica" placeholder="Polna" class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black" />
+                                    <input value="<?= $_SESSION['street'] ?? '' ?>" name="ulica" placeholder="Polna" class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black" />
                                 </div>
 
                                 <div class="flex flex-col w-full gap-1 text-gray-700">
                                     <label>Kod pocztowy<span class="text-red-500 ml-1">*<span></label>
-                                    <input name="kod_pocztowy" placeholder="00-000" class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black" />
+                                    <input value="<?= $_SESSION['postalCode'] ?? '' ?>" name="kod_pocztowy" placeholder="00-000" class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black" />
                                 </div>
 
                                 <div class="flex flex-col w-full gap-1 text-gray-700">
                                     <label>Numer budynku<span class="text-red-500 ml-1">*<span></label>
-                                    <input name="budynek" placeholder="7" class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black" />
+                                    <input value="<?= $_SESSION['building'] ?? '' ?>" name="budynek" placeholder="7" class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black" />
                                 </div>
                                 
                                 <div class="flex flex-col w-full gap-1 text-gray-700">
                                     <label>Numer mieszkania</label>
-                                    <input data-optional class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black" />
+                                    <input value="<?= $_SESSION['apartment'] ?? '' ?>" name="apartament" data-optional class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black" />
                                 </div>
                             </div>
                         </section>

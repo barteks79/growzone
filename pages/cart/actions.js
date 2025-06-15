@@ -203,16 +203,28 @@ document.addEventListener('DOMContentLoaded', () => {
 		document.querySelector('select')?.value !== '';
 
 	const isCityEntered = () =>
-		document.querySelector('[name="miasto"]').value !== '';
+		document.querySelector('[name="miasto"]')?.value !== '';
 
 	const isStreetEntered = () =>
-		document.querySelector('[name="ulica"]').value !== '';
+		document.querySelector('[name="ulica"]')?.value !== '';
 
 	const isPostalCodeEntered = () =>
-		document.querySelector('[name="kod_pocztowy"]').value !== '';
+		document.querySelector('[name="kod_pocztowy"]')?.value !== '';
 
 	const isBuildingNumberEnetered = () =>
-		document.querySelector('[name="budynek"]').value !== '';
+		document.querySelector('[name="budynek"]')?.value !== '';
+
+	if (
+		isCountrySelected() &&
+		isCityEntered() &&
+		isStreetEntered() &&
+		isPostalCodeEntered() &&
+		isBuildingNumberEnetered()
+	) {
+		if (nextPageBtnDostawa) {
+			nextPageBtnDostawa.disabled = false;
+		}
+	}
 
 	document.querySelectorAll('#sekcja_dostawy input')?.forEach(input =>
 		input.addEventListener('keyup', e => {
@@ -248,7 +260,39 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	});
 
-	nextPageBtnDostawa?.addEventListener('click', e => {
-		window.location.href = './index.php?strona=podsumowanie';
+	nextPageBtnDostawa?.addEventListener('click', async e => {
+		if (
+			isCountrySelected() &&
+			isCityEntered() &&
+			isStreetEntered() &&
+			isPostalCodeEntered() &&
+			isBuildingNumberEnetered()
+		) {
+			const selectedCountry = document.querySelector('select').value;
+			const eneteredCity = document.querySelector('[name="miasto"]').value;
+			const eneteredStreet = document.querySelector('[name="ulica"]').value;
+			const eneteredPostalCode = document.querySelector(
+				'[name="kod_pocztowy"]'
+			).value;
+			const enetredBuilding = document.querySelector('[name="budynek"]').value;
+			const eneteredApartment = document.querySelector(
+				'[name="apartament"]'
+			).value;
+
+			await fetch('http://localhost/growzone/php/add-to-session.php', {
+				method: 'PUT',
+				headers: { 'Content-Type': 'applicatioin/json' },
+				body: JSON.stringify({
+					country: selectedCountry,
+					city: eneteredCity,
+					street: eneteredStreet,
+					postalCode: eneteredPostalCode,
+					building: enetredBuilding,
+					apartment: eneteredApartment
+				})
+			});
+
+			window.location.href = './index.php?strona=podsumowanie';
+		}
 	});
 });
