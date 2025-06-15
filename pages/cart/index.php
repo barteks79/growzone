@@ -291,6 +291,41 @@ $cart = $stmt->get_result()->fetch_assoc();
                         </section>
                     <?php endif; ?>
 
+                    <?php if ($nastepna_strona === 'platnosc'): ?>
+                        <section id="sekcja_dostawy" class="grid grid-cols-2 gap-4 py-4">
+                            <div class="flex flex-col border-r border-gray-400">
+                                <h3 class="text-2xl font-semibold">Order Summary</h3>
+                                <ul class="flex flex-col pr-7 [&>li]:border-b [&>li]:border-gray-400">
+                                <?php
+                                    $cart_id = $cart['cart_id'];
+                                    $stmt = $db_o->prepare('SELECT _ci.quantity, _p.* FROM cart_items _ci INNER JOIN products _p ON _ci.product_id = _p.product_id WHERE cart_id = ?');
+                                    $stmt->bind_param('i', $cart_id);
+                                    $stmt->execute();
+                                    $cart_items = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+                                    foreach ($cart_items as $cart_item) { ?>    
+                                        <li class="flex justify-between py-2">
+                                            <h4><?= $cart_item['title'] ?></h4>
+                                            <span>x<?= $cart_item['quantity'] ?></span>
+                                        </li>
+                                    <?php } ?>
+                                </ul>
+                                <div class="flex justify-between w-full py-2 text-lg font-medium">
+                                    <p>Total:</p> 
+                                    <span class="pr-6">$
+                                        <?php 
+                                            $stmt = $db_o->prepare('SELECT SUM(ci.quantity * p.price) AS wartosc FROM carts c JOIN cart_items ci ON c.cart_id = ci.cart_id JOIN  products p ON ci.product_id = p.product_id WHERE c.cart_id = ?');
+                                            $stmt->bind_param('i', $cart_id);
+                                            $stmt->execute();
+                                            $cart_value = $stmt->get_result()->fetch_assoc()['wartosc'];
+                                            echo htmlspecialchars(number_format($cart_value, 2));
+                                        ?>
+                                    </span>
+                                </div>
+                            </div>
+                        </section>
+                    <?php endif ?>
+
                     <menu class="flex items-center justify-end gap-5">
                         <?php if ($nastepna_strona !== 'dostawa'): ?>
                             <button data-previous="<?php 
