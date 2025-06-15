@@ -111,7 +111,7 @@ $cart = $stmt->get_result()->fetch_assoc();
                 </div>
             </nav>
             
-            <main class="flex justify-center items-center mt-10">
+            <main class="flex justify-center items-center pb-10">
                 <div class="flex flex-col gap-3 bg-white rounded-xl shadow-lg py-4 px-10 max-w-[1100px] w-2/3 min-w-[950px]">                
                     <?php 
                         if (!isset($_GET['strona'])) { 
@@ -157,7 +157,7 @@ $cart = $stmt->get_result()->fetch_assoc();
                             <div class="flex justify-between items-center">
                                 <h2 class="text-3xl font-medium">Twój koszyk</h3>
                                 <div class="flex gap-4 items-center">
-                                    <p class="flex items-center gap-1 text-lg font-semibold"><span id="cart_value_span">
+                                    <p class="flex items-center gap-0.5 text-lg font-semibold">$<span id="cart_value_span">
                                     <?php
                                         if (isset($cart['cart_id'])) {
                                             $cart_id = $cart['cart_id'];
@@ -169,7 +169,7 @@ $cart = $stmt->get_result()->fetch_assoc();
                                         } else {
                                             echo htmlspecialchars(number_format(0, 2));
                                         }
-                                    ?></span> PLN</p>
+                                    ?></span></p>
                                     <button id="clear_cart" class="grid place-items-center border border-gray-400 size-8 rounded-md cursor-pointer">
                                         <i data-lucide="trash" class="size-4 font-normal pointer-events-none"></i>
                                     </button>
@@ -202,7 +202,7 @@ $cart = $stmt->get_result()->fetch_assoc();
                                     
                                     <div class="flex items-center gap-7">
                                         <div class="flex gap-4 pl-8 items-center">
-                                            <p data-price="true" class="text-lg font-semibold"><span><?= htmlspecialchars(number_format($cart_item['price'] * $cart_item['quantity'], 2)) ?></span> PLN</p>
+                                            <p data-price="true" class="text-lg font-semibold flex gap-0.5">$<span><?= htmlspecialchars(number_format($cart_item['price'] * $cart_item['quantity'], 2)) ?></span></p>
                                         </div>
                                         
                                         <div class="flex items-center border border-gray-400 rounded-md">

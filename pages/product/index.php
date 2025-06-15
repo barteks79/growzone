@@ -226,10 +226,10 @@ if (!$product) {
 
                         <div data-selected="<?= $tab ?>" class="group bg-gray-100 px-8 text-sm font-semibold rounded-lg flex gap-6">
                             <a href="?id=<?= urlencode($product['uuid']) ?>">
-                                <button class="relative text-neutral-600 py-3 group-data-[selected=reviews]:text-emerald-600 group-data-[selected=reviews]:before:visible before:invisible before:absolute before:w-full before:h-[3px] before:bg-emerald-600 before:rounded-full before:-bottom-1 cursor-pointer hover:text-emerald-600">Reviews</button>
+                                <button class="relative text-neutral-600 py-2 group-data-[selected=reviews]:text-emerald-600 group-data-[selected=reviews]:before:visible before:invisible before:absolute before:w-full before:h-[3px] before:bg-emerald-600 before:rounded-full before:-bottom-1 cursor-pointer hover:text-emerald-600">Reviews</button>
                             </a>
                             <a href="?id=<?= urlencode($product['uuid']) ?>&tab=send">
-                                <button <?= !$user ? 'disabled' : '' ?> class="disabled:opacity-50 relative text-neutral-600 py-3 group-data-[selected=send]:text-emerald-600 group-data-[selected=send]:before:visible before:invisible before:absolute before:w-full before:h-[3px] before:bg-emerald-600 before:rounded-full before:-bottom-1 cursor-pointer not-disabled:hover:text-emerald-600">Send review</button>
+                                <button <?= !$user ? 'disabled' : '' ?> class="disabled:opacity-50 relative text-neutral-600 py-2 group-data-[selected=send]:text-emerald-600 group-data-[selected=send]:before:visible before:invisible before:absolute before:w-full before:h-[3px] before:bg-emerald-600 before:rounded-full before:-bottom-1 cursor-pointer not-disabled:hover:text-emerald-600">Send review</button>
                             </a>
                         </div>
 
