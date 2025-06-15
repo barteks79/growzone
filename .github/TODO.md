@@ -68,9 +68,11 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
 -   [x] historia zamówień użytkownika (frontend)
 -   [x] zapłata za produkty (backend)
 -   [x] zapłata za produkty (frontend)
--   [ ] wysyłanie potwierdzenia zakupu mailem
+-   [x] wysyłanie potwierdzenia zakupu mailem
 -   [x] dodanie systemu opinii (backend)
 -   [x] dodanie systemu opinii (frontend)
+-   [ ] dodanie ustawień (backend)
+-   [ ] dodanie ustawień (frontend)
 
 ---
 
