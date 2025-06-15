@@ -238,14 +238,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	}
 
-	const postalCode = document.querySelector('#postal-code');
-
-	postalCode?.addEventListener('input', () => {
-		const output = formatPostalCode(postalCode.value);
-
-		postalCode.value = output;
-	});
-
 	document.querySelectorAll('#sekcja_dostawy input')?.forEach(input =>
 		input.addEventListener('keyup', e => {
 			if (

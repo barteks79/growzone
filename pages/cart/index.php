@@ -400,6 +400,24 @@ $cart = $stmt->get_result()->fetch_assoc();
 
     <script>
         lucide.createIcons();
+
+        <?php if ($nastepna_strona === 'podsumowanie'): ?>
+        document.getElementById("postal-code").addEventListener("input", function (e) {
+            let value = e.target.value.replace(/\D/g, "");
+            value = value.substring(0, 5);
+
+            let formatted = "";
+
+            if (value.length > 0) {
+                formatted += value.substring(0, 2);
+            }
+            if (value.length > 2) {
+                formatted += "-" + value.substring(2, 5);
+            }
+
+            e.target.value = formatted.trim();
+        });
+        <?php endif; ?>
     </script>
 </body>
 </html>
