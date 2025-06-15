@@ -71,8 +71,8 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
 -   [x] wysyłanie potwierdzenia zakupu mailem
 -   [x] dodanie systemu opinii (backend)
 -   [x] dodanie systemu opinii (frontend)
--   [ ] dodanie ustawień (backend)
--   [ ] dodanie ustawień (frontend)
+-   [x] dodanie ustawień (backend)
+-   [x] dodanie ustawień (frontend)
 
 ---
 
