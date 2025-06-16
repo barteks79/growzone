@@ -14,21 +14,28 @@
 
 ## Installation
 
-#### Open terminal
-   
+### Open terminal
+
 ```bash
 
 cd C:\xampp\htdocs
-git clone https://github.com/barteks79/growzone.git
+git clone https://github.com/barteks79/growzone
 
 ```
 
-#### Open PHPMyAdmin
+### Open PHPMyAdmin
 
 ```sql
 
-CREATE DATABASE growzone;
+CREATE DATABASE growzone COLLATE utf8mb4_polish_ci;
 USE growzone;
 
--- copy all content from database.sql
+-- import all content from database.sql
+-- import all content from records.sql
 ```
+
+### How to use
+
+1. Turn on `Apache` & `MySQL` in `xampp-control-panel`
+
+2. Open [http://localhost/growzone/pages/home](http://localhost/growzone/pages/home)
