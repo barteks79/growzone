@@ -73,7 +73,7 @@ Nazwa funkcjonalności + (backend/frontend/database) ✓
 -   [x] dodanie systemu opinii (frontend)
 -   [x] dodanie ustawień (backend)
 -   [x] dodanie ustawień (frontend)
-
+-   [x] logi administratora
 ---
 
 ### Aleksandra Jarema
