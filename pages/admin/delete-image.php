@@ -38,3 +38,4 @@ $stmt->bind_param('i', $user_id);
 $stmt->execute();
 
 header('Location: ./index.php?tab=images');
+exit;

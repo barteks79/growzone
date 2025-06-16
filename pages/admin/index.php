@@ -61,10 +61,128 @@ function formatBytes($bytes, $precision = 2) {
         }
     </script>
     <script src="./script.js" type="module" defer></script>
+    <script src="./modal.js" defer></script>
 </head>
 <body class="font-[Inter]">
     <div class="relative h-dvh flex flex-col">
         <div class="primary-radial-background absolute inset-0 -z-[1]"></div>
+
+        <div id="category-modal" data-hidden class="data-hidden:hidden absolute z-10 shadow-xl bg-white rounded-md p-10 flex flex-col gap-4 left-1/2 top-1/2 -translate-1/2">
+            <form action="./add-category.php" method="POST" class="min-w-[20rem]">
+                <div class="grid gap-1 mb-3">
+                    <label for="title" class="flex gap-0.5">
+                        <span>Category Title</span>
+                        <span class="text-red-600">*</span>
+                    </label>
+                    <div class="relative">
+                        <input type="text" name="title" id="title" placeholder="Enter title" class="border border-gray-400 p-2 pl-3 pr-9 rounded-md w-full" />
+                        <div class="absolute right-0.5 bottom-1 p-2">
+                            <i data-lucide="text" class="size-[18px]"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="relative mt-3 duration-75 cursor-pointer rounded-md bg-green-500 py-3 font-bold text-white shadow-xs transition hover:brightness-105 [box-shadow:0_4px_0_0_var(--color-green-700)] active:translate-y-[4px] active:shadow-none before:absolute before:inset-0 before:-left-[500%] before:bg-[linear-gradient(120deg,_transparent,_hsla(0_0%_100%_/_.6),_transparent)] before:transition-none before:duration-700 before:ease-in-out hover:before:left-full hover:before:transition-all overflow-hidden w-full">Submit</button>
+            </form>
+        </div>
+
+        <div id="product-modal" data-hidden class="data-hidden:hidden absolute z-10 shadow-xl bg-white rounded-md p-10 flex flex-col gap-4 left-1/2 top-1/2 -translate-1/2">
+            <form action="./add-product.php" method="POST" class="min-w-[20rem] grid gap-2">
+                <div class="grid gap-1 mb-3">
+                    <label for="title" class="flex gap-0.5">
+                        <span>Product Title</span>
+                        <span class="text-red-600">*</span>
+                    </label>
+                    <div class="relative">
+                        <input type="text" name="title" id="title" placeholder="Enter title" class="border border-gray-400 p-2 pl-3 pr-9 rounded-md w-full" />
+                        <div class="absolute right-0.5 bottom-1 p-2">
+                            <i data-lucide="text" class="size-[18px]"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid gap-1 mb-3">
+                    <label for="price" class="flex gap-0.5">
+                        <span>Product Price</span>
+                        <span class="text-red-600">*</span>
+                    </label>
+                    <div class="relative">
+                        <input type="number" name="price" id="price" placeholder="Enter price" class="border border-gray-400 p-2 pl-3 pr-9 rounded-md w-full" />
+                        <div class="absolute right-0.5 bottom-1 p-2">
+                            <i data-lucide="text" class="size-[18px]"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid gap-1 mb-3">
+                    <label for="description" class="flex gap-0.5">
+                        <span>Product Description</span>
+                        <span class="text-red-600">*</span>
+                    </label>
+                    <div class="relative">
+                        <input type="text" name="description" id="description" placeholder="Enter description" class="border border-gray-400 p-2 pl-3 pr-9 rounded-md w-full" />
+                        <div class="absolute right-0.5 bottom-1 p-2">
+                            <i data-lucide="text" class="size-[18px]"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid gap-1 mb-3">
+                    <label for="category" class="flex gap-0.5">
+                        <span>Product Category</span>
+                        <span class="text-red-600">*</span>
+                    </label>
+                    <div class="relative">
+                        <?php
+
+                        $stmt = $db_o->prepare('SELECT * FROM categories');
+                        $stmt->execute();
+
+                        $categories = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+                        ?>
+                        <select name="category" id="category" class="border border-gray-400 p-2 pl-3 pr-9 rounded-md w-full">
+                            <?php foreach($categories as $category): ?>
+                            <option value="<?= htmlspecialchars($category['category_id']) ?>"><?= htmlspecialchars($category['title']) ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid gap-1 mb-3">
+                    <label for="picture" class="flex gap-0.5">
+                        <span>Product Picture</span>
+                    </label>
+                    <div class="relative">
+                        <?php
+
+                        $stmt = $db_o->prepare('SELECT * FROM uploads');
+                        $stmt->execute();
+
+                        $categories = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+                        ?>
+                        <select name="picture" id="picture" class="border border-gray-400 p-2 pl-3 pr-9 rounded-md w-full">
+                            <option value="0">None</option>
+                            <?php foreach($categories as $picture): ?>
+                            <option value="<?= htmlspecialchars($picture['upload_id']) ?>"><?= htmlspecialchars($picture['title']) ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid gap-1 mb-3">
+                    <label for="in-stock" class="flex gap-2">
+                        <span>In stock</span>
+                        <input type="checkbox" name="in-stock" id="in-stock" />
+                    </label>
+                </div>
+
+                <button type="submit" class="relative mt-3 duration-75 cursor-pointer rounded-md bg-green-500 py-3 font-bold text-white shadow-xs transition hover:brightness-105 [box-shadow:0_4px_0_0_var(--color-green-700)] active:translate-y-[4px] active:shadow-none before:absolute before:inset-0 before:-left-[500%] before:bg-[linear-gradient(120deg,_transparent,_hsla(0_0%_100%_/_.6),_transparent)] before:transition-none before:duration-700 before:ease-in-out hover:before:left-full hover:before:transition-all overflow-hidden w-full">Submit</button>
+            </form>
+        </div>
+
+        <div id="modal-overlay" data-hidden class="data-hidden:hidden absolute z-[9] backdrop-brightness-50 inset-0"></div>
 
         <nav class="px-[3vw] py-4 grid place-items-center grid-cols-3">
             <div class="justify-self-start">
@@ -348,10 +466,19 @@ function formatBytes($bytes, $precision = 2) {
                     $pictures = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
                     ?>
-                    <h2 class="flex justify-center items-center gap-4 text-3xl font-semibold">
-                        <span>Inspecting "Products"</span>
-                        <span>&RightAngleBracket;</span>
-                        <span><?= htmlspecialchars($productsCount) ?> records</span>
+                    <h2 class="flex justify-between items-center gap-4 text-3xl font-semibold">
+                        <div></div>
+
+                        <div>
+                            <span>Inspecting "Products"</span>
+                            <span>&RightAngleBracket;</span>
+                            <span><?= htmlspecialchars($productsCount) ?> records</span>
+                        </div>
+
+                        <button id="show-product-modal" class="flex items-center gap-3 pl-3 pr-6 py-2 rounded-md font-medium transition hover:opacity-100 opacity-50 bg-emerald-400/20 text-xl font-semibold cursor-pointer">
+                            <i data-lucide="plus" class="stroke-3"></i>
+                            Add product
+                        </button>
                     </h2>
 
                     <div class="grid overflow-y-scroll no-scrollbar pb-4">
@@ -414,10 +541,19 @@ function formatBytes($bytes, $precision = 2) {
                     $categoriesCount = count($categories);
 
                     ?>
-                    <h2 class="flex justify-center items-center gap-4 text-3xl font-semibold">
-                        <span>Inspecting "Categories"</span>
-                        <span>&RightAngleBracket;</span>
-                        <span><?= htmlspecialchars($categoriesCount) ?> records</span>
+                    <h2 class="flex justify-between items-center gap-4 text-3xl font-semibold">
+                        <div></div>
+
+                        <div>
+                            <span>Inspecting "Categories"</span>
+                            <span>&RightAngleBracket;</span>
+                            <span><?= htmlspecialchars($categoriesCount) ?> records</span>
+                        </div>
+
+                        <button id="show-category-modal" class="flex items-center gap-3 pl-3 pr-6 py-2 rounded-md font-medium transition hover:opacity-100 opacity-50 bg-emerald-400/20 text-xl font-semibold cursor-pointer">
+                            <i data-lucide="plus" class="stroke-3"></i>
+                            Add category
+                        </button>
                     </h2>
 
                     <div class="grid overflow-y-scroll no-scrollbar pb-4">
