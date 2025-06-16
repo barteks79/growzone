@@ -11,3 +11,24 @@
 </div>
 
 ![homepage](./public/images/homepage.png)
+
+## Installation
+
+#### Open terminal
+   
+```bash
+
+cd C:\xampp\htdocs
+git clone https://github.com/barteks79/growzone.git
+
+```
+
+#### Open PHPMyAdmin
+
+```sql
+
+CREATE DATABASE growzone;
+USE growzone;
+
+-- copy all content from database.sql
+```
