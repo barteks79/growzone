@@ -174,6 +174,7 @@ async function updateProducts(productName, availability, maxPrice, categories) {
         if (data['picture_path']) {
             const img = document.createElement('img');
             img.src = `../../uploads/${data['picture_path']}`;
+            img.alt = 'product picture';
             pictureContainer.append(img);
             pictureMask.classList.toggle('hidden');
         }

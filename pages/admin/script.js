@@ -10,8 +10,11 @@ const saveChangesButton = document.querySelector('#save-changes');
 
 let changes = [];
 
-/** @type {NodeListOf<HTMLInputElement>} */
-const inputs = mainContainer.querySelectorAll('input');
+/** @type {NodeListOf<HTMLInputElement | HTMLSelectElement>} */
+const inputs = [
+    ...mainContainer.querySelectorAll('input'),
+    ...mainContainer.querySelectorAll('select'),
+];
 inputs.forEach(input => {
     input.addEventListener('input', () => {
         const id = input.closest('.record').dataset.id;

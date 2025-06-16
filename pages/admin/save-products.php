@@ -35,6 +35,20 @@ foreach ($data as $change) {
         $type = 's';
     }
 
+    if ($name == 'category') {
+        $query .= 'category_id';
+        $type = 'i';
+    }
+
+    if ($name == 'picture') {
+        $query .= 'upload_id';
+        $type = 'i';
+
+        if ($value == 0) {
+            $value = null;
+        }
+    }
+
     if ($name == 'in-stock') {
         $query .= 'in_stock';
         $type = 'i';

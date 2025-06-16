@@ -11,6 +11,10 @@ foreach ($data as $change) {
     $value = $change['value'];
 
     if ($name == 'delete') {
+        $stmt = $db_o->prepare('UPDATE products SET category_id = (SELECT category_id FROM categories WHERE category_id != ? ORDER BY category_id LIMIT 1) WHERE category_id = ?');
+        $stmt->bind_param('ii', $id, $id);
+        $stmt->execute();
+
         $stmt = $db_o->prepare('DELETE FROM categories WHERE category_id = ?');
         $stmt->bind_param('i', $id);
         $stmt->execute();

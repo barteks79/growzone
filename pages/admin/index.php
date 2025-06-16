@@ -326,11 +326,21 @@ function formatBytes($bytes, $precision = 2) {
                     <?php elseif($tab == 'products'): ?>
                     <?php
 
-                    $stmt = $db_o->prepare('SELECT product_id, title, price, description, in_stock FROM products ORDER BY product_id');
+                    $stmt = $db_o->prepare('SELECT _p.product_id, _p.title, _p.price, _p.description, _c.category_id, _u.upload_id, _p.in_stock FROM products _p LEFT JOIN categories _c USING (category_id) LEFT JOIN uploads _u USING (upload_id) ORDER BY _p.product_id');
                     $stmt->execute();
 
                     $products = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                     $productsCount = count($products);
+
+                    $stmt = $db_o->prepare('SELECT * FROM categories');
+                    $stmt->execute();
+
+                    $categories = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+                    $stmt = $db_o->prepare('SELECT * FROM uploads');
+                    $stmt->execute();
+
+                    $pictures = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
                     ?>
                     <h2 class="flex justify-center items-center gap-4 text-3xl font-semibold">
@@ -342,9 +352,11 @@ function formatBytes($bytes, $precision = 2) {
                     <div class="grid overflow-y-scroll no-scrollbar pb-4">
                         <div class="flex border-t font-semibold bg-emerald-50">
                             <div class="border-l py-2 w-[6rem] text-center">Product ID</div>
-                            <div class="border-l py-2 basis-0 grow-2 text-center">Title</div>
-                            <div class="border-l py-2 basis-0 grow text-center">Price</div>
-                            <div class="border-l py-2 basis-0 grow-3 text-center">Description</div>
+                            <div class="border-l py-2 basis-0 grow text-center">Title</div>
+                            <div class="border-l py-2 w-[7rem] text-center">Price</div>
+                            <div class="border-l py-2 basis-0 grow-2 text-center">Description</div>
+                            <div class="border-l py-2 w-[12rem] text-center">Category</div>
+                            <div class="border-l py-2 w-[12rem] text-center">Picture</div>
                             <div class="border-l py-2 w-[5rem] text-center">In stock</div>
                             <div class="border-x py-2 w-[5rem] text-center">Delete</div>
                         </div>
@@ -352,14 +364,29 @@ function formatBytes($bytes, $precision = 2) {
                         <?php foreach($products as $product): ?>
                         <div data-id="<?= htmlspecialchars($product['product_id']) ?>" class="record flex border-t last:border-b odd:bg-emerald-50">
                             <div class="border-l w-[6rem] grid place-items-center font-medium"><?= htmlspecialchars($product['product_id']) ?></div>
-                            <div class="border-l basis-0 grow-2">
+                            <div class="border-l basis-0 grow">
                                 <input type="text" name="title" placeholder="Title" value="<?= htmlspecialchars($product['title']) ?>" class="px-3 py-2 w-full" />
                             </div>
-                            <div class="border-l basis-0 grow">
+                            <div class="border-l w-[7rem]">
                                 <input type="number" name="price" min="0" step="0.01" placeholder="Price" value="<?= htmlspecialchars($product['price']) ?>" class="px-3 py-2 w-full" />
                             </div>
-                            <div class="border-l basis-0 grow-3">
+                            <div class="border-l basis-0 grow-2">
                                 <input type="text" name="description" placeholder="Description" value="<?= htmlspecialchars($product['description']) ?>" class="px-3 py-2 w-full" />
+                            </div>
+                            <div class="border-l w-[12rem] grid place-items-center">
+                                <select name="category">
+                                    <?php foreach($categories as $category): ?>
+                                    <option <?= $product['category_id'] == $category['category_id'] ? 'selected' : '' ?> value="<?= htmlspecialchars($category['category_id']) ?>"><?= htmlspecialchars($category['title']) ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                            <div class="border-l w-[12rem] grid place-items-center">
+                                <select name="picture">
+                                    <option value="0">None</option>
+                                    <?php foreach($pictures as $picture): ?>
+                                    <option <?= $product['upload_id'] == $picture['upload_id'] ? 'selected' : '' ?> value="<?= htmlspecialchars($picture['upload_id']) ?>"><?= htmlspecialchars($picture['title']) ?></option>
+                                    <?php endforeach ?>
+                                </select>
                             </div>
                             <div class="border-l w-[5rem] grid place-items-center">
                                 <input type="checkbox" name="in-stock" <?= $product['in_stock'] ? 'checked' : '' ?> />
