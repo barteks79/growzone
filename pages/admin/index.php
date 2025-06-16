@@ -132,7 +132,7 @@ function formatBytes($bytes, $precision = 2) {
 
             $tab = $_GET['tab'] ?? null;
 
-            if ($tab != 'orders' && $tab != 'products' && $tab != 'images') {
+            if ($tab != 'orders' && $tab != 'products' && $tab != 'categories' && $tab != 'images') {
                 $tab = 'users';
             }
 
@@ -152,6 +152,11 @@ function formatBytes($bytes, $precision = 2) {
                     <a href="?tab=products" <?= $tab == 'products' ? 'data-active' : '' ?> class="flex items-center gap-3 pl-3 pr-6 py-2 rounded-md font-medium transition data-active:bg-emerald-400/20 hover:bg-emerald-400/20">
                         <i data-lucide="sprout" class="size-[20px]"></i>
                         Manage Products
+                    </a>
+
+                    <a href="?tab=categories" <?= $tab == 'categories' ? 'data-active' : '' ?> class="flex items-center gap-3 pl-3 pr-6 py-2 rounded-md font-medium transition data-active:bg-emerald-400/20 hover:bg-emerald-400/20">
+                        <i data-lucide="tag" class="size-[20px]"></i>
+                        Manage Categories
                     </a>
 
                     <a href="?tab=images" <?= $tab == 'images' ? 'data-active' : '' ?> class="flex items-center gap-3 pl-3 pr-6 py-2 rounded-md font-medium transition data-active:bg-emerald-400/20 hover:bg-emerald-400/20">
@@ -358,6 +363,43 @@ function formatBytes($bytes, $precision = 2) {
                             </div>
                             <div class="border-l w-[5rem] grid place-items-center">
                                 <input type="checkbox" name="in-stock" <?= $product['in_stock'] ? 'checked' : '' ?> />
+                            </div>
+                            <div class="border-x w-[5rem] grid place-items-center">
+                                <button class="delete p-1.5 cursor-pointer hover:bg-red-300 transition rounded-md bg-red-400">
+                                    <i data-lucide="trash-2" class="size-[18px] stroke-white"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <?php endforeach ?>
+                    </div>
+                    <?php elseif($tab == 'categories'): ?>
+                    <?php
+
+                    $stmt = $db_o->prepare('SELECT category_id, title FROM categories ORDER BY category_id');
+                    $stmt->execute();
+
+                    $categories = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+                    $categoriesCount = count($categories);
+
+                    ?>
+                    <h2 class="flex justify-center items-center gap-4 text-3xl font-semibold">
+                        <span>Inspecting "Categories"</span>
+                        <span>&RightAngleBracket;</span>
+                        <span><?= htmlspecialchars($categoriesCount) ?> records</span>
+                    </h2>
+
+                    <div class="grid overflow-y-scroll no-scrollbar pb-4">
+                        <div class="flex border-t font-semibold bg-emerald-50">
+                            <div class="border-l py-2 w-[8rem] text-center">Category ID</div>
+                            <div class="border-l py-2 basis-0 grow text-center">Title</div>
+                            <div class="border-x py-2 w-[5rem] text-center">Delete</div>
+                        </div>
+
+                        <?php foreach($categories as $category): ?>
+                        <div data-id="<?= htmlspecialchars($category['category_id']) ?>" class="record flex border-t last:border-b odd:bg-emerald-50">
+                            <div class="border-l w-[8rem] grid place-items-center font-medium"><?= htmlspecialchars($category['category_id']) ?></div>
+                            <div class="border-l basis-0 grow">
+                                <input type="text" name="title" placeholder="Title" value="<?= htmlspecialchars($category['title']) ?>" class="px-3 py-2 w-full" />
                             </div>
                             <div class="border-x w-[5rem] grid place-items-center">
                                 <button class="delete p-1.5 cursor-pointer hover:bg-red-300 transition rounded-md bg-red-400">
