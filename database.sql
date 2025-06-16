@@ -100,3 +100,12 @@ CREATE TABLE order_items (
   FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
   FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE  
 );
+
+CREATE TABLE logs (
+  log_id      INT          PRIMARY KEY AUTO_INCREMENT,
+  user_id     INT          NOT NULL,
+  action      VARCHAR(100) NOT NULL,
+  created_at  DATETIME     NOT NULL,
+
+  FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);

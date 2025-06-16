@@ -132,7 +132,7 @@ function formatBytes($bytes, $precision = 2) {
 
             $tab = $_GET['tab'] ?? null;
 
-            if ($tab != 'orders' && $tab != 'products' && $tab != 'categories' && $tab != 'images') {
+            if ($tab != 'orders' && $tab != 'products' && $tab != 'categories' && $tab != 'images' && $tab != 'logs') {
                 $tab = 'users';
             }
 
@@ -157,6 +157,11 @@ function formatBytes($bytes, $precision = 2) {
                     <a href="?tab=categories" <?= $tab == 'categories' ? 'data-active' : '' ?> class="flex items-center gap-3 pl-3 pr-6 py-2 rounded-md font-medium transition data-active:bg-emerald-400/20 hover:bg-emerald-400/20">
                         <i data-lucide="tag" class="size-[20px]"></i>
                         Manage Categories
+                    </a>
+
+                    <a href="?tab=logs" <?= $tab == 'logs' ? 'data-active' : '' ?> class="flex items-center gap-3 pl-3 pr-6 py-2 rounded-md font-medium transition data-active:bg-emerald-400/20 hover:bg-emerald-400/20">
+                        <i data-lucide="file-text" class="size-[20px]"></i>
+                        Admin Logs
                     </a>
 
                     <a href="?tab=images" <?= $tab == 'images' ? 'data-active' : '' ?> class="flex items-center gap-3 pl-3 pr-6 py-2 rounded-md font-medium transition data-active:bg-emerald-400/20 hover:bg-emerald-400/20">
@@ -432,6 +437,45 @@ function formatBytes($bytes, $precision = 2) {
                                 <button class="delete p-1.5 cursor-pointer hover:bg-red-300 transition rounded-md bg-red-400">
                                     <i data-lucide="trash-2" class="size-[18px] stroke-white"></i>
                                 </button>
+                            </div>
+                        </div>
+                        <?php endforeach ?>
+                    </div>
+                    <?php elseif($tab == 'logs'): ?>
+                    <?php
+
+                    $stmt = $db_o->prepare("SELECT logs.log_id, CONCAT(users.first_name, ' ', users.last_name) as name, logs.action, logs.created_at FROM logs inner join users on logs.user_id = users.user_id");
+                    $stmt->execute();
+
+                    $logs = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+                    $logsCount = count($logs);
+
+                    ?>
+                    <h2 class="flex justify-center items-center gap-4 text-3xl font-semibold">
+                        <span>Inspecting "Logs"</span>
+                        <span>&RightAngleBracket;</span>
+                        <span><?= htmlspecialchars($logsCount) ?> records</span>
+                    </h2>
+
+                    <div class="grid overflow-y-scroll no-scrollbar pb-4">
+                        <div class="flex border-t font-semibold bg-emerald-50">
+                            <div class="border-l py-2 w-[6rem] text-center">Log ID</div>
+                            <div class="border-l py-2 w-[20rem] text-center">Admin</div>
+                            <div class="border-l py-2 basis-0 grow-[1.5] text-center">Action</div>
+                            <div class="border-x py-2 basis-0 grow text-center">Creation</div>
+                        </div>
+
+                        <?php foreach($logs as $log): ?>
+                        <div data-id="<?= htmlspecialchars($log['log_id']) ?>" class="record flex border-t last:border-b odd:bg-emerald-50">
+                            <div class="border-l w-[6rem] grid place-items-center font-medium"><?= htmlspecialchars($log['log_id']) ?></div>
+                            <div class="border-l w-[20rem] grid place-items-center justify-center">
+                                <label class="px-3 py-2 w-full"><?= htmlspecialchars($log['name']) ?></label>
+                            </div>
+                            <div class="border-l basis-0 grow-[1.5] grid place-items-center justify-center">
+                                <label class="px-3 py-2 w-full"><?= htmlspecialchars($log['action']) ?></label>
+                            </div>
+                            <div class="border-x basis-0 grow grid place-items-center justify-center">
+                                <label class="px-3 py-2 w-full"><?= htmlspecialchars($log['created_at']) ?></label>
                             </div>
                         </div>
                         <?php endforeach ?>

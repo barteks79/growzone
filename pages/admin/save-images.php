@@ -1,6 +1,27 @@
 <?php
 
+session_start();
+
 require_once __DIR__ . '/../../php/db.php';
+
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+
+    $stmt = $db_o->prepare("SELECT * FROM users WHERE user_id = ?");
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $user = $result->fetch_assoc();
+    }
+}
+
+if (!$user || !$user['is_admin']) {
+    header("Location: ../home/index.php");
+    exit();
+}
 
 foreach ($_FILES as $file) {
     $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
@@ -21,3 +42,7 @@ foreach ($_FILES as $file) {
 
     move_uploaded_file($file['tmp_name'], $uploadsDir . $uploadName);
 }
+
+$stmt = $db_o->prepare('INSERT INTO logs (user_id, action, created_at) VALUES (?, "New image added", NOW())');
+$stmt->bind_param('i', $user_id);
+$stmt->execute();
