@@ -212,7 +212,7 @@ if (isset($_SESSION['user_id'])) {
                     <template id="product-template">
                         <a class="product-link h-fit">
                             <div class="relative w-[20rem] h-[15rem] overflow-hidden isolate rounded-md shadow-sm cursor-pointer transition hover:shadow-lg group">
-                                <div class="picture-container absolute inset-0 bg-neutral-100 group-hover:bg-neutral-50 -z-[2] grid place-items-center *:w-[15rem]"></div>
+                                <div class="picture-container absolute inset-0 bg-neutral-100 group-hover:bg-neutral-50 -z-[2] grid place-items-center *:size-[10rem]"></div>
                                 <div class="picture-mask absolute bottom-0 left-0 right-0 h-[6rem] -z-[1] bg-gradient-to-b from-white/90 from-50% to-transparent rounded-b-md hidden"></div>
 
                                 <div class="flex flex-col justify-between p-4 h-full">

@@ -153,8 +153,8 @@ if (!$product) {
                 <div class="grid grid-cols-2 gap-12">
                     <div class="justify-self-end w-[25rem] h-[30rem] perspective-distant">
                         <?php if($product['picture_path']): ?>
-                        <div id="product-picture-container" class="size-full bg-gradient-to-br from-emerald-50 to-blue-50 grid place-items-center relative transition-all duration-200 ease-linear transform-3d hover:shadow-2xl hover:shadow-emerald-500/20 rounded-lg">
-                            <img src="../../uploads/<?= htmlspecialchars($product['picture_path']) ?>" alt="product picture" id="product-picture" class="transform-3d transition duration-200 ease-linear rounded-xl drop-shadow-2xl/75 animate-[enter-picture_500ms_ease-out]" />
+                        <div id="product-picture-container" class="size-full group bg-gradient-to-br from-emerald-50 to-blue-50 grid place-items-center relative transition-all duration-200 ease-linear transform-3d hover:shadow-2xl hover:shadow-emerald-500/20 rounded-lg">
+                            <img src="../../uploads/<?= htmlspecialchars($product['picture_path']) ?>" alt="product picture" id="product-picture" class="transform-3d transition duration-200 ease-linear rounded-xl drop-shadow-2xl/75 not-group-hover:drop-shadow-emerald-200 animate-[enter-picture_500ms_ease-out]" />
                         </div>
                         <?php else: ?>
                         <div class="bg-neutral-300 animate-pulse size-full rounded-lg"></div>

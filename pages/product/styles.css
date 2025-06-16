@@ -14,7 +14,7 @@
 @keyframes enter-picture {
     from {
         opacity: 0;
-        translate: 0 -2rem;
+        translate: 0 -3rem;
     }
 
     to {
