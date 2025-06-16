@@ -331,6 +331,29 @@ INSERT INTO order_items
   (19, 30, 1), (19, 46, 2),
   (20, 34, 1), (20, 5, 1), (20, 18, 2);
 
+INSERT INTO logs 
+  (user_id, action,                       created_at) VALUES
+  (5,       'Records updated in Users',   '2025-06-15 10:45:12'),
+  (12,      'Records deleted from Order', '2025-06-15 09:31:45'),
+  (5,       'Records updated in Order',   '2025-06-14 15:22:38'),
+  (12,      'Records deleted from Users', '2025-06-14 13:10:22'),
+  (5,       'Records updated in Users',   '2025-06-13 17:50:03'),
+  (12,      'Records updated in Order',   '2025-06-13 16:44:55'),
+  (5,       'Records deleted from Order', '2025-06-13 12:11:27'),
+  (12,      'Records deleted from Users', '2025-06-12 18:32:10'),
+  (5,       'Records updated in Order',   '2025-06-12 11:09:45'),
+  (12,      'Records updated in Users',   '2025-06-11 10:00:00'),
+  (5,       'Records deleted from Users', '2025-06-11 09:21:30'),
+  (12,      'Records deleted from Order', '2025-06-10 22:12:44'),
+  (5,       'Records updated in Users',   '2025-06-10 19:18:00'),
+  (12,      'Records updated in Order',   '2025-06-09 13:05:35'),
+  (5,       'Records deleted from Order', '2025-06-09 08:22:10'),
+  (12,      'Records updated in Users',   '2025-06-08 15:15:00'),
+  (5,       'Records deleted from Users', '2025-06-08 13:13:13'),
+  (12,      'Records updated in Order',   '2025-06-07 17:00:01'),
+  (5,       'Records deleted from Order', '2025-06-07 14:55:55'),
+  (12,      'Records updated in Users',   '2025-06-06 11:11:11');
+
 -- Generate extra random reviews
 CREATE TEMPORARY TABLE temp_reviews AS
 SELECT 
