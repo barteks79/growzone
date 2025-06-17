@@ -40,7 +40,7 @@ foreach ($_FILES as $file) {
     $uploadName = $stmt->get_result()->fetch_assoc()['file_path'];
     $uploadDir = __DIR__ . '/../../uploads/';
 
-    move_uploaded_file($file['tmp_name'], $uploadsDir . $uploadName);
+    move_uploaded_file($file['tmp_name'], $uploadDir . $uploadName);
 }
 
 $stmt = $db_o->prepare('INSERT INTO logs (user_id, action, created_at) VALUES (?, "New image added", NOW())');
