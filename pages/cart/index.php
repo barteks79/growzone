@@ -263,7 +263,7 @@ $cart = $stmt->get_result()->fetch_assoc();
                                     <select value="<?= $_SESSION['country'] ?? '' ?>" class="flex-1 border px-4 py-2 rounded-md border-gray-400 text-black">
                                         <option disabled <?php if (!isset($_SESSION['country'])) echo 'selected' ?> value="">Wybierz kraj</option>
                                         <option <?php if (isset($_SESSION['country']) && $_SESSION['country'] === 'Polska') echo 'selected' ?> value="Polska">Polska</option>
-                                        <option <?php if (isset($_SESSION['country']) && $_SESSION['country'] === 'Niger') echo 'selected' ?> value="Niger">Niger</option>
+                                        <option <?php if (isset($_SESSION['country']) && $_SESSION['country'] === 'Niger') echo 'selected' ?> value="Niger">Nigeri̶a̶</option>
                                     </select>
                                 </div>
 
