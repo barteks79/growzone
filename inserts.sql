@@ -35,20 +35,20 @@ INSERT INTO categories
   ('Trees & Shrubs');
 
 INSERT INTO uploads
-  (file_path,                                  title,               size,   created_at) VALUES
-  ('ea3bfb3e-4a06-11f0-9d35-5ce42aad1a60.png', 'Hand Rake Picture', 88760,  '2025-07-25'),
-  ('45865bd7-4ae4-11f0-9bad-5ce42aad1a60.png', 'Tomato Seeds',      50194,  '2025-06-16'),
-  ('459d162a-4ae4-11f0-9bad-5ce42aad1a60.png', 'Sunflower Seeds',   104529, '2025-06-16'),
-  ('45b03fb6-4ae4-11f0-9bad-5ce42aad1a60.png', 'Plastic Pot',       22437,  '2025-06-16'),
-  ('45cb9284-4ae4-11f0-9bad-5ce42aad1a60.png', 'Lettuce Seeds',     74428,  '2025-06-16'),
-  ('45cf610f-4ae4-11f0-9bad-5ce42aad1a60.png', 'Hydrangea',         61898,  '2025-06-16'),
-  ('45d3112f-4ae4-11f0-9bad-5ce42aad1a60.png', 'Hanging Basket',    44670,  '2025-06-16'),
-  ('45d6e75d-4ae4-11f0-9bad-5ce42aad1a60.png', 'Clay Pot',          43366,  '2025-06-16'),
-  ('46ad0005-4ae4-11f0-9bad-5ce42aad1a60.png', 'Carrot Seeds',      73366,  '2025-06-16'),
-  ('46c07cab-4ae4-11f0-9bad-5ce42aad1a60.png', 'Cactus Mix Soil',   39182,  '2025-06-16'),
-  ('46d1fd2f-4ae4-11f0-9bad-5ce42aad1a60.png', 'Box Tree',          63244,  '2025-06-16'),
-  ('46e35268-4ae4-11f0-9bad-5ce42aad1a60.png', 'Bone Meal',         41566,  '2025-06-16'),
-  ('46f4beb6-4ae4-11f0-9bad-5ce42aad1a60.png', 'Basil Seeds',       83831,  '2025-06-16');
+  (file_path,                                   title,               size,   created_at) VALUES
+  ('ea3bfb3e-4a06-11f0-9d35-5ce42aad1a60.jpg',  'Hand Rake Picture', 88760,  '2025-07-25'),
+  ('45865bd7-4ae4-11f0-9bad-5ce42aad1a60.jpg',  'Tomato Seeds',      50194,  '2025-06-16'),
+  ('459d162a-4ae4-11f0-9bad-5ce42aad1a60.jpg',  'Sunflower Seeds',   104529, '2025-06-16'),
+  ('45b03fb6-4ae4-11f0-9bad-5ce42aad1a60.png',  'Plastic Pot',       22437,  '2025-06-16'),
+  ('45cb9284-4ae4-11f0-9bad-5ce42aad1a60.png',  'Lettuce Seeds',     74428,  '2025-06-16'),
+  ('45cf610f-4ae4-11f0-9bad-5ce42aad1a60.webp', 'Hydrangea',         61898,  '2025-06-16'),
+  ('45d3112f-4ae4-11f0-9bad-5ce42aad1a60.png',  'Hanging Basket',    44670,  '2025-06-16'),
+  ('45d6e75d-4ae4-11f0-9bad-5ce42aad1a60.webp', 'Clay Pot',          43366,  '2025-06-16'),
+  ('46ad0005-4ae4-11f0-9bad-5ce42aad1a60.png',  'Carrot Seeds',      73366,  '2025-06-16'),
+  ('46c07cab-4ae4-11f0-9bad-5ce42aad1a60.webp', 'Cactus Mix Soil',   39182,  '2025-06-16'),
+  ('46d1fd2f-4ae4-11f0-9bad-5ce42aad1a60.webp', 'Box Tree',          63244,  '2025-06-16'),
+  ('46e35268-4ae4-11f0-9bad-5ce42aad1a60.jpg',  'Bone Meal',         41566,  '2025-06-16'),
+  ('46f4beb6-4ae4-11f0-9bad-5ce42aad1a60.png',  'Basil Seeds',       83831,  '2025-06-16');
 
 
 INSERT INTO products

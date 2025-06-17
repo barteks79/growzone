@@ -17,7 +17,6 @@
 ### Open terminal
 
 ```bash
-
 cd C:\xampp\htdocs
 git clone https://github.com/barteks79/growzone
 
@@ -26,7 +25,6 @@ git clone https://github.com/barteks79/growzone
 ### Open PHPMyAdmin
 
 ```sql
-
 CREATE DATABASE growzone COLLATE utf8mb4_polish_ci;
 USE growzone;
 
