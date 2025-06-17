@@ -109,13 +109,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['payment_method'])) {
             
             // FIRMA DOSTAWCZA
             $deliveryCompany = $_SESSION['company'];
-            if($deliveryCompany === 'dhl') {
+            if($deliveryCompany === 'DHL') {
                 $deliveryCompany = 'DHL';
-            } elseif($deliveryCompany === 'inpost') {
+            } elseif($deliveryCompany === 'Inpost') {
                 $deliveryCompany = 'InPost';
-            } elseif($deliveryCompany === 'dpd') {
+            } elseif($deliveryCompany === 'DPD') {
                 $deliveryCompany = 'DPD';
-            } elseif($deliveryCompany === 'poczta_polska') {
+            } elseif($deliveryCompany === 'Poczta Polska') {
                 $deliveryCompany = 'Poczta Polska';
             } else {
                 $deliveryCompany = 'Unknown Delivery Company';
