@@ -318,11 +318,29 @@ $cart = $stmt->get_result()->fetch_assoc();
                                     <p>Total:</p> 
                                     <span class="pr-6">$
                                         <?php 
-                                            $stmt = $db_o->prepare('SELECT SUM(ci.quantity * p.price) AS wartosc FROM carts c JOIN cart_items ci ON c.cart_id = ci.cart_id JOIN  products p ON ci.product_id = p.product_id WHERE c.cart_id = ?');
-                                            $stmt->bind_param('i', $cart_id);
-                                            $stmt->execute();
-                                            $cart_value = $stmt->get_result()->fetch_assoc()['wartosc'];
-                                            echo htmlspecialchars(number_format($cart_value, 2));
+                                            if(isset($_SESSION['promo_code'])) {
+                                                $promo_code = $_SESSION['promo_code'];
+                                                $stmt = $db_o->prepare('SELECT discount FROM promo_codes WHERE code = ?');
+                                                $stmt->bind_param('s', $promo_code);
+                                                $stmt->execute();
+                                                $discount = $stmt->get_result()->fetch_assoc()['discount'];
+
+                                                if ($discount) {
+                                                    $stmt = $db_o->prepare('SELECT SUM(ci.quantity * p.price) AS wartosc FROM carts c JOIN cart_items ci ON c.cart_id = ci.cart_id JOIN  products p ON ci.product_id = p.product_id WHERE c.cart_id = ?');
+                                                    $stmt->bind_param('i', $cart_id);
+                                                    $stmt->execute();
+                                                    $cart_value = $stmt->get_result()->fetch_assoc()['wartosc'];
+                                                    $base_cart_value = $cart_value ?? 0;
+                                                    $cart_value -= ($cart_value * ($discount / 100));
+                                                    echo '<s>' . htmlspecialchars(number_format($base_cart_value, 2)) . '</s> ' . htmlspecialchars(number_format($cart_value, 2));
+                                                }
+                                            } else {
+                                                $stmt = $db_o->prepare('SELECT SUM(ci.quantity * p.price) AS wartosc FROM carts c JOIN cart_items ci ON c.cart_id = ci.cart_id JOIN  products p ON ci.product_id = p.product_id WHERE c.cart_id = ?');
+                                                $stmt->bind_param('i', $cart_id);
+                                                $stmt->execute();
+                                                $cart_value = $stmt->get_result()->fetch_assoc()['wartosc'];
+                                                echo htmlspecialchars(number_format($cart_value, 2));
+                                            }
                                         ?>
                                     </span>
                                 </div>
@@ -368,6 +386,44 @@ $cart = $stmt->get_result()->fetch_assoc();
                                         </li>
                                     <?php endif; ?>
                                 </ul>
+                                <form method="post" id="promo_code_form" class="flex flex-col mt-5">
+                                    <p class="font-medium">Promo code</p>
+                                    <div class="flex justify-between mt-2">
+                                        <input type="text" placeholder="Enter promo code" class="w-3/5 border px-4 py-2 rounded-md border-gray-400 text-black" name="promo_code"/>
+                                        <button class="bg-emerald-600 text-white px-4 py-2 rounded-md hover:bg-emerald-700 transition-colors" type="submit">Apply</button>
+                                    </div>
+                                </form>
+                                <?php
+                                    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['promo_code']) && $_POST['promo_code'] !== '') {
+                                        $promo_code = $_POST['promo_code'];
+
+                                        $stmt = $db_o->prepare('SELECT * FROM promo_codes WHERE code = ?');
+                                        $stmt->bind_param('s', $promo_code);
+                                        $stmt->execute();
+                                        $result = $stmt->get_result();
+
+                                        if ($result->num_rows > 0) {
+                                            $promo = $result->fetch_assoc();
+                                            $_SESSION['promo_code'] = $promo['code'];
+                                            ?>
+                                            <script type="text/javascript">
+                                                window.location.href='index.php?strona=podsumowanie&code=valid';
+                                            </script>
+                                            <?php
+                                        } else {
+                                            ?>
+                                            <script type="text/javascript">
+                                                window.location.href='index.php?strona=podsumowanie&code=invalid';
+                                            </script>
+                                            <?php
+                                        }
+                                    }
+                                    if (isset($_GET['code']) && $_GET['code'] === 'valid') {
+                                        echo '<p class="text-green-600 mt-2">Promo code applied successfully!</p>';
+                                    } elseif (isset($_GET['code']) && $_GET['code'] === 'invalid') {
+                                        echo '<p class="text-red-600 mt-2">Invalid promo code.</p>';
+                                    }
+                                ?>
                             </div>
                         </section>
                     <?php endif ?>

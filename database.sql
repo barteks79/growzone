@@ -109,3 +109,9 @@ CREATE TABLE logs (
 
   FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
+
+CREATE TABLE promo_codes (
+  code_id     INT          PRIMARY KEY AUTO_INCREMENT,
+  code        VARCHAR(100) NOT NULL,
+  discount    INT          NOT NULL
+);

@@ -152,10 +152,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['payment_method'])) {
     
             // WARTOSC
             $cart_id = $cart['cart_id'];
-            $stmt = $db_o->prepare('SELECT SUM(ci.quantity * p.price) AS wartosc FROM carts c JOIN cart_items ci ON c.cart_id = ci.cart_id JOIN  products p ON ci.product_id = p.product_id WHERE c.cart_id = ?');
-            $stmt->bind_param('i', $cart_id);
-            $stmt->execute();
-            $cart_value = $stmt->get_result()->fetch_assoc()['wartosc'];
+
+            if(isset($_SESSION['promo_code'])) {
+                $promo_code = $_SESSION['promo_code'];
+                $stmt = $db_o->prepare('SELECT discount FROM promo_codes WHERE code = ?');
+                $stmt->bind_param('s', $promo_code);
+                $stmt->execute();
+                $discount = $stmt->get_result()->fetch_assoc()['discount'];
+
+                if ($discount) {
+                    $stmt = $db_o->prepare('SELECT SUM(ci.quantity * p.price) AS wartosc FROM carts c JOIN cart_items ci ON c.cart_id = ci.cart_id JOIN  products p ON ci.product_id = p.product_id WHERE c.cart_id = ?');
+                    $stmt->bind_param('i', $cart_id);
+                    $stmt->execute();
+                    $diff_cart_value = $stmt->get_result()->fetch_assoc()['wartosc'];
+                    $base_cart_value = $diff_cart_value ?? 0;
+                    $diff_cart_value -= ($diff_cart_value * ($discount / 100));
+                    $cart_value = "<s>" . htmlspecialchars(number_format($base_cart_value, 2)) . "</s> " . htmlspecialchars(number_format($diff_cart_value, 2));
+                }
+            } else {
+                $stmt = $db_o->prepare('SELECT SUM(ci.quantity * p.price) AS wartosc FROM carts c JOIN cart_items ci ON c.cart_id = ci.cart_id JOIN  products p ON ci.product_id = p.product_id WHERE c.cart_id = ?');
+                $stmt->bind_param('i', $cart_id);
+                $stmt->execute();
+                $diff_cart_value = $stmt->get_result()->fetch_assoc()['wartosc'];
+                $cart_value = htmlspecialchars(number_format($diff_cart_value, 2));
+            }
     
             // IMIE
             $fullName = $user['first_name'] . ' ' . $user['last_name'];
@@ -240,9 +260,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['payment_method'])) {
                     <p>Your order has been accepted and is being processed.</p>
     
                     <h3>📦 Order details</h3>
-                    <p><strong>Order number:</strong> '.$orderNumber.'</p>
-                    <p><strong>Delivery company:</strong> '.$deliveryCompany.'</p>
-                    <p><strong>Date of purchase:</strong> '.$order['order_date'].'</p>
+                    <p><strong>Order number:</strong> '.htmlspecialchars($orderNumber).'</p>
+                    <p><strong>Delivery company:</strong> '.htmlspecialchars($deliveryCompany).'</p>
+                    <p><strong>Date of purchase:</strong> '.htmlspecialchars($order['order_date']).'</p>
                     
                     <h3>🛍️ Products</h3>
                     <table>
@@ -263,10 +283,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['payment_method'])) {
                     </table>
     
                     <h3>📍 Delivery address</h3>
-                    <p>'.$fullName.'<br>'.$shippingAddress.'</p>
+                    <p>'.htmlspecialchars($fullName).'<br>'.htmlspecialchars($shippingAddress).'</p>
     
                     <h3>💳 Payment method</h3>
-                    <p>'.$emailPayment.'</p>
+                    <p>'.htmlspecialchars($emailPayment).'</p>
     
                     <div class="footer">
                         If you have any questions, please contact us: <a href="mailto:growzone.help@gmail.com">growzone.help@gmail.com</a><br>
@@ -299,6 +319,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['payment_method'])) {
     } else {
         header("Location: ../home/index.php?message=Payment-failed");
     }
+
+    unset($_SESSION['promo_code']);
+    unset($_SESSION['company']);
+    unset($_SESSION['country']);
+    unset($_SESSION['city']); 
+    unset($_SESSION['postalCode']);
+    unset($_SESSION['street']);
+    unset($_SESSION['building']);
+    unset($_SESSION['apartment']);
 
     exit();
 
@@ -417,15 +446,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['payment_method'])) {
         
             <button class="pay-button" disabled id="pay-btn">Pay €<?php 
             if (isset($cart['cart_id'])) {
-            $cart_id = $cart['cart_id'];
-            $stmt = $db_o->prepare('SELECT SUM(ci.quantity * p.price) AS wartosc FROM carts c JOIN cart_items ci ON c.cart_id = ci.cart_id JOIN  products p ON ci.product_id = p.product_id WHERE c.cart_id = ?');
-            $stmt->bind_param('i', $cart_id);
-            $stmt->execute();
-            $cart_value = $stmt->get_result()->fetch_assoc()['wartosc'];
-            echo htmlspecialchars(number_format($cart_value, 2));
+                $cart_id = $cart['cart_id'];
+                if(isset($_SESSION['promo_code'])) {
+                    $promo_code = $_SESSION['promo_code'];
+                    $stmt = $db_o->prepare('SELECT discount FROM promo_codes WHERE code = ?');
+                    $stmt->bind_param('s', $promo_code);
+                    $stmt->execute();
+                    $discount = $stmt->get_result()->fetch_assoc()['discount'];
+
+                    if ($discount) {
+                        $stmt = $db_o->prepare('SELECT SUM(ci.quantity * p.price) AS wartosc FROM carts c JOIN cart_items ci ON c.cart_id = ci.cart_id JOIN  products p ON ci.product_id = p.product_id WHERE c.cart_id = ?');
+                        $stmt->bind_param('i', $cart_id);
+                        $stmt->execute();
+                        $cart_value = $stmt->get_result()->fetch_assoc()['wartosc'];
+                        $cart_value -= ($cart_value * ($discount / 100));
+                        echo htmlspecialchars(number_format($cart_value, 2));
+                    }
+                } else {
+                    $stmt = $db_o->prepare('SELECT SUM(ci.quantity * p.price) AS wartosc FROM carts c JOIN cart_items ci ON c.cart_id = ci.cart_id JOIN  products p ON ci.product_id = p.product_id WHERE c.cart_id = ?');
+                    $stmt->bind_param('i', $cart_id);
+                    $stmt->execute();
+                    $cart_value = $stmt->get_result()->fetch_assoc()['wartosc'];
+                    echo htmlspecialchars(number_format($cart_value, 2));
+                }
             } else {
                 echo htmlspecialchars(number_format(0, 2));
             }
+
+
             ?> now</button>
         </div>
     </form>
