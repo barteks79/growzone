@@ -15,17 +15,14 @@ Stosujemy się do zasad, aby każdy rozumiał kod.
     ```diff
 
     # korzystamy z snake case
-    - $isGay = true;
-    - $IsGay = true;
-    + $is_gay = true;
+    - $isEnabled = true;
+    - $IsEnabled = true;
+    + $is_enabled = true;
 
     # tylko pozytywne zmienne boolean'owe
-    - $is_not_homosexual = false;
-    + $is_homosexual = true;
+    - $is_disabled = false;
+    + $is_enabled = true;
 
-    # konkretnie
-    - $is_informatyk = false;
-    + $has_girlfriend = false;
     ```
 
 2. **Struktura katalogów**
